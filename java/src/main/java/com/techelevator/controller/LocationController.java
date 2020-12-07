@@ -25,19 +25,24 @@ public class LocationController {
 		this.locationDAO = locationDAO;
 	}
 	
+	//Get all pothole locations
 //	@RequestMapping(path = "/locations", method = RequestMethod.GET)
 //	public List<Location> listAllLocations() {
 //		return locationDAO.getAllPotholeLocations();
 //	}
 	
+	//Add pothole location
 //	@ResponseStatus(HttpStatus.CREATED)
 //	@RequestMapping(path = "/locations", method = RequestMethod.POST)
 //	public void createLocation(@Valid @RequestBody PotholeDTO newLocation) {
 //		locationDAO.createLocation(newLocation);
 //	}
 	
+	//Update pothole location
 //	@RequestMapping(path = "/locations/{id}", method = RequestMethod.PUT)
 //	public void updatePotholeLocation(@Valid @RequestBody Location updatedLocation, @PathVariable int id) {
 //		locationDAO.updatePotholeLocation(updatedLocation);
 //	}
+	
+	//
 }

@@ -25,27 +25,32 @@ public class ClaimController {
 		this.claimDAO = claimDAO;
 	}
 	
+	//Get all claims
 //	@RequestMapping(path = "/claims", method = RequestMethod.GET)
 //	public List<Claim> listAllClaims() {
 //		return claimDAO.getAllClaims();
 //	}
 	
+	//Get claim by claim ID
 //	@RequestMapping(path = "/claims/{id]", method = RequestMethod.GET)
 //	public Claim getClaimById(@PathVariable int id) {
 //		return claimDAO.getClaimById(id);
 //	}
 	
-//	@RequestMapping(path = "/claims/{claimId}/user/{userId}")
-//	public List<Claim> getUsersClaim(@PathVariable int claimId, @PathVariable int userId) {
-//		return claimDAO.getUsersClaim(claimId, userId);
+	//Get claim by user ID
+//	@RequestMapping(path = "/claims/user/{userId}", method = RequestMethod.GET)
+//	public List<Claim> getUsersClaim(@PathVariable int userId) {
+//		return claimDAO.getUsersClaim(userId);
 //	}
 	
+	//Add Claim
 //	@ResponseStatus(HttpStatus.CREATED)
 //	@RequestMapping(value = "/claims", method = RequestMethod.POST);
 //	public void addClaim(@Valid @RequestBody ClaimDTO newClaim) {
 //		claimDAO.createClaim(newClaim);
 //	}
 	
+	//Update claim status
 //	@ResponseStatus(HttpStatus.OK)
 //	@RequestMapping(value = "/claims/{id}", method = RequestMethod.PUT)
 //	public void updateClaimStatus(@Valid @RequestBody Claim changedClaim, @PathVariable int id) {

@@ -25,27 +25,51 @@ public class PotholeController {
 		this.potholeDAO = potholeDAO;
 	}
 	
+	//Get all potholes
 //	@RequestMapping(value = "/potholes", method = RequestMethod.GET)
 //	public List<Pothole> listAllPotholes() {
 //		return potholeDAO.findAllPotholes();
 //	}
 	
+	//Get pothole by ID
 //	@RequestMapping(value = "/potholes/{id}", method = RequestMethod.GET)
 //	public Pothole getPothole(@PathVariable int id) {
 //		return potholeDAO.getPothole(id);
 //	}
 	
+	//Get pothole by Status
+//	@RequestMapping(value = "/potholes/{statusId)", method = RequestMethod.GET)
+//	public List<Pothole> getPotholeByStatus(@PathVariable int statusId){
+//		return potholeDAO.getPotholeByStatus(statusId);
+//	}
+	
+	//Add pothole 
 //	@ResponseStatus(HttpStatus.CREATED)
 //	@RequestMapping(value = "/potholes", method = RequestMethod.POST)
 //	public void addPothole(@Valid @RequestBody PotholeDTO newPothole) {
 //		potholeDAO.createPothole(newPothole);
 //	}
 	
-//	@RequestMapping(value = "potholes/{id}", method = RequestMethod.PUT)
-//	public void updatePotholeStatus(@Valid @RequestBody Pothole potholeStatus, @PathVariable int id) {
-//		potholeDAO.updatePotholeStatus(id);
+	//Add pothole severity
+//	@ResponseStatus(HttpStatus.CREATED)
+//	@RequestMapping(value = "/potholes", method = RequestMethod.POST)
+//	public void addPotholeSeverity(@Valid @RequestBody PotholeDTO newPotholeSeverity) {
+//		potholeDAO.addPotholeSeverity(newPotholeSeverity);
 //	}
 	
+	//Update pothole severity
+//	@RequestMapping(value = "/potholes/{id}", method = RequestMethod.PUT)
+//	public void updatePotholeSeverity(@Valid @RequestBody Pothole potholeChanged, @PathVariable int id) {
+//		potholeDAO.updatePotholeSeverity(potholeChanged);
+//	}
+	
+	//Update pothole status
+//	@RequestMapping(value = "potholes/{id}", method = RequestMethod.PUT)
+//	public void updatePotholeStatus(@Valid @RequestBody Pothole potholeChanged, @PathVariable int id) {
+//		potholeDAO.updatePotholeStatus(potholeChanged);
+//	}
+	
+	//Delete pothole Might not use may just changed status to deleted
 //	@ResponseStatus(HttpStatus.OK)
 //	@RequestMapping(value = "/potholes/{id}", method = RequestMethod.DELETE)
 //	public void deletelPothole(@PathVariable int id) {
