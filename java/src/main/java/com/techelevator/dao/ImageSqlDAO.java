@@ -1,5 +1,12 @@
 package com.techelevator.dao;
 
-public class ImageSqlDAO implements ImageDAO {
+import org.springframework.jdbc.core.JdbcTemplate;
 
+public class ImageSqlDAO implements ImageDAO {
+	
+	private JdbcTemplate jdbcTemplate;
+
+	public ImageSqlDAO(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 }
