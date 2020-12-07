@@ -1,5 +1,5 @@
 package com.techelevator.dao;
 
-public class ImageSqlDAO {
+public class ImageSqlDAO implements ImageDAO {
 
 }

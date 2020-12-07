@@ -1,5 +1,5 @@
 package com.techelevator.dao;
 
-public class PotholeSqlDAO {
+public class PotholeSqlDAO implements PotholeDAO{
 
 }

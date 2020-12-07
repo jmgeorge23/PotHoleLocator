@@ -1,5 +1,5 @@
 package com.techelevator.dao;
 
-public class LocationSqlDAO {
+public class LocationSqlDAO implements LocationDAO{
 
 }

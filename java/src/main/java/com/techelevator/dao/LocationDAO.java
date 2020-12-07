@@ -1,5 +1,5 @@
 package com.techelevator.dao;
 
-public class LocationDAO {
+public interface LocationDAO {
 
 }

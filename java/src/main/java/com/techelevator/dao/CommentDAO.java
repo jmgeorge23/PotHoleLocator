@@ -1,5 +1,5 @@
 package com.techelevator.dao;
 
-public class CommentDAO {
+public interface CommentDAO {
 
 }

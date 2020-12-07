@@ -1,5 +1,5 @@
 package com.techelevator.dao;
 
-public class PotholeDAO {
+public interface PotholeDAO {
 
 }

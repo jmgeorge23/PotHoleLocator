@@ -1,5 +1,5 @@
 package com.techelevator.dao;
 
-public class ClaimDAO {
+public interface ClaimDAO {
 
 }
