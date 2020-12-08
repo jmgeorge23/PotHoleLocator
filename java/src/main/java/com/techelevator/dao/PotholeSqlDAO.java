@@ -1,5 +1,6 @@
 package com.techelevator.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,8 +18,19 @@ public class PotholeSqlDAO implements PotholeDAO{
 
 	@Override
 	public List<Pothole> findAllPotholes() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Pothole> allPotholes = new ArrayList<>();
+		
+//		String getAllPotholes = "SELECT p.pothole_id, l.lat, l.lng, ps.status, s.severity FROM potholes p INNER JOIN locations l ON p.location_id = l.location_id INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id;"; 
+//		
+//				SqlRowSet result = jdbcTemplate.queryForRowSet(getAllPotholes);
+//				
+//				while(result.next()) {
+//					Pothole pothole = mapToPothole(result);
+//					allPotholes.add(pothole);
+//				}
+				
+		return allPotholes ;
 	}
 
 	@Override
@@ -66,10 +78,16 @@ public class PotholeSqlDAO implements PotholeDAO{
 	private Pothole mapToPothole(SqlRowSet ph) {
 		
 		Pothole potholes = new Pothole();
+		
 		potholes.setPotholeId(ph.getLong("pothole_id"));
-		potholes.setStatusId(ph.getInt("status_id"));
-		potholes.setLocationId(ph.getLong("location_id"));
-		potholes.setSeverityId(ph.getInt("severity_id"));
+		potholes.setStatus(ph.getString("status"));
+		potholes.setSeverity(ph.getString("severity"));
+		potholes.setUserId(ph.getLong("user_id"));
+		potholes.setLatitude(ph.getLong("lat"));
+		potholes.setLongitude(ph.getLong("lng"));
+		potholes.setRoadName(ph.getString("road_name"));
+		potholes.setDirection(ph.getString("direction"));
+		potholes.setLane(ph.getString("lane"));
 		return potholes;
 		
 		

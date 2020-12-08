@@ -20,6 +20,9 @@
     </div>
 </template>
 <script>
+
+import potholeServices from '../services/PotholeService.js';
+
     export default {
         data() {
             return {
@@ -33,6 +36,8 @@
         },
         created() {
             // does the user have a saved center? use it instead of the default
+            this.getPotholes();
+
             if(localStorage.center) {
                 this.myCoordinates = JSON.parse(localStorage.center);
             } else {
@@ -62,6 +67,11 @@
                 let zoom = this.map.getZoom();
                 localStorage.center = JSON.stringify(center);
                 localStorage.zoom = zoom;
+            },
+            getPotholes() {
+                potholeServices.getAllPothole().then(response => {
+                    this.$store.commit('SET_POTHOLES', response.data);
+                })
             }
         },
         computed: {
