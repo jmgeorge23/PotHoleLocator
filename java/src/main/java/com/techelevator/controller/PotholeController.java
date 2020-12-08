@@ -16,7 +16,7 @@ import com.techelevator.dao.PotholeDAO;
 import com.techelevator.model.Pothole;
 import com.techelevator.model.PotholeDTO;
 
-//@RestController
+@RestController
 public class PotholeController {
 	
 	private PotholeDAO potholeDAO;
@@ -26,10 +26,10 @@ public class PotholeController {
 	}
 	
 	//Get all potholes
-//	@RequestMapping(value = "/potholes", method = RequestMethod.GET)
-//	public List<Pothole> listAllPotholes() {
-//		return potholeDAO.findAllPotholes();
-//	}
+	@RequestMapping(value = "/potholes", method = RequestMethod.GET)
+	public List<Pothole> listAllPotholes() {
+		return potholeDAO.findAllPotholes();
+	}
 	
 	//Get pothole by ID
 //	@RequestMapping(value = "/potholes/{id}", method = RequestMethod.GET)
