@@ -22,7 +22,7 @@ public class PotholeSqlDAO implements PotholeDAO{
 
 		List<Pothole> allPotholes = new ArrayList<>();
 
-		String getAllPotholes = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p  INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id;"; 
+		String getAllPotholes = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p  INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id"; 
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(getAllPotholes);
 
@@ -71,9 +71,10 @@ public class PotholeSqlDAO implements PotholeDAO{
 	public Pothole createPothole(Pothole newPothole) {
 		Pothole potholes = null;
 		
-//		String makePothole = BEGIN TRANSACTION;
-//						INSERT INTO potholes(pothole_id, pothole_status_id, severity_id, lat, lng, roadname, direction, lane)
-//						ROLLBACK;
+		String makePothole = "BEGIN TRANSACTION;"
+						+ "INSERT INTO potholes(pothole_id, pothole_status_id, severity_id)"
+						+ "VALUES(DEFAULT(?,?,?,?)"
+						+ "ROLLBACK";
 	return potholes;
 	}
 
@@ -106,14 +107,14 @@ public class PotholeSqlDAO implements PotholeDAO{
 		Pothole potholes = new Pothole();
 
 		potholes.setPotholeId(ph.getLong("pothole_id"));
+		potholes.setLatitude(ph.getBigDecimal("lat"));
+		potholes.setLongitude(ph.getBigDecimal("lng"));
 		potholes.setStatus(ph.getString("status"));
 		potholes.setSeverity(ph.getString("severity"));
-		potholes.setUserId(ph.getLong("user_id"));
-		potholes.setLatitude(ph.getLong("lat"));
-		potholes.setLongitude(ph.getLong("lng"));
 		potholes.setRoadName(ph.getString("road_name"));
 		potholes.setDirection(ph.getString("direction"));
 		potholes.setLane(ph.getString("lane"));
+		potholes.setUserId(ph.getLong("user_id"));
 		return potholes;
 
 

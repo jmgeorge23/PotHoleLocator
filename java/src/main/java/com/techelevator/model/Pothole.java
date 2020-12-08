@@ -1,5 +1,7 @@
 package com.techelevator.model;
 
+import java.math.BigDecimal;
+
 public class Pothole {
 
 	private Long potholeId;
@@ -8,8 +10,8 @@ public class Pothole {
 	private String severity;
 	
 	private Long userId;
-	private Long latitude;
-	private Long longitude;
+	private BigDecimal latitude;
+	private BigDecimal longitude;
 	private String roadName;
 	private String direction;
 	private String lane;
@@ -57,19 +59,19 @@ public class Pothole {
 		this.userId = userId;
 	}
 
-	public Long getLatitude() {
+	public BigDecimal getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(Long latitude) {
+	public void setLatitude(BigDecimal latitude) {
 		this.latitude = latitude;
 	}
 
-	public Long getLongitude() {
+	public BigDecimal getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(Long longitude) {
+	public void setLongitude(BigDecimal longitude) {
 		this.longitude = longitude;
 	}
 
