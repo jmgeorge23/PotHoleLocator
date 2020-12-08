@@ -52,7 +52,7 @@ private JdbcTemplate jdbcTemplate;
 		comments.setCommentId(cm.getLong("comment_id"));
 		comments.setUserId(cm.getLong("user_id"));
 		comments.setPotholeId(cm.getLong("pothole_id"));
-		comments.setComment(cm.getString("comment"));
+		comments.setComment(cm.getString("user_comment"));
 		comments.setTimeStamp(cm.getDate("time_stamp"));
 		return comments;
 		
