@@ -16,7 +16,7 @@ import com.techelevator.dao.LocationDAO;
 import com.techelevator.model.Location;
 import com.techelevator.model.PotholeDTO;
 
-@RestController
+//@RestController
 public class LocationController {
 	
 	private LocationDAO locationDAO;

@@ -16,7 +16,7 @@ import com.techelevator.dao.CommentDAO;
 import com.techelevator.model.Comment;
 import com.techelevator.model.CommentDTO;
 
-@RestController
+//@RestController
 public class CommentController {
 	
 	private CommentDAO commentDAO;

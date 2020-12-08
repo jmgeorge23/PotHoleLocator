@@ -16,7 +16,7 @@ import com.techelevator.dao.PotholeDAO;
 import com.techelevator.model.Pothole;
 import com.techelevator.model.PotholeDTO;
 
-@RestController
+//@RestController
 public class PotholeController {
 	
 	private PotholeDAO potholeDAO;

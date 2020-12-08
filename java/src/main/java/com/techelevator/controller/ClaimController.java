@@ -16,7 +16,7 @@ import com.techelevator.dao.ClaimDAO;
 import com.techelevator.model.Claim;
 import com.techelevator.model.ClaimDTO;
 
-@RestController
+//@RestController
 public class ClaimController {
 	
 	private ClaimDAO claimDAO;
