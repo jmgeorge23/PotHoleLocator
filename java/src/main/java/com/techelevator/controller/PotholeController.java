@@ -57,14 +57,20 @@ public class PotholeController {
 //		potholeDAO.addPotholeSeverity(newPotholeSeverity);
 //	}
 	
-	//Update pothole severity
+	//Update pothole
 //	@RequestMapping(value = "/potholes/{id}", method = RequestMethod.PUT)
+//	public void updatePothole(@Valid @RequestBody Pothole potholeChanged, @PathVariable int id) {
+//		potholeDAO.updatePothole(potholeChanged);
+//	}
+	
+	//Update pothole severity
+//	@RequestMapping(value = "/potholes/{id}/severity", method = RequestMethod.PUT)
 //	public void updatePotholeSeverity(@Valid @RequestBody Pothole potholeChanged, @PathVariable int id) {
 //		potholeDAO.updatePotholeSeverity(potholeChanged);
 //	}
 	
 	//Update pothole status
-//	@RequestMapping(value = "potholes/{id}", method = RequestMethod.PUT)
+//	@RequestMapping(value = "potholes/{id}/status", method = RequestMethod.PUT)
 //	public void updatePotholeStatus(@Valid @RequestBody Pothole potholeChanged, @PathVariable int id) {
 //		potholeDAO.updatePotholeStatus(potholeChanged);
 //	}
