@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import com.techelevator.model.Pothole;
 import com.techelevator.model.PotholeDTO;
 
 @RestController
+@CrossOrigin
 public class PotholeController {
 	
 	private PotholeDAO potholeDAO;
