@@ -111,10 +111,10 @@ public class PotholeSqlDAO implements PotholeDAO{
 		potholes.setLongitude(ph.getBigDecimal("lng"));
 		potholes.setStatus(ph.getString("status"));
 		potholes.setSeverity(ph.getString("severity"));
-		potholes.setRoadName(ph.getString("roadname"));
-		potholes.setDirection(ph.getString("direction"));
-		potholes.setLane(ph.getString("lane"));
-		potholes.setUserId(ph.getLong("user_id"));
+//		potholes.setRoadName(ph.getString("roadname"));
+//		potholes.setDirection(ph.getString("direction"));
+//		potholes.setLane(ph.getString("lane"));
+//		potholes.setUserId(ph.getLong("user_id"));
 		return potholes;
 
 
