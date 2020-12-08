@@ -10,13 +10,35 @@
                 <p>{{ mapCoordinates.lat }} Latitude, {{ mapCoordinates.lng }} Longitude</p>
             </div>
         </div>
-        <GmapMap
+        <gmap-map
             :center="myCoordinates"
             :zoom="12.8"
             style="width:800px; height:800px; margin: 32px auto;"
             ref="mapRef"
             @dragend="handleDrag"
-        ></GmapMap>
+        >
+            <gmap-info-window
+                :options="infoWindowOptions"
+                :position="infoWindowPosition"
+                :opened="isInfoWindowOpened"
+                @closeclick="handleInfoWindowClose"
+                >
+                    <div class="info-window">
+                        <h2>Pothole on [street name]</h2>
+                        <h5>Severity: [severity-level]</h5>
+                        <p>Reported on: [date]</p>
+                        <button>View Details</button>
+                    </div>
+                </gmap-info-window>
+            <gmap-marker
+                v-for="pothole in this.$store.state.potholes"
+                :key="pothole.potholeId"
+                :position="getPosition(pothole)"
+                :clickable="true"
+                :draggable="false"
+                @click="handleMarkerClicked(pothole)"
+            ></gmap-marker>    
+        </gmap-map>
     </div>
 </template>
 <script>
@@ -31,12 +53,20 @@ import potholeServices from '../services/PotholeService.js';
                     lat: 0,
                     lng: 0
                 },
-                zoom: 7
+                zoom: 12,
+                infoWindowOptions: {
+                    pixelOffset: {
+                        witdth: 0,
+                        height: -35
+                    }
+                },
+                activePothole: {},
+                isInfoWindowOpened: false
             }
         },
         created() {
             // does the user have a saved center? use it instead of the default
-            this.getPotholes();
+            this.getAllPotholes();
 
             if(localStorage.center) {
                 this.myCoordinates = JSON.parse(localStorage.center);
@@ -68,11 +98,27 @@ import potholeServices from '../services/PotholeService.js';
                 localStorage.center = JSON.stringify(center);
                 localStorage.zoom = zoom;
             },
-            getPotholes() {
-                potholeServices.getAllPothole().then(response => {
-                    this.$store.commit('SET_POTHOLES', response.data);
-                })
-            }
+            getPosition(pothole) {
+                return {
+                    lat: parseFloat(pothole.latitude),
+                    lng: parseFloat(pothole.longitude)
+                }
+            },
+            getAllPotholes() {
+                potholeServices.getAllPothole()
+                    .then(response => {
+                        this.$store.commit('SET_POTHOLES', response.data);
+                    })
+                    .catch(error => alert(error));
+            },
+            handleMarkerClicked(pothole) {
+                this.activePothole = pothole;
+                this.isInfoWindowOpened = true;
+            },
+            handleInfoWindowClose() {
+                this.activePothole = {};
+                this.isInfoWindowOpened = false;
+            },
         },
         computed: {
             mapCoordinates() {
@@ -85,6 +131,12 @@ import potholeServices from '../services/PotholeService.js';
                 return {
                     lat: this.map.getCenter().lat().toFixed(4),
                     lng: this.map.getCenter().lng().toFixed(4)
+                }
+            },
+            infoWindowPosition() {
+                return {
+                    lat: parseFloat(this.activePothole.latitude),
+                    lng: parseFloat(this.activePothole.longitude),
                 }
             }
         }
