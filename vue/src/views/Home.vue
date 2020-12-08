@@ -1,12 +1,33 @@
 <template>
   <div class="home">
-    <h1>Home</h1>
-    <p>You must be authenticated to see this</p>
+    <div id="title">
+      <img src="../assets/PHL_Love_Logo.png" alt="">
+      <h2>P</h2><p>ot</p>
+      <h2>H</h2><p>ole</p>
+      <h2>L</h2><p>ocator</p>
+    </div>
+    <router-view/>
+      <Map/>
   </div>
 </template>
 
 <script>
+import Map from '../components/Map';
+
 export default {
-  name: "home"
+  name: "home",
+  components: {
+    Map
+  }
 };
 </script>
+
+<style scoped>
+#title {
+  display: flex;
+  justify-content: center;
+}
+img {
+  height: 4vh;
+}
+</style>
