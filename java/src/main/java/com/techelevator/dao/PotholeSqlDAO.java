@@ -75,4 +75,10 @@ public class PotholeSqlDAO implements PotholeDAO{
 		
 	}
 
+	@Override
+	public Pothole updatePothole(Pothole updatedPothole) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

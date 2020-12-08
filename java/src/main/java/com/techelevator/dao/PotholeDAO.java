@@ -27,6 +27,9 @@ public interface PotholeDAO {
 	//update pothole status
 	Pothole updatePotholeStatus(Integer stausId);
 	
+	//update pothole general
+	Pothole updatePothole(Pothole updatedPothole);
+	
 	//delete pothole
 	Pothole deletePothole(Long potholeId);
 	
