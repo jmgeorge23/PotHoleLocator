@@ -10,10 +10,10 @@ public interface LocationDAO {
 	List<Location> getAllPotholeLocations();
 	
 	//add pothole location
-	Location createLocation();
+	Location createLocation(Location newLocation);
 	
 	//update pothole location
-	Location updatePotholelocation();
+	Location updatePotholelocation(Location updatedLocation);
 	
 	
 	

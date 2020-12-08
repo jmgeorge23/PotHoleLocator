@@ -16,7 +16,7 @@ public interface PotholeDAO {
 	Pothole getPotholeByStatus(Integer statusId);
 	
 	//add pothole
-	Pothole createPothole();
+	Pothole createPothole(Pothole newPothole);
 	
 	//add pothole severity
 	Pothole addPotholeSeverity(Integer severityId);
@@ -28,7 +28,7 @@ public interface PotholeDAO {
 	Pothole updatePotholeStatus(Integer stausId);
 	
 	//delete pothole
-	Pothole deletePothole();
+	Pothole deletePothole(Long potholeId);
 	
 	
 

@@ -3,6 +3,7 @@ package com.techelevator.dao;
 import java.util.List;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import com.techelevator.model.Pothole;
 
@@ -33,7 +34,7 @@ public class PotholeSqlDAO implements PotholeDAO{
 	}
 
 	@Override
-	public Pothole createPothole() {
+	public Pothole createPothole(Pothole newPothole) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -57,9 +58,21 @@ public class PotholeSqlDAO implements PotholeDAO{
 	}
 
 	@Override
-	public Pothole deletePothole() {
+	public Pothole deletePothole(Long potholeId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private Pothole mapToPothole(SqlRowSet ph) {
+		
+		Pothole potholes = new Pothole();
+		potholes.setPotholeId(ph.getLong("pothole_id"));
+		potholes.setStatusId(ph.getInt("status_id"));
+		potholes.setLocationId(ph.getLong("location_id"));
+		potholes.setSeverityId(ph.getInt("severity_id"));
+		return potholes;
+		
+		
 	}
 
 }

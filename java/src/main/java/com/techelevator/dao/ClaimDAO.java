@@ -10,15 +10,15 @@ public interface ClaimDAO {
 	List<Claim> getAllClaims ();
 	
 	//Get claim by claim Id
-	Claim getClaimById(Long ClaimId);
+	Claim getClaimById(Long claimId);
 	
 	//Get claim by user Id
 	List<Claim> getUsersClaim (Long userId);
 	
 	//Add claim
-	Claim createClaim ();
+	Claim createClaim (Claim newClaim);
 	
 	//Update Claim status
-	Claim updateClaim ();
+	Claim updateClaim (Claim updatedClaim );
 	
 }

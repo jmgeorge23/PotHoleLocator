@@ -5,7 +5,7 @@ public class Claim {
 	private Long claimId;
 	private double claimAmount;
 	private Long statusId;
-	
+	private String description;
 	private Long userId;
 	private Long potholeId;
 	
@@ -55,9 +55,17 @@ public class Claim {
 		
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	@Override
 	public String toString() {
 		return "Claim [claimId=" + claimId + ", claimAmount=" + claimAmount + ", statusId=" + statusId + ", userId="
-				+ userId + ", potholeId=" + potholeId + "]";
+				+ userId + ", potholeId=" + potholeId + ", description=" + description +"]";
 	}
 }

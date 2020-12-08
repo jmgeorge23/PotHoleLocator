@@ -16,10 +16,10 @@ public interface CommentDAO {
 	List<Comment> getCommentsByPotholeId(Long potholeId);
 	
 	//add comment
-	Comment createComment();
+	Comment createComment(Comment newComment);
 	
 	//delete comment
-	Comment deleteComment();
+	Comment deleteComment(Long id);
 	
 
 }

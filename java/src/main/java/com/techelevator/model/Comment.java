@@ -1,6 +1,7 @@
 package com.techelevator.model;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 public class Comment {
 
@@ -8,7 +9,7 @@ public class Comment {
 	private Long userId;
 	private Long potholeId;
 	private String comment;
-	private LocalDate timeStamp;
+	private Date timeStamp;
 	
 	
 	public Comment() {
@@ -57,12 +58,12 @@ public class Comment {
 	}
 
 
-	public LocalDate getTimeStamp() {
+	public Date getTimeStamp() {
 		return timeStamp;
 	}
 
 
-	public void setTimeStamp(LocalDate timeStamp) {
+	public void setTimeStamp(Date timeStamp) {
 		this.timeStamp = timeStamp;
 		
 		
