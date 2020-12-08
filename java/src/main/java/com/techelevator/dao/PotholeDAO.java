@@ -16,7 +16,7 @@ public interface PotholeDAO {
 	Pothole getPotholeByStatus(Integer statusId);
 	
 	//add pothole
-	Pothole createPothole(Pothole newPothole);
+	boolean createPothole(Pothole newPothole);
 	
 	//add pothole severity
 	Pothole addPotholeSeverity(Integer severityId);

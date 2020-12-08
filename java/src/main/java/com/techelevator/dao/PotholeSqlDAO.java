@@ -68,13 +68,19 @@ public class PotholeSqlDAO implements PotholeDAO{
 
 
 	@Override
-	public Pothole createPothole(Pothole newPothole) {
-		Pothole potholes = null;
+	public boolean createPothole(Pothole newPothole) {
+		boolean potholes = false;
 		
 		String makePothole = "BEGIN TRANSACTION;"
-						+ "INSERT INTO potholes(pothole_id, pothole_status_id, severity_id)"
-						+ "VALUES(DEFAULT(?,?,?,?)"
-						+ "ROLLBACK";
+						+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id)"
+						+ "VALUES(DEFAULT(?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = 'Reported'),(SELECT severity_id FROM severity WHERE severity = 'Not Inspected')"
+						+ "COMMIT";
+		
+		int result = jdbcTemplate.update(makePothole, newPothole.getLatitude(), newPothole.getLongitude(), newPothole.getStatus(), newPothole.getSeverity());
+		
+		if( result == 1) {
+			potholes = true;
+		}
 	return potholes;
 	}
 
