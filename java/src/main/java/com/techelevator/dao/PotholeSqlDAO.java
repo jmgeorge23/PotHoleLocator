@@ -9,8 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.techelevator.model.Pothole;
 import com.techelevator.model.PotholeDTO;
+
 @Service
-public class PotholeSqlDAO implements PotholeDAO{
+public class PotholeSqlDAO implements PotholeDAO {
 
 	private JdbcTemplate jdbcTemplate;
 
@@ -19,32 +20,32 @@ public class PotholeSqlDAO implements PotholeDAO{
 	}
 
 	@Override
-	public List<Pothole> findAllPotholes() {
+	public List<PotholeDTO> findAllPotholes() {
 
-		List<Pothole> allPotholes = new ArrayList<>();
+		List<PotholeDTO> allPotholes = new ArrayList<>();
 
-		String getAllPotholes = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p  INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id"; 
+		String getAllPotholes = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p  INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(getAllPotholes);
 
-		while(result.next()) {
-			Pothole pothole = mapToPothole(result);
+		while (result.next()) {
+			PotholeDTO pothole = mapToPothole(result);
 			allPotholes.add(pothole);
 		}
 
-		return allPotholes ;
+		return allPotholes;
 	}
 
 	@Override
-	public Pothole getPothole(Integer potholeId) {
+	public PotholeDTO getPotholeById(int potholeId) {
 
-		Pothole potholes = null;
+		PotholeDTO potholes = null;
 
-		String potholeById = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id WHERE pothole_id = ?;"; 
+		String potholeById = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id WHERE pothole_id = ?;";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(potholeById, potholeId);
 
-		while(result.next()) {
+		while (result.next()) {
 			potholes = mapToPothole(result);
 
 		}
@@ -53,105 +54,172 @@ public class PotholeSqlDAO implements PotholeDAO{
 	}
 
 	@Override
-	public List<Pothole> getPotholeByStatus(Integer statusId) {
-		
-		List<Pothole> potholesStat =  new ArrayList<>();
+	public List<PotholeDTO> getPotholeByStatus(int statusId) {
 
-		String potholeByStat = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id WHERE p.pothole_status_id = ?;"; 
+		List<PotholeDTO> potholesStat = new ArrayList<>();
+
+		String potholeByStat = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id WHERE p.pothole_status_id = ?;";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(potholeByStat, statusId);
 
-		while(result.next()) {
-			Pothole pothole = mapToPothole(result);
+		while (result.next()) {
+			PotholeDTO pothole = mapToPothole(result);
 			potholesStat.add(pothole);
 		}
-
 
 		return potholesStat;
 	}
 
-
 	@Override
 	public boolean createPothole(PotholeDTO newPothole) {
 		boolean potholes = false;
-		
-		String makePothole = "BEGIN TRANSACTION;"
-						+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id)"
-						+ "VALUES(DEFAULT,?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),(SELECT severity_id FROM severity WHERE severity = ?));"
-						+ "COMMIT;";
-		
-		int result = jdbcTemplate.update(makePothole, newPothole.getLatitude(), newPothole.getLongitude(), newPothole.getStatus(), newPothole.getSeverity());
-		
-		if( result == 0) {
-			potholes = true;
+
+		String addToPotholes = "BEGIN TRANSACTION;"
+				+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id)"
+				+ "VALUES(DEFAULT,?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),(SELECT severity_id FROM severity WHERE severity = ?));"
+				+ "COMMIT;";
+
+		if (addToPotholesUsers(newPothole)) {
+
+			if (addToPotholesHistory(newPothole)) {
+				int result = jdbcTemplate.update(addToPotholes, newPothole.getLatitude(), newPothole.getLongitude(),
+						newPothole.getStatus(), newPothole.getSeverity());
+
+				if (result == 0) {
+					potholes = true;
+				}
+			}
 		}
-	return potholes;
+		return potholes;
 	}
 
 	@Override
 	public boolean updatePothole(PotholeDTO updatedPothole, int potholeId) {
-		
-		boolean potholes = false;
-		
-		String updatePothole= "UPDATE potholes SET pothole_status_id=(SELECT pothole_status_id FROM pothole_status WHERE status = ?), severity_id =(SELECT severity_id FROM severity WHERE severity = ?), lat = ?, lng = ? WHERE pothole_id =?;";
 
-		
-		int result = jdbcTemplate.update(updatePothole,updatedPothole.getStatus(), updatedPothole.getSeverity(), updatedPothole.getLatitude(), updatedPothole.getLongitude(), potholeId);
-				
-				if( result == 0) {
-					potholes = true;
-				}
-			return potholes;
-			}
-
-	@Override
-	public boolean updatePotholeSeverity( int potholeId, String severity) {
 		boolean potholes = false;
-		
-		String updateSeverity="UPDATE potholes SET severity_id =(SELECT severity_id FROM severity WHERE severity=?) WHERE pothole_id = ?";
-		
-		int result = jdbcTemplate.update(updateSeverity,severity, potholeId);
-				
-				if( result == 0) {
-					potholes = true;
-				}
-			return potholes;
+
+		String updatePotholes = "UPDATE potholes SET pothole_status_id=(SELECT pothole_status_id FROM pothole_status WHERE status = ?), severity_id =(SELECT severity_id FROM severity WHERE severity = ?), lat = ?, lng = ? WHERE pothole_id =?;";
+
+		if (addToPotholesHistory(updatedPothole)) {
+			int result = jdbcTemplate.update(updatePotholes, updatedPothole.getStatus(), updatedPothole.getSeverity(),
+					updatedPothole.getLatitude(), updatedPothole.getLongitude(), potholeId);
+
+			if (result == 0) {
+				potholes = true;
 			}
+		}
+		return potholes;
+	}
 
 	@Override
-	public boolean updatePotholeStatus(int potholeId, String status ) {
+	public boolean updatePotholeSeverity(int potholeId, PotholeDTO updatedPothole) {
 		boolean potholes = false;
-		
-		String updateStatus="UPDATE potholes SET pothole_status_id =(SELECT pothole_status_id FROM pothole_status WHERE status =?) WHERE pothole_id = ?";
-		
-		int result = jdbcTemplate.update(updateStatus, status, potholeId);
-				
-				if( result == 0) {
-					potholes = true;
-				}
-			return potholes;
+
+		String updateSeverity = "UPDATE potholes SET severity_id =(SELECT severity_id FROM severity WHERE severity=?) WHERE pothole_id = ?";
+
+		if (addToPotholesHistory(updatedPothole)) {
+
+			int result = jdbcTemplate.update(updateSeverity, updatedPothole.getStatus(), potholeId);
+
+			if (result == 0) {
+				potholes = true;
 			}
+		}
+		return potholes;
+	}
+
+	@Override
+	public boolean updatePotholeStatus(int potholeId, PotholeDTO updatedPothole) {
+		boolean potholes = false;
+
+		String updateStatus = "UPDATE potholes SET pothole_status_id =(SELECT pothole_status_id FROM pothole_status WHERE status =?) WHERE pothole_id = ?";
+
+		if (addToPotholesHistory(updatedPothole)) {
+
+			int result = jdbcTemplate.update(updateStatus, updatedPothole.getSeverity(), potholeId);
+
+			if (result == 0) {
+				potholes = true;
+			}
+		}
+		return potholes;
+	}
 
 	@Override
 	public boolean deletePothole(int potholeId) {
-		
+
 		boolean potholes = false;
-		
-		String deleteFromUsersPotholes= "DELETE from users_potholes WHERE pothole_id =?";
-		String deleteFromPotholes="DELETE FROM potholes WHERE pothole_id = ? ";
-		
-		int result1 = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
-		int result2 =  jdbcTemplate.update(deleteFromPotholes, potholeId);
-				
-				if( result1==0 && result2 == 0) {
+
+		if (deleteFromPotholeUsers(potholeId)) {
+
+			String deleteFromPotholes = "DELETE FROM potholes WHERE pothole_id = ? ";
+
+			PotholeDTO deletedPothole = getPotholeById(potholeId);
+
+			if (addToPotholesHistory(deletedPothole)) {
+
+				int result = jdbcTemplate.update(deleteFromPotholes, potholeId);
+
+				if (result == 0) {
 					potholes = true;
 				}
-			return potholes;
 			}
+		}
+		return potholes;
+	}
 
-	private Pothole mapToPothole(SqlRowSet ph) {
+	private boolean addToPotholesHistory(PotholeDTO pothole) {
 
-		Pothole potholes = new Pothole();
+		boolean potholes = false;
+
+		String addToPotholesHistory = "INSERT INTO potholes_history "
+				+ "(pothole_history_id, pothole_id, pothole_status_id, severity_id, lat, lng, datetime) "
+				+ "VALUES(DEFAULT, ? ,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),"
+				+ "(SELECT severity_id FROM severity WHERE severity = ?), ?, ?, CURRENT_TIMESTAMP)";
+
+		int result = jdbcTemplate.update(addToPotholesHistory, pothole.getPotholeId(), pothole.getStatus(),
+				pothole.getSeverity(), pothole.getLatitude(), pothole.getLongitude());
+
+		if (result == 0) {
+			potholes = true;
+		}
+		return potholes;
+
+	}
+
+	private boolean addToPotholesUsers(PotholeDTO pothole) {
+
+		boolean potholes = false;
+
+		String addToPotholesUsers = "INSERT INTO users_potholes (user_id, pothole_id) VALUES ( ?, ?)";
+
+		int result = jdbcTemplate.update(addToPotholesUsers, pothole.getUserId(), pothole.getPotholeId());
+
+		if (result == 0) {
+			potholes = true;
+		}
+		return potholes;
+
+	}
+
+	private boolean deleteFromPotholeUsers(int potholeId) {
+
+		boolean potholes = false;
+
+		String deleteFromUsersPotholes = "DELETE from users_potholes WHERE pothole_id =?";
+
+		int result = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
+
+		if (result == 0) {
+			potholes = true;
+		}
+		return potholes;
+
+	}
+
+	private PotholeDTO mapToPothole(SqlRowSet ph) {
+
+		PotholeDTO potholes = new PotholeDTO();
 
 		potholes.setPotholeId(ph.getLong("pothole_id"));
 		potholes.setLatitude(ph.getBigDecimal("lat"));
@@ -164,11 +232,6 @@ public class PotholeSqlDAO implements PotholeDAO{
 //		potholes.setUserId(ph.getLong("user_id"));
 		return potholes;
 
-
 	}
 
-
-
-
 }
-

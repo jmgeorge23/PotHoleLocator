@@ -13,13 +13,9 @@ public class Pothole {
 	private String roadName;
 	private String direction;
 	private String lane;
-	
-	
-	
-	
-	public Pothole(){
-		
-		
+
+	public Pothole() {
+
 	}
 
 	public Long getPotholeId() {
@@ -38,15 +34,13 @@ public class Pothole {
 		this.status = status;
 	}
 
-
-
 	public String getSeverity() {
 		return severity;
 	}
 
 	public void setSeverity(String severity) {
 		this.severity = severity;
-		
+
 	}
 
 	public Long getUserId() {
@@ -99,9 +93,9 @@ public class Pothole {
 
 	@Override
 	public String toString() {
-		return "Pothole [potholeId=" + potholeId + ", status=" + status + ", severity=" + severity + ", userId=" + userId + ", latitude=" + latitude + ", longitude="
-				+ longitude + ", roadName=" + roadName + ", direction=" + direction + ", lane=" + lane + "]";
+		return "Pothole [potholeId=" + potholeId + ", status=" + status + ", severity=" + severity + ", userId="
+				+ userId + ", latitude=" + latitude + ", longitude=" + longitude + ", roadName=" + roadName
+				+ ", direction=" + direction + ", lane=" + lane + "]";
 	}
 
-	
 }
