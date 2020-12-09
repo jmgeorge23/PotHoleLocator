@@ -19,47 +19,80 @@ public class ClaimSqlDAO implements ClaimDAO {
 	@Override
 	public List<ClaimDTO> getAllClaims() {
 
-		List<ClaimDTO> gettingAllClaims = new ArrayList<>();
+		List<ClaimDTO> allClaims = new ArrayList<>();
 		
 		String gettingClaims = "SELECT * FROM claims;";
 		
-//		SqlRowSet result = jdbc
+		SqlRowSet result = jdbcTemplate.queryForRowSet(gettingClaims);
 		
-		return gettingAllClaims;
+		while(result.next()) {
+			ClaimDTO claim = mapToClaim(result);
+			allClaims.add(claim);
+		}
+		
+		return allClaims;
 	}
 
 	@Override
-	public ClaimDTO getClaimById(Long ClaimId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ClaimDTO getClaimById(int claimId) {
+		
+		ClaimDTO claim=  null;
+		
+		String claimById = "SELECT * FROM claims WHERE claim__id =?;";
+		
+		SqlRowSet result =jdbcTemplate.queryForRowSet(claimById, claimId);
+		
+		while (result.next()) {
+			claim = mapToClaim(result);
+		}
+		return claim;
 	}
 
 	@Override
-	public List<ClaimDTO> getUsersClaim(Long userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ClaimDTO> getUsersClaim(int userId) {
+		
+		List<ClaimDTO> userClaims =  new ArrayList<>();
+		
+		String gettingClaimsByUser = "SELECT c.claim_id, c.amount, c.description, c.claim_status_id, uc.user_id FROM claims c INNER JOIN users_claims uc ON c.claim_id = uc.claim_id WHERE uc.user_id = ?;";
+		
+		SqlRowSet result = jdbcTemplate.queryForRowSet(gettingClaimsByUser);
+		
+		while(result.next()) {
+			ClaimDTO claim = mapToClaim(result);
+			userClaims.add(claim);
+		}
+			
+		return userClaims;
 	}
 
 	@Override
 	public boolean createClaim(ClaimDTO newClaim) {
-		// TODO Auto-generated method stub
-		return true;
+		
+		boolean claim = false;
+		
+		String createNewClaim ="INSERT INTO claims(claim_id, amount, description, claim_status_id) VALUES(DEFAULT, ?, ?,?);";
+		
+		int result = jdbcTemplate.update(createNewClaim, newClaim.getClaimId(), newClaim.getClaimAmount(), newClaim.getDescription(), newClaim.getStatusId() );
+		
+		
+		
+		return claim;
 	}
 
 	@Override
-	public boolean updateClaim(ClaimDTO updatedClaim) {
+	public boolean updateClaim(ClaimDTO updatedClaim, int claimId) {
 		// TODO Auto-generated method stub
 		return true;
 
 	}
 
-	private ClaimDTO maptoClaim(SqlRowSet cl) {
+	private ClaimDTO mapToClaim(SqlRowSet cl) {
 
 		ClaimDTO claims = new ClaimDTO();
 
 		claims.setClaimId(cl.getLong("claim_id"));
 		claims.setClaimAmount(cl.getDouble("claim_amount"));
-		claims.setStatusId(cl.getLong("status_id"));
+		claims.setStatusId(cl.getLong("claim_status_id"));
 		claims.setUserId(cl.getLong("user_id"));
 		claims.setPotholeId(cl.getLong("pothole_id"));
 
