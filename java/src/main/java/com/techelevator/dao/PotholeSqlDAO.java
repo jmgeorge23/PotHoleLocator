@@ -8,6 +8,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
 import com.techelevator.model.Pothole;
+import com.techelevator.model.PotholeDTO;
 @Service
 public class PotholeSqlDAO implements PotholeDAO{
 
@@ -71,19 +72,19 @@ public class PotholeSqlDAO implements PotholeDAO{
 
 
 	@Override
-	public boolean createPothole(Pothole newPothole) {
+	public boolean createPothole(PotholeDTO newPothole) {
 		boolean potholes = false;
 		
-		String makePothole = "BEGIN TRANSACTION;"
-						+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id)"
-						+ "VALUES(DEFAULT(?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),(SELECT severity_id FROM severity WHERE severity = ?)"
-						+ "COMMIT";
-		
-		int result = jdbcTemplate.update(makePothole, newPothole.getLatitude(), newPothole.getLongitude(), newPothole.getStatus(), newPothole.getSeverity());
-		
-		if( result == 0) {
-			potholes = true;
-		}
+//		String makePothole = "BEGIN TRANSACTION;"
+//						+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id)"
+//						+ "VALUES(DEFAULT(?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),(SELECT severity_id FROM severity WHERE severity = ?)"
+//						+ "COMMIT";
+//		
+//		int result = jdbcTemplate.update(makePothole, newPothole.getLatitude(), newPothole.getLongitude(), newPothole.getStatus(), newPothole.getSeverity());
+//		
+//		if( result == 0) {
+//			potholes = true;
+//		}
 	return potholes;
 	}
 

@@ -46,11 +46,11 @@ public class PotholeController {
 //	}
 	
 	//Add pothole 
-//	@ResponseStatus(HttpStatus.CREATED)
-//	@RequestMapping(value = "/potholes", method = RequestMethod.POST)
-//	public void addPothole(@Valid @RequestBody PotholeDTO newPothole) {
-//		potholeDAO.createPothole(newPothole);
-//	}
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(value = "/potholes", method = RequestMethod.POST)
+	public void addPothole(@Valid @RequestBody PotholeDTO newPothole) {
+		potholeDAO.createPothole(newPothole);
+	}
 	
 	//Add pothole severity
 //	@ResponseStatus(HttpStatus.CREATED)

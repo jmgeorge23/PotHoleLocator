@@ -3,6 +3,7 @@ package com.techelevator.dao;
 import java.util.List;
 
 import com.techelevator.model.Pothole;
+import com.techelevator.model.PotholeDTO;
 
 public interface PotholeDAO {
 	
@@ -16,7 +17,7 @@ public interface PotholeDAO {
 	List<Pothole> getPotholeByStatus(Integer statusId);
 	
 	//add pothole
-	boolean createPothole(Pothole newPothole);
+	boolean createPothole(PotholeDTO newPothole);
 	
 	//add pothole severity
 	boolean addPotholeSeverity(Integer severityId,Integer potholeId);
