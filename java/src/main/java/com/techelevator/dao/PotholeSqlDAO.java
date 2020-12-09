@@ -35,7 +35,7 @@ public class PotholeSqlDAO implements PotholeDAO{
 	}
 
 	@Override
-	public Pothole getPothole(Long potholeId) {
+	public Pothole getPothole(Integer potholeId) {
 
 		Pothole potholes = null;
 
@@ -52,18 +52,21 @@ public class PotholeSqlDAO implements PotholeDAO{
 	}
 
 	@Override
-	public Pothole getPotholeByStatus(Integer statusId) {
-		Pothole potholes = null;
+	public List<Pothole> getPotholeByStatus(Integer statusId) {
+		
+		List<Pothole> potholesStat =  new ArrayList<>();
 
 		String potholeByStat = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id WHERE status_id = ?;"; 
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(potholeByStat, statusId);
 
 		while(result.next()) {
-			potholes = mapToPothole(result);
+			Pothole pothole = mapToPothole(result);
+			potholesStat.add(pothole);
 		}
 
-		return potholes;
+
+		return potholesStat;
 	}
 
 
@@ -73,34 +76,50 @@ public class PotholeSqlDAO implements PotholeDAO{
 		
 		String makePothole = "BEGIN TRANSACTION;"
 						+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id)"
-						+ "VALUES(DEFAULT(?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = 'Reported'),(SELECT severity_id FROM severity WHERE severity = 'Not Inspected')"
+						+ "VALUES(DEFAULT(?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),(SELECT severity_id FROM severity WHERE severity = ?)"
 						+ "COMMIT";
 		
 		int result = jdbcTemplate.update(makePothole, newPothole.getLatitude(), newPothole.getLongitude(), newPothole.getStatus(), newPothole.getSeverity());
 		
-		if( result == 1) {
+		if( result == 0) {
 			potholes = true;
 		}
 	return potholes;
 	}
 
 	@Override
-	public Pothole addPotholeSeverity(Integer severityId) {
+	public boolean addPotholeSeverity(Integer severityId, Integer potholeId) {
 		// TODO Auto-generated method stub
-		return null;
+		return true;
 	}
 
 	@Override
-	public Pothole updatePotholeSeverity(Integer severityId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public boolean updatePotholeSeverity(Integer severityId, Integer potholeId) {
+		boolean potholes = false;
+		
+		String updateSeverity="UPDATE potholes SET severity_id =? WHERE pothole_id = ?";
+		
+		int result = jdbcTemplate.update(updateSeverity,severityId, potholeId);
+				
+				if( result == 0) {
+					potholes = true;
+				}
+			return potholes;
+			}
 
 	@Override
-	public Pothole updatePotholeStatus(Integer stausId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public boolean updatePotholeStatus(Integer statusId,Integer potholeId ) {
+		boolean potholes = false;
+		
+		String updateStatus="UPDATE potholes SET pothole_status_id =? WHERE pothole_id = ?";
+		
+		int result = jdbcTemplate.update(updateStatus,statusId, potholeId);
+				
+				if( result == 0) {
+					potholes = true;
+				}
+			return potholes;
+			}
 
 	@Override
 	public Pothole deletePothole(Long potholeId) {
@@ -127,9 +146,9 @@ public class PotholeSqlDAO implements PotholeDAO{
 	}
 
 	@Override
-	public Pothole updatePothole(Pothole updatedPothole) {
+	public boolean updatePothole(Pothole updatedPothole) {
 		// TODO Auto-generated method stub
-		return null;
+		return true;
 	}
 
 }

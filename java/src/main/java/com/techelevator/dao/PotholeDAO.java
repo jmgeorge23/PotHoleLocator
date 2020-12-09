@@ -10,25 +10,25 @@ public interface PotholeDAO {
 	List<Pothole> findAllPotholes();
 	
 	//get pothole by id
-	Pothole getPothole(Long potholeId);
+	Pothole getPothole(Integer potholeId);
 	
 	//get pothole by status
-	Pothole getPotholeByStatus(Integer statusId);
+	List<Pothole> getPotholeByStatus(Integer statusId);
 	
 	//add pothole
 	boolean createPothole(Pothole newPothole);
 	
 	//add pothole severity
-	Pothole addPotholeSeverity(Integer severityId);
+	boolean addPotholeSeverity(Integer severityId,Integer potholeId);
 	
 	//update pothole severity
-	Pothole updatePotholeSeverity(Integer severityId);
+	boolean updatePotholeSeverity(Integer severityId,Integer potholeId);
 	
 	//update pothole status
-	Pothole updatePotholeStatus(Integer stausId);
+	boolean updatePotholeStatus(Integer statusId,Integer potholeId);
 	
 	//update pothole general
-	Pothole updatePothole(Pothole updatedPothole);
+	boolean updatePothole(Pothole updatedPothole);
 	
 	//delete pothole
 	Pothole deletePothole(Long potholeId);
