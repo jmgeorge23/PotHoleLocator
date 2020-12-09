@@ -66,7 +66,7 @@ public class PotholeController {
 	}
 	
 	//Update pothole status
-	@RequestMapping(value = "potholes/{potholeId}/status", method = RequestMethod.PUT)
+	@RequestMapping(value = "/potholes/{potholeId}/status", method = RequestMethod.PUT)
 	public void updatePotholeStatus(@Valid @RequestBody PotholeDTO updatedPothole, @PathVariable int potholeId) {
 		potholeDAO.updatePotholeStatus(potholeId, updatedPothole.getStatus());
 	}
