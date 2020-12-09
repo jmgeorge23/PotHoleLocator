@@ -54,22 +54,22 @@ public class PotholeController {
 	
 	
 	//Update pothole
-//	@RequestMapping(value = "/potholes/{id}", method = RequestMethod.PUT)
-//	public void updatePothole(@Valid @RequestBody Pothole potholeChanged, @PathVariable int id) {
-//		potholeDAO.updatePothole(potholeChanged);
-//	}
+	@RequestMapping(value = "/potholes/{potholeId}", method = RequestMethod.PUT)
+	public void updatePothole(@Valid @RequestBody PotholeDTO updatedPothole, @PathVariable int potholeId) {
+		potholeDAO.updatePothole(updatedPothole, potholeId);
+	}
 	
 	//Update pothole severity
-//	@RequestMapping(value = "/potholes/{id}/severity", method = RequestMethod.PUT)
-//	public void updatePotholeSeverity(@Valid @RequestBody Pothole potholeChanged, @PathVariable int id) {
-//		potholeDAO.updatePotholeSeverity(potholeChanged);
-//	}
+	@RequestMapping(value = "/potholes/{potholeId}/severity", method = RequestMethod.PUT)
+	public void updatePotholeSeverity(@Valid @RequestBody PotholeDTO updatedPothole, @PathVariable int potholeId) {
+		potholeDAO.updatePotholeSeverity(potholeId,updatedPothole.getSeverity());
+	}
 	
 	//Update pothole status
-//	@RequestMapping(value = "potholes/{id}/status", method = RequestMethod.PUT)
-//	public void updatePotholeStatus(@Valid @RequestBody Pothole potholeChanged, @PathVariable int id) {
-//		potholeDAO.updatePotholeStatus(potholeChanged);
-//	}
+	@RequestMapping(value = "potholes/{potholeId}/status", method = RequestMethod.PUT)
+	public void updatePotholeStatus(@Valid @RequestBody PotholeDTO updatedPothole, @PathVariable int potholeId) {
+		potholeDAO.updatePotholeStatus(potholeId, updatedPothole.getStatus());
+	}
 	
 	//Delete pothole Might not use may just changed status to deleted
 //	@ResponseStatus(HttpStatus.OK)

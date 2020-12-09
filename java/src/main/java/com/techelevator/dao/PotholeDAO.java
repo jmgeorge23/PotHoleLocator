@@ -21,13 +21,13 @@ public interface PotholeDAO {
 	
 	
 	//update pothole severity
-	boolean updatePotholeSeverity(Integer severityId,Integer potholeId);
+	boolean updatePotholeSeverity(int potholeId, String severity);
 	
 	//update pothole status
-	boolean updatePotholeStatus(Integer statusId,Integer potholeId);
+	boolean updatePotholeStatus(int potholeId, String status);
 	
 	//update pothole general
-	boolean updatePothole(Pothole updatedPothole);
+	boolean updatePothole(PotholeDTO updatedPothole, int potholeId);
 	
 	//delete pothole
 	Pothole deletePothole(Long potholeId);

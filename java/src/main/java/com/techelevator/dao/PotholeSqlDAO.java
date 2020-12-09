@@ -57,7 +57,7 @@ public class PotholeSqlDAO implements PotholeDAO{
 		
 		List<Pothole> potholesStat =  new ArrayList<>();
 
-		String potholeByStat = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id WHERE status_id = ?;"; 
+		String potholeByStat = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id WHERE p.pothole_status_id = ?;"; 
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(potholeByStat, statusId);
 
@@ -91,12 +91,12 @@ public class PotholeSqlDAO implements PotholeDAO{
 
 
 	@Override
-	public boolean updatePotholeSeverity(Integer severityId, Integer potholeId) {
+	public boolean updatePotholeSeverity( int potholeId, String severity) {
 		boolean potholes = false;
 		
-		String updateSeverity="UPDATE potholes SET severity_id =? WHERE pothole_id = ?";
+		String updateSeverity="UPDATE potholes SET severity_id =(SELECT severity_id FROM severity WHERE severity=?) WHERE pothole_id = ?";
 		
-		int result = jdbcTemplate.update(updateSeverity,severityId, potholeId);
+		int result = jdbcTemplate.update(updateSeverity,severity, potholeId);
 				
 				if( result == 0) {
 					potholes = true;
@@ -105,12 +105,12 @@ public class PotholeSqlDAO implements PotholeDAO{
 			}
 
 	@Override
-	public boolean updatePotholeStatus(Integer statusId,Integer potholeId ) {
+	public boolean updatePotholeStatus(int potholeId, String status ) {
 		boolean potholes = false;
 		
-		String updateStatus="UPDATE potholes SET pothole_status_id =? WHERE pothole_id = ?";
+		String updateStatus="UPDATE potholes SET pothole_status_id =(SELECT pothole_status_id FROM pothole_status WHERE status =?) WHERE pothole_id = ?";
 		
-		int result = jdbcTemplate.update(updateStatus,statusId, potholeId);
+		int result = jdbcTemplate.update(updateStatus, status, potholeId);
 				
 				if( result == 0) {
 					potholes = true;
@@ -143,9 +143,20 @@ public class PotholeSqlDAO implements PotholeDAO{
 	}
 
 	@Override
-	public boolean updatePothole(Pothole updatedPothole) {
-		// TODO Auto-generated method stub
-		return true;
-	}
+	public boolean updatePothole(PotholeDTO updatedPothole, int potholeId) {
+		
+		boolean potholes = false;
+		
+		String updatePothole= "UPDATE potholes SET pothole_status_id=(SELECT pothole_status_id FROM pothole_status WHERE status = ?), severity_id =(SELECT severity_id FROM severity WHERE severity = ?), lat = ?, lng = ? WHERE pothole_id =?;";
+
+		
+		int result = jdbcTemplate.update(updatePothole,updatedPothole.getStatus(), updatedPothole.getSeverity(), updatedPothole.getLatitude(), updatedPothole.getLongitude(), potholeId);
+				
+				if( result == 0) {
+					potholes = true;
+				}
+			return potholes;
+			}
+
 
 }
