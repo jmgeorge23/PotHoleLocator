@@ -11,9 +11,9 @@
             </div>
         </div>
         <gmap-map
+            class="gmap"
             :center="myCoordinates"
             :zoom="12.8"
-            style="width:800px; height:800px; margin: 32px auto;"
             ref="mapRef"
             @dragend="handleDrag"
         >
@@ -142,3 +142,24 @@ import potholeServices from '../services/PotholeService.js';
         }
     }
 </script>
+<style>
+    .gmap {
+        width:800px;
+        height:800px;
+        margin: 32px auto;
+    }
+    @media screen and (max-width: 900px){
+        .gmap {
+            width:400px;
+            height:400px;
+            margin: 32px auto;
+        }       
+    }
+    @media screen and (max-width: 1264px){
+        .gmap {
+            width:700px;
+            height:700px;
+            margin: 32px auto;
+        }       
+    }
+</style>
