@@ -72,9 +72,9 @@ public class PotholeController {
 	}
 	
 	//Delete pothole Might not use may just changed status to deleted
-//	@ResponseStatus(HttpStatus.OK)
-//	@RequestMapping(value = "/potholes/{id}", method = RequestMethod.DELETE)
-//	public void deletelPothole(@PathVariable int id) {
-//		potholeDAO.deletePothole(id);
-//	}
+	@ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "/potholes/{potholeId}", method = RequestMethod.DELETE)
+	public void deletelPothole(@PathVariable int potholeId) {
+		potholeDAO.deletePothole(potholeId);
+	}
 }

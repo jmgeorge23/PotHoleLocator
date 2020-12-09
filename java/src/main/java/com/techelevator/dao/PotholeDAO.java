@@ -30,7 +30,7 @@ public interface PotholeDAO {
 	boolean updatePothole(PotholeDTO updatedPothole, int potholeId);
 	
 	//delete pothole
-	Pothole deletePothole(Long potholeId);
+	boolean deletePothole(int potholeId);
 	
 	
 

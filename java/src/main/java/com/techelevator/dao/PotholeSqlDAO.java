@@ -88,7 +88,21 @@ public class PotholeSqlDAO implements PotholeDAO{
 	return potholes;
 	}
 
+	@Override
+	public boolean updatePothole(PotholeDTO updatedPothole, int potholeId) {
+		
+		boolean potholes = false;
+		
+		String updatePothole= "UPDATE potholes SET pothole_status_id=(SELECT pothole_status_id FROM pothole_status WHERE status = ?), severity_id =(SELECT severity_id FROM severity WHERE severity = ?), lat = ?, lng = ? WHERE pothole_id =?;";
 
+		
+		int result = jdbcTemplate.update(updatePothole,updatedPothole.getStatus(), updatedPothole.getSeverity(), updatedPothole.getLatitude(), updatedPothole.getLongitude(), potholeId);
+				
+				if( result == 0) {
+					potholes = true;
+				}
+			return potholes;
+			}
 
 	@Override
 	public boolean updatePotholeSeverity( int potholeId, String severity) {
@@ -119,10 +133,21 @@ public class PotholeSqlDAO implements PotholeDAO{
 			}
 
 	@Override
-	public Pothole deletePothole(Long potholeId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public boolean deletePothole(int potholeId) {
+		
+		boolean potholes = false;
+		
+		String deleteFromUsersPotholes= "DELETE from users_potholes WHERE pothole_id =?";
+		String deleteFromPotholes="DELETE FROM potholes WHERE pothole_id = ? ";
+		
+		int result1 = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
+		int result2 =  jdbcTemplate.update(deleteFromPotholes, potholeId);
+				
+				if( result1==0 && result2 == 0) {
+					potholes = true;
+				}
+			return potholes;
+			}
 
 	private Pothole mapToPothole(SqlRowSet ph) {
 
@@ -142,21 +167,8 @@ public class PotholeSqlDAO implements PotholeDAO{
 
 	}
 
-	@Override
-	public boolean updatePothole(PotholeDTO updatedPothole, int potholeId) {
-		
-		boolean potholes = false;
-		
-		String updatePothole= "UPDATE potholes SET pothole_status_id=(SELECT pothole_status_id FROM pothole_status WHERE status = ?), severity_id =(SELECT severity_id FROM severity WHERE severity = ?), lat = ?, lng = ? WHERE pothole_id =?;";
 
-		
-		int result = jdbcTemplate.update(updatePothole,updatedPothole.getStatus(), updatedPothole.getSeverity(), updatedPothole.getLatitude(), updatedPothole.getLongitude(), potholeId);
-				
-				if( result == 0) {
-					potholes = true;
-				}
-			return potholes;
-			}
 
 
 }
+
