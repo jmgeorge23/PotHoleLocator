@@ -18,10 +18,6 @@ public class PotholeDTO {
 	
 	
 	
-	public Pothole(){
-		
-		
-	}
 
 	public Long getPotholeId() {
 		return potholeId;
