@@ -6,68 +6,65 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import com.techelevator.model.Claim;
+import com.techelevator.model.ClaimDTO;
 
-public class ClaimSqlDAO implements ClaimDAO{
-	
+public class ClaimSqlDAO implements ClaimDAO {
+
 	private JdbcTemplate jdbcTemplate;
-	
+
 	public ClaimSqlDAO(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
 	@Override
-	public List<Claim> getAllClaims() {
-		List<Claim> reports = new ArrayList<>();
-		Claim claims = null;
+	public List<ClaimDTO> getAllClaims() {
+
+		List<ClaimDTO> gettingAllClaims = new ArrayList<>();
 		
+		String gettingClaims = "SELECT * FROM claims;";
 		
+//		SqlRowSet result = jdbc
 		
-		
-		return reports;
+		return gettingAllClaims;
 	}
 
 	@Override
-	public Claim getClaimById(Long ClaimId) {
+	public ClaimDTO getClaimById(Long ClaimId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Claim> getUsersClaim(Long userId) {
+	public List<ClaimDTO> getUsersClaim(Long userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Claim createClaim(Claim newClaim) {
+	public boolean createClaim(ClaimDTO newClaim) {
 		// TODO Auto-generated method stub
-		return null;
+		return true;
 	}
 
 	@Override
-	public Claim updateClaim(Claim updatedClaim) {
+	public boolean updateClaim(ClaimDTO updatedClaim) {
 		// TODO Auto-generated method stub
-		return null;
-		
+		return true;
+
 	}
-	private Claim maptoClaim(SqlRowSet cl) {
-		
-		Claim claims = new Claim();
-		
+
+	private ClaimDTO maptoClaim(SqlRowSet cl) {
+
+		ClaimDTO claims = new ClaimDTO();
+
 		claims.setClaimId(cl.getLong("claim_id"));
 		claims.setClaimAmount(cl.getDouble("claim_amount"));
 		claims.setStatusId(cl.getLong("status_id"));
 		claims.setUserId(cl.getLong("user_id"));
 		claims.setPotholeId(cl.getLong("pothole_id"));
-		
+
 		return claims;
-		
 
-	
 	}
-
-	
-
-	
 
 }
