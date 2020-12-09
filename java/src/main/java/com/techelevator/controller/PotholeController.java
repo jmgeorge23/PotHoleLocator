@@ -52,12 +52,6 @@ public class PotholeController {
 		potholeDAO.createPothole(newPothole);
 	}
 	
-	//Add pothole severity
-//	@ResponseStatus(HttpStatus.CREATED)
-//	@RequestMapping(value = "/potholes", method = RequestMethod.POST)
-//	public void addPotholeSeverity(@Valid @RequestBody PotholeDTO newPotholeSeverity) {
-//		potholeDAO.addPotholeSeverity(newPotholeSeverity);
-//	}
 	
 	//Update pothole
 //	@RequestMapping(value = "/potholes/{id}", method = RequestMethod.PUT)

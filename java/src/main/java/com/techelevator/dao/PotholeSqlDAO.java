@@ -75,24 +75,20 @@ public class PotholeSqlDAO implements PotholeDAO{
 	public boolean createPothole(PotholeDTO newPothole) {
 		boolean potholes = false;
 		
-//		String makePothole = "BEGIN TRANSACTION;"
-//						+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id)"
-//						+ "VALUES(DEFAULT(?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),(SELECT severity_id FROM severity WHERE severity = ?)"
-//						+ "COMMIT";
-//		
-//		int result = jdbcTemplate.update(makePothole, newPothole.getLatitude(), newPothole.getLongitude(), newPothole.getStatus(), newPothole.getSeverity());
-//		
-//		if( result == 0) {
-//			potholes = true;
-//		}
+		String makePothole = "BEGIN TRANSACTION;"
+						+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id)"
+						+ "VALUES(DEFAULT,?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),(SELECT severity_id FROM severity WHERE severity = ?));"
+						+ "COMMIT;";
+		
+		int result = jdbcTemplate.update(makePothole, newPothole.getLatitude(), newPothole.getLongitude(), newPothole.getStatus(), newPothole.getSeverity());
+		
+		if( result == 0) {
+			potholes = true;
+		}
 	return potholes;
 	}
 
-	@Override
-	public boolean addPotholeSeverity(Integer severityId, Integer potholeId) {
-		// TODO Auto-generated method stub
-		return true;
-	}
+
 
 	@Override
 	public boolean updatePotholeSeverity(Integer severityId, Integer potholeId) {
