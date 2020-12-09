@@ -6,9 +6,7 @@ public class Pothole {
 
 	private Long potholeId;
 	private String status;
-	
 	private String severity;
-	
 	private Long userId;
 	private BigDecimal latitude;
 	private BigDecimal longitude;
