@@ -34,16 +34,16 @@ public class PotholeController {
 	}
 	
 	//Get pothole by ID
-//	@RequestMapping(value = "/potholes/{id}", method = RequestMethod.GET)
-//	public Pothole getPothole(@PathVariable int id) {
-//		return potholeDAO.getPothole(id);
-//	}
+	@RequestMapping(value = "/potholes/{id}", method = RequestMethod.GET)
+	public Pothole getPothole(@PathVariable int id) {
+		return potholeDAO.getPothole(id);
+	}
 	
 	//Get pothole by Status
-//	@RequestMapping(value = "/potholes/{statusId)", method = RequestMethod.GET)
-//	public List<Pothole> getPotholeByStatus(@PathVariable int statusId){
-//		return potholeDAO.getPotholeByStatus(statusId);
-//	}
+	@RequestMapping(value = "/potholes/status/{statusId}", method = RequestMethod.GET)
+	public List<Pothole> getPotholeByStatus(@PathVariable int statusId){
+		return potholeDAO.getPotholeByStatus(statusId);
+	}
 	
 	//Add pothole 
 	@ResponseStatus(HttpStatus.CREATED)
