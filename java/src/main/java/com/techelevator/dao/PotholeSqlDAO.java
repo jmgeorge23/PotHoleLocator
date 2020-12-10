@@ -79,14 +79,19 @@ public class PotholeSqlDAO implements PotholeDAO {
 				+ "VALUES(DEFAULT,?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),(SELECT severity_id FROM severity WHERE severity = ?));"
 				+ "COMMIT;";
 
-		if (addToPotholesUsers(newPothole)) {
+		int result = jdbcTemplate.update(addToPotholes, newPothole.getLatitude(), newPothole.getLongitude(),
+				newPothole.getStatus(), newPothole.getSeverity());
 
-			if (addToPotholesHistory(newPothole)) {
-				int result = jdbcTemplate.update(addToPotholes, newPothole.getLatitude(), newPothole.getLongitude(),
-						newPothole.getStatus(), newPothole.getSeverity());
+		if (result == 0) {
 
-				if (result == 0) {
+			PotholeDTO potholeWithId = getPotholesId(newPothole);
+
+			if (addToPotholesUsers(potholeWithId, newPothole)) {
+
+				if (addToPotholesHistory(potholeWithId)) {
+
 					potholes = true;
+					
 				}
 			}
 		}
@@ -187,15 +192,16 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 	}
 
-	private boolean addToPotholesUsers(PotholeDTO pothole) {
+	private boolean addToPotholesUsers(PotholeDTO potholeWithId, PotholeDTO potholeWithUserId) {
 
 		boolean potholes = false;
 
 		String addToPotholesUsers = "INSERT INTO users_potholes (user_id, pothole_id) VALUES ( ?, ?)";
 
-		int result = jdbcTemplate.update(addToPotholesUsers, pothole.getUserId(), pothole.getPotholeId());
+		int result = jdbcTemplate.update(addToPotholesUsers, potholeWithUserId.getUserId(),
+				potholeWithId.getPotholeId());
 
-		if (result == 0) {
+		if (result == 1) {
 			potholes = true;
 		}
 		return potholes;
@@ -215,6 +221,23 @@ public class PotholeSqlDAO implements PotholeDAO {
 		}
 		return potholes;
 
+	}
+
+	private PotholeDTO getPotholesId(PotholeDTO pothole) {
+
+		PotholeDTO potholes = null;
+
+		String getPotholeId = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
+				+ "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE lat = ? AND lng = ?";
+
+		SqlRowSet result = jdbcTemplate.queryForRowSet(getPotholeId, pothole.getLatitude(), pothole.getLongitude());
+
+		while (result.next()) {
+			potholes = mapToPothole(result);
+
+		}
+
+		return potholes;
 	}
 
 	private PotholeDTO mapToPothole(SqlRowSet ph) {
