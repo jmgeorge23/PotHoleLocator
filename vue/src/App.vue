@@ -11,7 +11,7 @@
   <v-app id="inspire">
     <v-app-bar
       app
-      color="primary"
+      color="info"
       flat
     >
       <v-container class="py-0 fill-height">
@@ -35,23 +35,17 @@
 
         <v-spacer></v-spacer>
 
-        <v-responsive max-width="260">
+        <v-responsive max-width="500px">
           <v-btn
-            color="secondary"
+            v-if="isLoggedIn"
+            color="accent"
             elevation="5"
             style="margin-right: 1rem;"
-            >Login</v-btn>
-          <v-btn
-            color="success"
-            elevation="5"
-            >Sign Up</v-btn>
-          <!-- <v-text-field
-            dense
-            flat
-            hide-details
-            rounded
-            solo-inverted
-          ></v-text-field> -->
+            @click="logout"
+            >Logout</v-btn>
+          <login class="login"
+            v-else/>
+          <register/>
         </v-responsive>
       </v-container>
     </v-app-bar>
@@ -59,7 +53,7 @@
       <router-view/>
     </v-main>
     <v-footer
-      color="primary"
+      color="info darken-1"
       padless
     >
       <v-row
@@ -77,7 +71,7 @@
           {{ link }}
         </v-btn>
         <v-col
-          class="secondary text-center white--text"
+          class="info darken-2 text-center white--text"
           cols="12"
         >
           {{ new Date().getFullYear() }} — <strong>Kony</strong>
@@ -89,9 +83,16 @@
 
 <script>
 //import Constrained from './components/Constrained.vue'
+import Login from './components/Login.vue'
+import Register from './components/Register.vue'
 export default {
   name: 'App',
+  components: {
+    Login,
+    Register,
+  },
   data: () => ({
+      dialog: false,
       headerLinks: [
         'Dashboard',
         'Notifications',
@@ -104,6 +105,18 @@ export default {
         'Contact Us',
       ],
   }),
+  computed: {
+    isLoggedIn() {
+      return (localStorage
+        .getItem('user') === null ? false : true);
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.commit("LOGOUT");
+      window.location.reload();
+    }
+  }
 }
 </script>
 
@@ -115,5 +128,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.login {
+  margin-right: 1rem;
 }
 </style>

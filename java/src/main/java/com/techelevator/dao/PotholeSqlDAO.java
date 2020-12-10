@@ -82,7 +82,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 		int result = jdbcTemplate.update(addToPotholes, newPothole.getLatitude(), newPothole.getLongitude(),
 				newPothole.getStatus(), newPothole.getSeverity());
 
-		if (result == 0) {
+		if (result == 1) {
 
 			PotholeDTO potholeWithId = getPotholesId(newPothole);
 
@@ -109,7 +109,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 			int result = jdbcTemplate.update(updatePotholes, updatedPothole.getStatus(), updatedPothole.getSeverity(),
 					updatedPothole.getLatitude(), updatedPothole.getLongitude(), potholeId);
 
-			if (result == 0) {
+			if (result == 1) {
 				potholes = true;
 			}
 		}
@@ -124,9 +124,9 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		if (addToPotholesHistory(updatedPothole)) {
 
-			int result = jdbcTemplate.update(updateSeverity, updatedPothole.getStatus(), potholeId);
+			int result = jdbcTemplate.update(updateSeverity, updatedPothole.getSeverity(), potholeId);
 
-			if (result == 0) {
+			if (result == 1) {
 				potholes = true;
 			}
 		}
@@ -141,9 +141,9 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		if (addToPotholesHistory(updatedPothole)) {
 
-			int result = jdbcTemplate.update(updateStatus, updatedPothole.getSeverity(), potholeId);
+			int result = jdbcTemplate.update(updateStatus, updatedPothole.getStatus(), potholeId);
 
-			if (result == 0) {
+			if (result == 1) {
 				potholes = true;
 			}
 		}
@@ -167,7 +167,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 				int result = jdbcTemplate.update(deleteFromPotholes, potholeId);
 
-				if (result == 0) {
+				if (result == 1) {
 					potholes = true;
 				}
 			}
