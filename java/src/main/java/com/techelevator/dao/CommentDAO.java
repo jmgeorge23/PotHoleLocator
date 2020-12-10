@@ -3,23 +3,24 @@ package com.techelevator.dao;
 import java.util.List;
 
 import com.techelevator.model.Comment;
+import com.techelevator.model.CommentDTO;
 
 public interface CommentDAO {
 	
 	//Get all comments
-	List<Comment> getAllComments();
+	List<CommentDTO> getAllComments();
 	
 	//Get comments by user
-	List<Comment> getCommentsByUser(Long userId);
+	List<CommentDTO> getCommentsByUser(Long userId);
 	
 	//Get comments by pothole
-	List<Comment> getCommentsByPotholeId(Long potholeId);
+	List<CommentDTO> getCommentsByPotholeId(Long potholeId);
 	
 	//add comment
-	Comment createComment(Comment newComment);
+	CommentDTO createComment(CommentDTO newComment);
 	
 	//delete comment
-	Comment deleteComment(Long id);
+	CommentDTO deleteComment(Long id);
 	
 
 }
