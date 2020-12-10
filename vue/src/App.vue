@@ -21,6 +21,7 @@
         <v-btn
           v-for="link in headerLinks"
           :key="link"
+          @click="$router.push({name: link})"
           text
           color="white"
         >
@@ -98,8 +99,7 @@ export default {
   data: () => ({
       dialog: false,
       headerLinks: [
-        'Dashboard',
-        'Notifications',
+        'dashboard',
         'Profile',
       ],
       footerLinks: [

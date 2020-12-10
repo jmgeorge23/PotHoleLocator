@@ -8,6 +8,7 @@ import Test from '../views/Test.vue'
 import Team from '../views/Team.vue'
 import Blog from '../views/Blog.vue'
 import ContactUs from '../views/ContactUs.vue'
+import Dashboard from '../views/Dashboard.vue'
 import store from '../store/index'
 
 Vue.use(Router)
@@ -89,6 +90,14 @@ const router = new Router({
         requiresAuth: false
       }
     },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: Dashboard,
+      meta: {
+        requiresAuth: false
+      }
+    }
   ]
 })
 
