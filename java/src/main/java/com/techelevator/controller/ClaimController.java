@@ -38,17 +38,17 @@ public class ClaimController {
 	}
 	
 	//Get claim by username
-	@RequestMapping(path = "/claims/usernameallss/{username}", method = RequestMethod.GET)
+	@RequestMapping(path = "/claims/username/{username}", method = RequestMethod.GET)
 	public List<ClaimDTO> getUsersClaim(@PathVariable String username) {
 		return claimDAO.getUsersClaim(username);
 	}
 	
 	//Add Claim
-//	@ResponseStatus(HttpStatus.CREATED)
-//	@RequestMapping(value = "/claims", method = RequestMethod.POST);
-//	public void addClaim(@Valid @RequestBody ClaimDTO newClaim) {
-//		claimDAO.createClaim(newClaim);
-//	}
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(value = "/claims", method = RequestMethod.POST)
+	public void addClaim(@Valid @RequestBody ClaimDTO newClaim) {
+		claimDAO.createClaim(newClaim);
+	}
 	
 	//Update claim status
 //	@ResponseStatus(HttpStatus.OK)

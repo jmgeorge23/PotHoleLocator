@@ -46,8 +46,7 @@ public class ClaimSqlDAO implements ClaimDAO {
 		String claimById = "SELECT c.claim_id, c.amount, c.description, cs.status, u.username "
 				+ "FROM claims c INNER JOIN claim_status cs ON c.claim_status_id = cs.claim_status_id "
 				+ "INNER JOIN users_claims uc ON c.claim_id = uc.claim_id "
-				+ "INNER JOIN users u ON uc.user_id = u.user_id "
-				+ "WHERE c.claim_id = ?;";
+				+ "INNER JOIN users u ON uc.user_id = u.user_id " + "WHERE c.claim_id = ?;";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(claimById, claimId);
 
@@ -65,8 +64,7 @@ public class ClaimSqlDAO implements ClaimDAO {
 		String gettingClaimsByUser = "SELECT c.claim_id, c.amount, c.description, cs.status, u.username "
 				+ "FROM claims c INNER JOIN claim_status cs ON c.claim_status_id = cs.claim_status_id "
 				+ "INNER JOIN users_claims uc ON c.claim_id = uc.claim_id "
-				+ "INNER JOIN users u ON uc.user_id = u.user_id "
-				+ "WHERE username = ?;";
+				+ "INNER JOIN users u ON uc.user_id = u.user_id " + "WHERE username = ?;";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(gettingClaimsByUser, username);
 
@@ -83,13 +81,27 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 		boolean claim = false;
 
-		String createNewClaim = "INSERT INTO claims(claim_id, amount, description, claim_status_id) VALUES(DEFAULT, ?, ?,(SELECT claim_status_id FROM claim_status WHERE status=?));";
+		String createNewClaim = "INSERT INTO claims(claim_id, amount, description, claim_status_id) "
+				+ "VALUES(DEFAULT, ?, ?,(SELECT claim_status_id FROM claim_status WHERE status=?));";
 
-		int result = jdbcTemplate.update(createNewClaim, newClaim.getClaimId(), newClaim.getClaimAmount(),
-				newClaim.getDescription(), newClaim.getStatus());
+		int result = jdbcTemplate.update(createNewClaim, newClaim.getClaimAmount(), newClaim.getDescription(),
+				newClaim.getStatus());
 
-		if (result == 0) {
-			claim = true;
+		if (result == 1) {
+
+			ClaimDTO claimWithId = getClaimId(newClaim);
+			newClaim.setClaimId(claimWithId.getClaimId());
+
+			if (addToUsersClaims(newClaim)) {
+
+//				if (addToPotholeClaims(claimWithId, newClaim)) {
+
+				if (addToClaimsHistory(claimWithId)) {
+
+					claim = true;
+				}
+//				}
+			}
 		}
 
 		return claim;
@@ -99,17 +111,99 @@ public class ClaimSqlDAO implements ClaimDAO {
 	public boolean updateClaim(ClaimDTO updatedClaim, int claimId) {
 		boolean claim = false;
 
-		String updatesClaims = "UPDATE claims SET amount = ? , description = ? claim_status_id =(SELECT claim_status_id FROM claim_status WHERE status=?) WHERE claim_id = ?;";
+		String updatesClaims = "UPDATE claims SET amount = ? , description = ? claim_status_id =(SELECT claim_status_id FROM claim_status WHERE status=?) "
+				+ " WHERE claim_id = ?;";
 
 		int result = jdbcTemplate.update(updatesClaims, updatedClaim.getClaimAmount(), updatedClaim.getDescription(),
 				updatedClaim.getStatus(), claimId);
 
-		if (result == 0) {
+		if (result == 1) {
 			claim = true;
 		}
 
 		return claim;
 
+	}
+
+	private boolean addToClaimsHistory(ClaimDTO claimHistory) {
+
+		boolean claim = false;
+
+		String addToClaimHistory = "INSERT INTO claims_history "
+				+ "(claim_history_id, claim_id, amount, description, claim_status_id, datetime) "
+				+ "VALUES(DEFAULT, ?, ?, ?,(SELECT claim_status_id FROM claim_status WHERE status=?), CURRENT_TIMESTAMP);";
+
+		int result = jdbcTemplate.update(addToClaimHistory, claimHistory.getClaimId(), claimHistory.getClaimAmount(),
+				claimHistory.getDescription(), claimHistory.getStatus());
+
+		if (result == 1) {
+			claim = true;
+		}
+		return claim;
+	}
+
+	private boolean addToUsersClaims(ClaimDTO newClaim) {
+
+		boolean claim = false;
+
+		String addToUsersClaims = "INSERT INTO users_claims(user_id, claim_id) "
+				+ "VALUES((SELECT user_id FROM users WHERE username = ?), ?);";
+		int result = jdbcTemplate.update(addToUsersClaims, newClaim.getUsername(), newClaim.getClaimId());
+
+		if (result == 1) {
+			claim = true;
+		}
+		return claim;
+
+	}
+
+	private boolean addToPotholeClaims(ClaimDTO claimWithClaimId, ClaimDTO claimWithpotholeId) {
+
+		boolean claim = false;
+
+		String addToPotholeClaims = "INSERT INTO pothole_claims(pothole_id, claim_id) " + "VALUES(?, ?);";
+
+		int result = jdbcTemplate.update(addToPotholeClaims, claimWithpotholeId.getPotholeId(),
+				claimWithClaimId.getClaimId());
+
+		if (result == 1) {
+			claim = true;
+		}
+		return claim;
+
+	}
+
+	private boolean addToUsersClaimsHistory(ClaimDTO claimWithUser) {
+
+		boolean claim = false;
+
+		String addToUsersClaimsHistory = "INSERT INTO users_claims_history(user_id, claim_history_id) "
+				+ "VALUES((SELECT user_id FROM users WHERE username = ?), "
+				+ "(SELECT claim_history_id FROM claims_history WHERE claim_id = ?);";
+
+		int result = jdbcTemplate.update(addToUsersClaimsHistory, claimWithUser.getUsername(),
+				claimWithUser.getClaimId());
+		if (result == 1) {
+			claim = true;
+		}
+		return claim;
+	}
+
+	private ClaimDTO getClaimId(ClaimDTO claim) {
+
+		ClaimDTO claims = null;
+
+		String getClaimId = "SELECT c.claim_id, c.amount, c.description, cs.status "
+				+ "FROM claims c INNER JOIN claim_status cs ON c.claim_status_id = cs.claim_status_id "
+				+ "WHERE amount = ?::money and description = ?;";
+		SqlRowSet result = jdbcTemplate.queryForRowSet(getClaimId, claim.getClaimAmount(), claim.getDescription());
+
+		while (result.next()) {
+			claims = mapToClaimNoUsername(result);
+
+		}
+
+		return claims;
 	}
 
 	private ClaimDTO mapToClaim(SqlRowSet cl) {
@@ -127,4 +221,16 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 	}
 
+	private ClaimDTO mapToClaimNoUsername(SqlRowSet cl) {
+
+		ClaimDTO claims = new ClaimDTO();
+
+		claims.setClaimId(cl.getLong("claim_id"));
+		claims.setClaimAmount(cl.getBigDecimal("amount"));
+		claims.setStatus(cl.getString("status"));
+		claims.setDescription(cl.getString("description"));
+
+		return claims;
+
+	}
 }
