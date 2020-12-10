@@ -94,16 +94,18 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 			if (addToUsersClaims(newClaim)) {
 
-//				if (addToPotholeClaims(claimWithId, newClaim)) {
+				if (addToPotholeClaims(newClaim)) {
 
-				if (addToClaimsHistory(claimWithId)) {
+					if (addToClaimsHistory(claimWithId)) {
 
-					claim = true;
+						if (addToUsersClaimsHistory(newClaim)) {
+
+							claim = true;
+						}
+					}
 				}
-//				}
 			}
 		}
-
 		return claim;
 	}
 
@@ -157,14 +159,13 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 	}
 
-	private boolean addToPotholeClaims(ClaimDTO claimWithClaimId, ClaimDTO claimWithpotholeId) {
+	private boolean addToPotholeClaims(ClaimDTO newClaim) {
 
 		boolean claim = false;
 
-		String addToPotholeClaims = "INSERT INTO pothole_claims(pothole_id, claim_id) " + "VALUES(?, ?);";
+		String addToPotholeClaims = "INSERT INTO potholes_claims(pothole_id, claim_id) " + "VALUES(?, ?);";
 
-		int result = jdbcTemplate.update(addToPotholeClaims, claimWithpotholeId.getPotholeId(),
-				claimWithClaimId.getClaimId());
+		int result = jdbcTemplate.update(addToPotholeClaims, newClaim.getPotholeId(), newClaim.getClaimId());
 
 		if (result == 1) {
 			claim = true;
@@ -179,10 +180,9 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 		String addToUsersClaimsHistory = "INSERT INTO users_claims_history(user_id, claim_history_id) "
 				+ "VALUES((SELECT user_id FROM users WHERE username = ?), "
-				+ "(SELECT claim_history_id FROM claims_history WHERE claim_id = ?);";
+				+ "(SELECT claim_history_id FROM claims_history WHERE claim_id = ?));";
 
-		int result = jdbcTemplate.update(addToUsersClaimsHistory, claimWithUser.getUsername(),
-				claimWithUser.getClaimId());
+		int result = jdbcTemplate.update(addToUsersClaimsHistory, claimWithUser.getUsername(), claimWithUser.getClaimId());
 		if (result == 1) {
 			claim = true;
 		}
@@ -195,7 +195,7 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 		String getClaimId = "SELECT c.claim_id, c.amount, c.description, cs.status "
 				+ "FROM claims c INNER JOIN claim_status cs ON c.claim_status_id = cs.claim_status_id "
-				+ "WHERE amount = ?::money and description = ?;";
+				+ "WHERE amount = ? and description = ?;";
 		SqlRowSet result = jdbcTemplate.queryForRowSet(getClaimId, claim.getClaimAmount(), claim.getDescription());
 
 		while (result.next()) {
@@ -215,7 +215,6 @@ public class ClaimSqlDAO implements ClaimDAO {
 		claims.setStatus(cl.getString("status"));
 		claims.setDescription(cl.getString("description"));
 		claims.setUsername(cl.getString("username"));
-//		claims.setPotholeId(cl.getLong("pothole_id"));
 
 		return claims;
 
