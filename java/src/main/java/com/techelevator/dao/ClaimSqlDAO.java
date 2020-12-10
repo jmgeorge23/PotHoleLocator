@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.techelevator.model.Claim;
 import com.techelevator.model.ClaimDTO;
+
 @Service
 public class ClaimSqlDAO implements ClaimDAO {
 
@@ -21,28 +22,28 @@ public class ClaimSqlDAO implements ClaimDAO {
 	public List<ClaimDTO> getAllClaims() {
 
 		List<ClaimDTO> allClaims = new ArrayList<>();
-		
+
 		String gettingClaims = "SELECT * FROM claims;";
-		
+
 		SqlRowSet result = jdbcTemplate.queryForRowSet(gettingClaims);
-		
-		while(result.next()) {
+
+		while (result.next()) {
 			ClaimDTO claim = mapToClaim(result);
 			allClaims.add(claim);
 		}
-		
+
 		return allClaims;
 	}
 
 	@Override
 	public ClaimDTO getClaimById(int claimId) {
-		
-		ClaimDTO claim=  null;
-		
+
+		ClaimDTO claim = null;
+
 		String claimById = "SELECT * FROM claims WHERE claim__id =?;";
-		
-		SqlRowSet result =jdbcTemplate.queryForRowSet(claimById, claimId);
-		
+
+		SqlRowSet result = jdbcTemplate.queryForRowSet(claimById, claimId);
+
 		while (result.next()) {
 			claim = mapToClaim(result);
 		}
@@ -51,39 +52,51 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 	@Override
 	public List<ClaimDTO> getUsersClaim(int userId) {
-		
-		List<ClaimDTO> userClaims =  new ArrayList<>();
-		
+
+		List<ClaimDTO> userClaims = new ArrayList<>();
+
 		String gettingClaimsByUser = "SELECT c.claim_id, c.amount, c.description, c.claim_status_id, uc.user_id FROM claims c INNER JOIN users_claims uc ON c.claim_id = uc.claim_id WHERE uc.user_id = ?;";
-		
+
 		SqlRowSet result = jdbcTemplate.queryForRowSet(gettingClaimsByUser);
-		
-		while(result.next()) {
+
+		while (result.next()) {
 			ClaimDTO claim = mapToClaim(result);
 			userClaims.add(claim);
 		}
-			
+
 		return userClaims;
 	}
 
 	@Override
 	public boolean createClaim(ClaimDTO newClaim) {
-		
+
 		boolean claim = false;
-		
-		String createNewClaim ="INSERT INTO claims(claim_id, amount, description, claim_status_id) VALUES(DEFAULT, ?, ?,?);";
-		
-		int result = jdbcTemplate.update(createNewClaim, newClaim.getClaimId(), newClaim.getClaimAmount(), newClaim.getDescription(), newClaim.getStatusId() );
-		
-		
-		
+
+		String createNewClaim = "INSERT INTO claims(claim_id, amount, description, claim_status_id) VALUES(DEFAULT, ?, ?,?);";
+
+		int result = jdbcTemplate.update(createNewClaim, newClaim.getClaimId(), newClaim.getClaimAmount(),
+				newClaim.getDescription(), newClaim.getStatusId());
+
+		if (result == 0) {
+			claim = true;
+		}
+
 		return claim;
 	}
 
 	@Override
 	public boolean updateClaim(ClaimDTO updatedClaim, int claimId) {
-		// TODO Auto-generated method stub
-		return true;
+		boolean claim = false;
+
+		String updatesClaims = "UPDATE claims SET amount = ? , description = ? claim_status_id =(SELECT claim_status_id FROM claim_status WHERE status=?) WHERE claim_id = ?;";
+
+		int result = jdbcTemplate.update(updatesClaims, updatedClaim.getClaimAmount(), updatedClaim.getDescription(), updatedClaim.getStatusId(), claimId);
+
+		if (result == 0) {
+			claim = true;
+		}
+
+		return claim;
 
 	}
 
