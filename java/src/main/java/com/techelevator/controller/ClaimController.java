@@ -38,7 +38,7 @@ public class ClaimController {
 	}
 	
 	//Get claim by username
-	@RequestMapping(path = "/claims/username/{username}", method = RequestMethod.GET)
+	@RequestMapping(path = "/claims/usernameallss/{username}", method = RequestMethod.GET)
 	public List<ClaimDTO> getUsersClaim(@PathVariable String username) {
 		return claimDAO.getUsersClaim(username);
 	}
