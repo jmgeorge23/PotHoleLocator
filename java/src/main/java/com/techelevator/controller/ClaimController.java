@@ -32,15 +32,15 @@ public class ClaimController {
 	}
 	
 	//Get claim by claim ID
-	@RequestMapping(path = "/claims/{id]", method = RequestMethod.GET)
-	public ClaimDTO getClaimById(@PathVariable int claimId) {
-		return claimDAO.getClaimById(claimId);
+	@RequestMapping(path = "/claims/{id}", method = RequestMethod.GET)
+	public ClaimDTO getClaimById(@PathVariable int id) {
+		return claimDAO.getClaimById(id);
 	}
 	
-	//Get claim by user ID
-	@RequestMapping(path = "/claims/user/{userId}", method = RequestMethod.GET)
-	public List<ClaimDTO> getUsersClaim(@PathVariable int userId) {
-		return claimDAO.getUsersClaim(userId);
+	//Get claim by username
+	@RequestMapping(path = "/claims/username/{username}", method = RequestMethod.GET)
+	public List<ClaimDTO> getUsersClaim(@PathVariable String username) {
+		return claimDAO.getUsersClaim(username);
 	}
 	
 	//Add Claim

@@ -1,12 +1,14 @@
 package com.techelevator.model;
 
+import java.math.BigDecimal;
+
 public class Claim {
 
 	private Long claimId;
-	private double claimAmount;
-	private Long statusId;
+	private BigDecimal claimAmount;
+	private String status;
 	private String description;
-	private Long userId;
+	private String username;
 	private Long potholeId;
 	
 	public Claim() {
@@ -21,28 +23,28 @@ public class Claim {
 		this.claimId = claimId;
 	}
 
-	public double getClaimAmount() {
+	public BigDecimal getClaimAmount() {
 		return claimAmount;
 	}
 
-	public void setClaimAmount(double claimAmount) {
+	public void setClaimAmount(BigDecimal claimAmount) {
 		this.claimAmount = claimAmount;
 	}
 
-	public Long getStatusId() {
-		return statusId;
+	public String getStatusId() {
+		return status;
 	}
 
-	public void setStatusId(Long statusId) {
-		this.statusId = statusId;
+	public void setStatusId(String statusId) {
+		this.status = statusId;
 	}
 
-	public Long getUserId() {
-		return userId;
+	public String getUserId() {
+		return username;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUserId(String userId) {
+		this.username = userId;
 	}
 
 	public Long getPotholeId() {
@@ -65,7 +67,7 @@ public class Claim {
 
 	@Override
 	public String toString() {
-		return "Claim [claimId=" + claimId + ", claimAmount=" + claimAmount + ", statusId=" + statusId + ", userId="
-				+ userId + ", potholeId=" + potholeId + ", description=" + description +"]";
+		return "Claim [claimId=" + claimId + ", claimAmount=" + claimAmount + ", status=" + status + ", username="
+				+ username + ", potholeId=" + potholeId + ", description=" + description +"]";
 	}
 }

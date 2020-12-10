@@ -13,8 +13,8 @@ public interface ClaimDAO {
 	//Get claim by claim Id
 	ClaimDTO getClaimById(int claimId);
 	
-	//Get claim by user Id
-	List<ClaimDTO> getUsersClaim (int userId);
+	//Get claim by username
+	List<ClaimDTO> getUsersClaim (String username);
 	
 	//Add claim
 	boolean createClaim (ClaimDTO newClaim);

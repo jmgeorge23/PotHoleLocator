@@ -23,7 +23,10 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 		List<ClaimDTO> allClaims = new ArrayList<>();
 
-		String gettingClaims = "SELECT * FROM claims;";
+		String gettingClaims = "SELECT c.claim_id, c.amount, c.description, cs.status, u.username "
+				+ "FROM claims c INNER JOIN claim_status cs ON c.claim_status_id = cs.claim_status_id "
+				+ "INNER JOIN users_claims uc ON c.claim_id = uc.claim_id "
+				+ "INNER JOIN users u ON uc.user_id = u.user_id ;";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(gettingClaims);
 
@@ -40,7 +43,11 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 		ClaimDTO claim = null;
 
-		String claimById = "SELECT * FROM claims WHERE claim__id =?;";
+		String claimById = "SELECT c.claim_id, c.amount, c.description, cs.status, u.username "
+				+ "FROM claims c INNER JOIN claim_status cs ON c.claim_status_id = cs.claim_status_id "
+				+ "INNER JOIN users_claims uc ON c.claim_id = uc.claim_id "
+				+ "INNER JOIN users u ON uc.user_id = u.user_id "
+				+ "WHERE c.claim_id = ?;";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(claimById, claimId);
 
@@ -51,13 +58,17 @@ public class ClaimSqlDAO implements ClaimDAO {
 	}
 
 	@Override
-	public List<ClaimDTO> getUsersClaim(int userId) {
+	public List<ClaimDTO> getUsersClaim(String username) {
 
 		List<ClaimDTO> userClaims = new ArrayList<>();
 
-		String gettingClaimsByUser = "SELECT c.claim_id, c.amount, c.description, c.claim_status_id, uc.user_id FROM claims c INNER JOIN users_claims uc ON c.claim_id = uc.claim_id WHERE uc.user_id = ?;";
+		String gettingClaimsByUser = "SELECT c.claim_id, c.amount, c.description, cs.status, u.username "
+				+ "FROM claims c INNER JOIN claim_status cs ON c.claim_status_id = cs.claim_status_id "
+				+ "INNER JOIN users_claims uc ON c.claim_id = uc.claim_id "
+				+ "INNER JOIN users u ON uc.user_id = u.user_id "
+				+ "WHERE username = ?;";
 
-		SqlRowSet result = jdbcTemplate.queryForRowSet(gettingClaimsByUser);
+		SqlRowSet result = jdbcTemplate.queryForRowSet(gettingClaimsByUser, username);
 
 		while (result.next()) {
 			ClaimDTO claim = mapToClaim(result);
@@ -72,10 +83,10 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 		boolean claim = false;
 
-		String createNewClaim = "INSERT INTO claims(claim_id, amount, description, claim_status_id) VALUES(DEFAULT, ?, ?,?);";
+		String createNewClaim = "INSERT INTO claims(claim_id, amount, description, claim_status_id) VALUES(DEFAULT, ?, ?,(SELECT claim_status_id FROM claim_status WHERE status=?));";
 
 		int result = jdbcTemplate.update(createNewClaim, newClaim.getClaimId(), newClaim.getClaimAmount(),
-				newClaim.getDescription(), newClaim.getStatusId());
+				newClaim.getDescription(), newClaim.getStatus());
 
 		if (result == 0) {
 			claim = true;
@@ -90,7 +101,8 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 		String updatesClaims = "UPDATE claims SET amount = ? , description = ? claim_status_id =(SELECT claim_status_id FROM claim_status WHERE status=?) WHERE claim_id = ?;";
 
-		int result = jdbcTemplate.update(updatesClaims, updatedClaim.getClaimAmount(), updatedClaim.getDescription(), updatedClaim.getStatusId(), claimId);
+		int result = jdbcTemplate.update(updatesClaims, updatedClaim.getClaimAmount(), updatedClaim.getDescription(),
+				updatedClaim.getStatus(), claimId);
 
 		if (result == 0) {
 			claim = true;
@@ -105,10 +117,11 @@ public class ClaimSqlDAO implements ClaimDAO {
 		ClaimDTO claims = new ClaimDTO();
 
 		claims.setClaimId(cl.getLong("claim_id"));
-		claims.setClaimAmount(cl.getDouble("claim_amount"));
-		claims.setStatusId(cl.getLong("claim_status_id"));
-		claims.setUserId(cl.getLong("user_id"));
-		claims.setPotholeId(cl.getLong("pothole_id"));
+		claims.setClaimAmount(cl.getBigDecimal("amount"));
+		claims.setStatus(cl.getString("status"));
+		claims.setDescription(cl.getString("description"));
+		claims.setUsername(cl.getString("username"));
+//		claims.setPotholeId(cl.getLong("pothole_id"));
 
 		return claims;
 
