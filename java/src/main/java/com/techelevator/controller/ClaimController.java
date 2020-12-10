@@ -16,7 +16,7 @@ import com.techelevator.dao.ClaimDAO;
 import com.techelevator.model.Claim;
 import com.techelevator.model.ClaimDTO;
 
-//@RestController
+@RestController
 public class ClaimController {
 	
 	private ClaimDAO claimDAO;
@@ -26,22 +26,22 @@ public class ClaimController {
 	}
 	
 	//Get all claims
-//	@RequestMapping(path = "/claims", method = RequestMethod.GET)
-//	public List<Claim> listAllClaims() {
-//		return claimDAO.getAllClaims();
-//	}
+	@RequestMapping(path = "/claims", method = RequestMethod.GET)
+	public List<ClaimDTO> listAllClaims() {
+		return claimDAO.getAllClaims();
+	}
 	
 	//Get claim by claim ID
-//	@RequestMapping(path = "/claims/{id]", method = RequestMethod.GET)
-//	public Claim getClaimById(@PathVariable int id) {
-//		return claimDAO.getClaimById(id);
-//	}
+	@RequestMapping(path = "/claims/{id]", method = RequestMethod.GET)
+	public ClaimDTO getClaimById(@PathVariable int claimId) {
+		return claimDAO.getClaimById(claimId);
+	}
 	
 	//Get claim by user ID
-//	@RequestMapping(path = "/claims/user/{userId}", method = RequestMethod.GET)
-//	public List<Claim> getUsersClaim(@PathVariable int userId) {
-//		return claimDAO.getUsersClaim(userId);
-//	}
+	@RequestMapping(path = "/claims/user/{userId}", method = RequestMethod.GET)
+	public List<ClaimDTO> getUsersClaim(@PathVariable int userId) {
+		return claimDAO.getUsersClaim(userId);
+	}
 	
 	//Add Claim
 //	@ResponseStatus(HttpStatus.CREATED)
