@@ -11,13 +11,13 @@ public interface CommentDAO {
 	List<CommentDTO> getAllComments();
 	
 	//Get comments by user
-	List<CommentDTO> getCommentsByUser(Long userId);
+	List<CommentDTO> getCommentsByUsername(String username);
 	
 	//Get comments by pothole
 	List<CommentDTO> getCommentsByPotholeId(Long potholeId);
 	
 	//add comment
-	CommentDTO createComment(CommentDTO newComment);
+	boolean createComment(CommentDTO newComment);
 	
 	//delete comment
 	CommentDTO deleteComment(Long id);

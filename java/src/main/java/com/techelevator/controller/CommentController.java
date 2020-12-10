@@ -16,7 +16,7 @@ import com.techelevator.dao.CommentDAO;
 import com.techelevator.model.Comment;
 import com.techelevator.model.CommentDTO;
 
-//@RestController
+@RestController
 public class CommentController {
 	
 	private CommentDAO commentDAO;
@@ -26,29 +26,29 @@ public class CommentController {
 	}
 	
 	//Get all comments
-//	@RequestMapping(path = "/comments", method = RequestMethod.GET)
-//	public List<Comment> getAllComments() {
-//		return commentDAO.getAllComments();
-//	}
+	@RequestMapping(path = "/comments", method = RequestMethod.GET)
+	public List<CommentDTO> getAllComments() {
+		return commentDAO.getAllComments();
+	}
 	
 	//Get comments by user
-//	@RequestMapping(path = "/comments/user/{userId}", method = RequestMethod.GET)
-//	public List<Comment> getCommentsByUserId(@PathVariable int userId) {
-//		return commentDAO.getCommentsByUserId(userId);
-//	}
+	@RequestMapping(path = "/comments/user/{username}", method = RequestMethod.GET)
+	public List<CommentDTO> getCommentsByUserId(@PathVariable String username) {
+		return commentDAO.getCommentsByUsername(username);
+	}
 	
 	//Get comments by pothole
-//	@RequestMapping(path = "/comments/pothole/{potholeId}", method = RequestMethod.GET)
-//	public List<Comment> getCommentsByPotholeId(@PathVariable int potholeId) {
-//		return commentDAO.getCommentsByPothileId(potholeId);
-//	}
+	@RequestMapping(path = "/comments/pothole/{potholeId}", method = RequestMethod.GET)
+	public List<CommentDTO> getCommentsByPotholeId(@PathVariable Long potholeId) {
+		return commentDAO.getCommentsByPotholeId(potholeId);
+	}
 	
 	//Add comments
-//	@ResponseStatus(HttpStatus.CREATED)
-//	@RequestMapping(path = "/comments", method = RequestMethod.POST)
-//	public void createComment(@Valid @RequestBody CommentDTO newComment) {
-//		commentDAO.createComment(newComment);
-//	}
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(path = "/comments", method = RequestMethod.POST)
+	public void createComment(@Valid @RequestBody CommentDTO newComment) {
+		commentDAO.createComment(newComment);
+	}
 	
 	//Delete comment
 //	@RequestMapping(path = "/comments/{id}", method = RequestMethod.DELETE)
