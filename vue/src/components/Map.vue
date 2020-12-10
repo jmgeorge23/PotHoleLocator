@@ -144,21 +144,28 @@ import potholeServices from '../services/PotholeService.js';
 </script>
 <style>
     .gmap {
-        width:800px;
-        height:800px;
+        width:300px;
+        height:300px;
         margin: 32px auto;
     }
-    @media screen and (max-width: 900px){
+    @media screen and (min-width: 960px){
         .gmap {
-            width:400px;
-            height:400px;
+            width:450px;
+            height:600px;
             margin: 32px auto;
         }       
     }
-    @media screen and (max-width: 1264px){
+    @media screen and (min-width: 1264px){
         .gmap {
-            width:700px;
-            height:700px;
+            width:780px;
+            height:600px;
+            margin: 32px auto;
+        }       
+    }
+    @media screen and (min-width: 1904px){
+        .gmap {
+            width:1200px;
+            height:600px;
             margin: 32px auto;
         }       
     }

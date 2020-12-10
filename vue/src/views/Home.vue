@@ -1,32 +1,72 @@
 <template>
-  <div class="home">
-    <!-- <div id="title">
-      <img src="../assets/PHL_Love_Logo.png" alt="">
-      <h2>P</h2><p>ot</p>
-      <h2>H</h2><p>ole</p>
-      <h2>L</h2><p>ocator</p>
-    </div> -->
-    <constrained/>
-  </div>
+  <v-container>
+    <v-row>
+      <v-col
+        md="5"
+        lg="3">
+        <v-sheet rounded="lg">
+          <v-list color="transparent">
+            <v-list-item
+              v-for="n in 8"
+              :key="n"
+              link
+            >
+              <v-list-item-content>
+                <v-list-item-title>
+                  List Item {{ n }}
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+
+            <v-divider class="my-2"></v-divider>
+
+            <v-list-item
+              link
+              color="grey lighten-4"
+            >
+              <v-list-item-content>
+                <v-list-item-title>
+                  Refresh Map
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list>
+        </v-sheet>
+      </v-col>
+
+      <v-col
+        md="7"
+        lg="9">
+        <v-sheet
+          min-height="70vh"
+          rounded="lg"
+        >
+          <Map/>
+          <!--  -->
+        </v-sheet>
+      </v-col>
+    </v-row>
+
+  </v-container>
 </template>
 
 <script>
-import Constrained from '../components/Constrained.vue';
-
+import Map from '../components/Map.vue'
 export default {
   name: "home",
   components: {
-    Constrained
-  }
-};
+    Map,
+  },
+
+}
 </script>
 
 <style scoped>
-#title {
+/* #title {
   display: flex;
   justify-content: center;
 }
 img {
   height: 4vh;
-}
+} */
 </style>
