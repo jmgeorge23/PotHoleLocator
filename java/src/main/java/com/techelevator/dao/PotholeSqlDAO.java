@@ -185,7 +185,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 		int result = jdbcTemplate.update(addToPotholesHistory, pothole.getPotholeId(), pothole.getStatus(),
 				pothole.getSeverity(), pothole.getLatitude(), pothole.getLongitude());
 
-		if (result == 0) {
+		if (result == 1) {
 			potholes = true;
 		}
 		return potholes;
@@ -216,7 +216,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		int result = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
 
-		if (result == 0) {
+		if (result == 1) {
 			potholes = true;
 		}
 		return potholes;
