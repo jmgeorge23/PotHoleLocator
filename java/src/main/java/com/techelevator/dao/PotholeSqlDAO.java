@@ -74,6 +74,8 @@ public class PotholeSqlDAO implements PotholeDAO {
 	public boolean createPothole(PotholeDTO newPothole) {
 		boolean potholes = false;
 
+		newPothole.setStatus("Reported");
+
 		String addToPotholes = "BEGIN TRANSACTION;"
 				+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id)"
 				+ "VALUES(DEFAULT,?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),(SELECT severity_id FROM severity WHERE severity = ?));"
@@ -91,7 +93,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 				if (addToPotholesHistory(potholeWithId)) {
 
 					potholes = true;
-					
+
 				}
 			}
 		}
@@ -155,20 +157,29 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		boolean potholes = false;
 
-		if (deleteFromPotholeUsers(potholeId)) {
+		if (deleteFromPotholesUsers(potholeId)) {
 
-			String deleteFromPotholes = "DELETE FROM potholes WHERE pothole_id = ? ";
+			if (deleteFromPotholesImages(potholeId)) {
 
-			PotholeDTO deletedPothole = getPotholeById(potholeId);
-			
-			deletedPothole.setStatus("Deleted");
+				if (deleteFromPotholesComments(potholeId)) {
 
-			if (addToPotholesHistory(deletedPothole)) {
+					if (deleteFromPotholesClaims(potholeId)) {
 
-				int result = jdbcTemplate.update(deleteFromPotholes, potholeId);
+						String deleteFromPotholes = "DELETE FROM potholes WHERE pothole_id = ? ";
 
-				if (result == 1) {
-					potholes = true;
+						PotholeDTO deletedPothole = getPotholeById(potholeId);
+
+						deletedPothole.setStatus("Deleted");
+
+						if (addToPotholesHistory(deletedPothole)) {
+
+							int result = jdbcTemplate.update(deleteFromPotholes, potholeId);
+
+							if (result == 1) {
+								potholes = true;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -210,7 +221,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 	}
 
-	private boolean deleteFromPotholeUsers(int potholeId) {
+	private boolean deleteFromPotholesUsers(int potholeId) {
 
 		boolean potholes = false;
 
@@ -218,7 +229,53 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		int result = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
 
-		if (result == 1) {
+		if (result >= 1) {
+			potholes = true;
+		}
+		return potholes;
+
+	}
+
+	private boolean deleteFromPotholesImages(int potholeId) {
+
+		boolean potholes = false;
+
+		String deleteFromUsersPotholes = "DELETE from potholes_images WHERE pothole_id =?";
+
+		int result = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
+
+		if (result >= 0) {
+			potholes = true;
+		}
+		return potholes;
+
+	}
+
+	private boolean deleteFromPotholesComments(int potholeId) {
+
+		boolean potholes = false;
+
+		String deleteFromUsersPotholes = "DELETE from potholes_comments WHERE pothole_id =?";
+
+		int result = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
+
+		if (result >= 0) {
+			potholes = true;
+		}
+		return potholes;
+
+	}
+
+	// TODO: Should this add to users_claims_history
+	private boolean deleteFromPotholesClaims(int potholeId) {
+
+		boolean potholes = false;
+
+		String deleteFromUsersPotholes = "DELETE from potholes_claims WHERE pothole_id =?";
+
+		int result = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
+
+		if (result >= 0) {
 			potholes = true;
 		}
 		return potholes;
