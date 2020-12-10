@@ -3,10 +3,11 @@ import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
 import axios from 'axios'
-import VueGeolocation from 'vue-browser-geolocation'
+import VueGeolocation from 'vue-browser-geolocation';
 import vuetify from './plugins/vuetify';
-import 'roboto-fontface/css/roboto/roboto-fontface.css'
-import '@mdi/font/css/materialdesignicons.css'
+import 'animate.css';
+import 'roboto-fontface/css/roboto/roboto-fontface.css';
+import '@mdi/font/css/materialdesignicons.css';
 
 
 Vue.config.productionTip = false

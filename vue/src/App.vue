@@ -1,13 +1,4 @@
 <template>
-  <!-- <div id="app">
-    <div id="nav">
-      <router-link v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'login' }">Login</router-link>
-      <router-link v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
-    </div> -->
-    <!-- <router-view /> -->
-    <!-- <constrained/> -->
-  <!-- </div> -->
   <v-app id="inspire">
     <v-app-bar
       app
@@ -18,9 +9,12 @@
         <v-avatar
           class="mr-10"
           color="grey darken-1"
-          size="32"
+          tile
+          size="48"
+          style="border-radius: 3px;"
+          @click="$router.push('/').catch(()=>{})"
         >
-        <img src="@/assets/favicon-32x32.png"
+        <img src="@/assets/phl-logo-cropped.png"
           alt="favicon">
         </v-avatar>
 
@@ -35,22 +29,31 @@
 
         <v-spacer></v-spacer>
 
-        <v-responsive max-width="500px">
+        <v-responsive 
+          max-width="300px"
+          height="70%">
           <v-btn
             v-if="isLoggedIn"
-            color="accent"
-            elevation="5"
+            color="info lighten-2"
             style="margin-right: 1rem;"
+            rounded
             @click="logout"
             >Logout</v-btn>
           <login class="login"
             v-else/>
-          <register/>
+          <register
+            v-if="!isLoggedIn"/>
         </v-responsive>
       </v-container>
     </v-app-bar>
     <v-main class="grey lighten-3">
-      <router-view/>
+      <transition
+        mode="out-in"
+        enter-active-class="animate__animated animate__fadeIn"
+        leave-active-class="animate__animated animate__fadeOut"
+      >
+        <router-view/>
+      </transition>
     </v-main>
     <v-footer
       color="info darken-1"
@@ -67,6 +70,7 @@
           text
           rounded
           class="my-2"
+          @click="$router.push({name: link}).catch(()=>{})"
         >
           {{ link }}
         </v-btn>
@@ -82,14 +86,14 @@
 </template>
 
 <script>
-//import Constrained from './components/Constrained.vue'
 import Login from './components/Login.vue'
 import Register from './components/Register.vue'
+
 export default {
   name: 'App',
   components: {
     Login,
-    Register,
+    Register
   },
   data: () => ({
       dialog: false,
@@ -99,10 +103,10 @@ export default {
         'Profile',
       ],
       footerLinks: [
-        'About Us',
-        'Team',
-        'Blog',
-        'Contact Us',
+        'test',
+        'team',
+        'blog',
+        'contact',
       ],
   }),
   computed: {

@@ -10,7 +10,7 @@
           v-bind="attrs"
           v-on="on"
           style="margin-right: 1rem;"
-          elevation="5"
+          rounded
         >
           Sign Up
         </v-btn>
@@ -23,13 +23,6 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <v-col cols="12" >
-                <v-text-field
-                  label="Email*"
-                  type="email"
-                  required
-                ></v-text-field>
-              </v-col>
               <v-col cols="12" >
                 <v-text-field
                   label="Username*"
