@@ -160,6 +160,8 @@ public class PotholeSqlDAO implements PotholeDAO {
 			String deleteFromPotholes = "DELETE FROM potholes WHERE pothole_id = ? ";
 
 			PotholeDTO deletedPothole = getPotholeById(potholeId);
+			
+			deletedPothole.setStatus("Deleted");
 
 			if (addToPotholesHistory(deletedPothole)) {
 
