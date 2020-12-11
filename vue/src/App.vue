@@ -21,7 +21,7 @@
         <v-btn
           v-for="link in headerLinks"
           :key="link"
-          @click="$router.push({name: link})"
+          @click="$router.push({name: link}).catch(()=>{})"
           text
           color="white"
         >
