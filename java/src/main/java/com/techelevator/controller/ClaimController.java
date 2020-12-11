@@ -51,11 +51,11 @@ public class ClaimController {
 	}
 	
 	//Update claim status
-//	@ResponseStatus(HttpStatus.OK)
-//	@RequestMapping(value = "/claims/{id}", method = RequestMethod.PUT)
-//	public void updateClaimStatus(@Valid @RequestBody Claim changedClaim, @PathVariable int id) {
-//		claimDAO.updateClaim(changedClaim);
-//	}
+	@ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "/claims/{claimId}", method = RequestMethod.PUT)
+	public void updateClaimStatus(@Valid @RequestBody ClaimDTO updatedClaim, @PathVariable int claimId) {
+		claimDAO.updateClaim(updatedClaim, claimId);
+	}
 	
 	
 	
