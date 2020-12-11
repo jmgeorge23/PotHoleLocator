@@ -191,6 +191,7 @@ public class CommentSqlDAO implements CommentDAO {
 	}
 
 	// Private deletes for users_comments, potholes_comments, and comment tables
+	//Delete from users_comments
 	private boolean deleteFromUsersComments(Long commentId) {
 
 		boolean deleted = false;
