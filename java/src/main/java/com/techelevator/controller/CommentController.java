@@ -51,8 +51,8 @@ public class CommentController {
 	}
 	
 	//Delete comment
-//	@RequestMapping(path = "/comments/{id}", method = RequestMethod.DELETE)
-//	public void deleteComment(@PathVariable int id) {
-//		commentDAO.deleteComment(id);
-//	}
+	@RequestMapping(path = "/comments/{id}", method = RequestMethod.DELETE)
+	public void deleteComment(@PathVariable Long id) {
+		commentDAO.deleteComment(id);
+	}
 }

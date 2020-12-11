@@ -225,7 +225,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		boolean potholes = false;
 
-		String deleteFromUsersPotholes = "DELETE from users_potholes WHERE pothole_id =?";
+		String deleteFromUsersPotholes = "DELETE FROM users_potholes WHERE pothole_id =?";
 
 		int result = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
 
@@ -240,7 +240,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		boolean potholes = false;
 
-		String deleteFromUsersPotholes = "DELETE from potholes_images WHERE pothole_id =?";
+		String deleteFromUsersPotholes = "DELETE FROM potholes_images WHERE pothole_id =?";
 
 		int result = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
 
@@ -255,7 +255,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		boolean potholes = false;
 
-		String deleteFromUsersPotholes = "DELETE from potholes_comments WHERE pothole_id =?";
+		String deleteFromUsersPotholes = "DELETE FROM potholes_comments WHERE pothole_id =?";
 
 		int result = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
 
@@ -271,7 +271,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		boolean potholes = false;
 
-		String deleteFromUsersPotholes = "DELETE from potholes_claims WHERE pothole_id =?";
+		String deleteFromUsersPotholes = "DELETE FROM potholes_claims WHERE pothole_id =?";
 
 		int result = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
 

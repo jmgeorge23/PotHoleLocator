@@ -20,7 +20,7 @@ public interface CommentDAO {
 	boolean createComment(CommentDTO newComment);
 	
 	//delete comment
-	CommentDTO deleteComment(Long id);
+	boolean deleteComment(Long commentId);
 	
 
 }

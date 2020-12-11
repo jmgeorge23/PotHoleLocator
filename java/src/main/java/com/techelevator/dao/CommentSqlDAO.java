@@ -113,11 +113,24 @@ public class CommentSqlDAO implements CommentDAO {
 	}
 
 	@Override
-	public CommentDTO deleteComment(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean deleteComment(Long commentId) {
+
+		boolean commentDeleted = false;
+		// Delete from users_comments
+		if (deleteFromUsersComments(commentId)) {
+			// Delete from potholes_comments
+			if (deleteFromPotholesComments(commentId)) {
+				// Delete from comments
+				if (deleteFromComments(commentId)) {
+					commentDeleted = true;
+				}
+			}
+		}
+		return commentDeleted;
+
 	}
 
+	// Private Getters From CommentId and UserId
 	private CommentDTO getCommentId(CommentDTO newComment, User user) {
 
 		CommentDTO newCommentWithId = null;
@@ -147,6 +160,7 @@ public class CommentSqlDAO implements CommentDAO {
 		return user;
 	}
 
+	// Private inserts to users_comments and pothole_comments tables
 	private boolean addToUsersComments(CommentDTO newComment, User user) {
 
 		boolean comment = false;
@@ -176,6 +190,67 @@ public class CommentSqlDAO implements CommentDAO {
 		return comment;
 	}
 
+	// Private deletes for users_comments, potholes_comments, and comment tables
+	private boolean deleteFromUsersComments(Long commentId) {
+
+		boolean deleted = false;
+
+		String deleteFromUsersComments = "DELETE FROM users_comments where comment_id = ?";
+
+		int result = jdbcTemplate.update(deleteFromUsersComments, commentId);
+
+		if (result >= 0) {
+			deleted = true;
+		}
+
+		return deleted;
+	}
+
+	// Delete from potholes_comments
+	private boolean deleteFromPotholesComments(Long commentId) {
+
+		boolean deleted = false;
+
+		String deleteFromPotholesComments = "DELETE FROM potholes_comments where comment_id = ?";
+
+		int result = jdbcTemplate.update(deleteFromPotholesComments, commentId);
+
+		if (result >= 0) {
+			deleted = true;
+		}
+
+		return deleted;
+	}
+
+	// Delete from comments
+	private boolean deleteFromComments(Long commentId) {
+
+		boolean deleted = false;
+
+		String deleteFromComments = "DELETE FROM comments where comment_id = ?";
+
+		int result = jdbcTemplate.update(deleteFromComments, commentId);
+
+		if (result >= 0) {
+			deleted = true;
+		}
+
+		return deleted;
+	}
+
+	// Private maps for a basic comment, a complex comment, and a user
+	private CommentDTO mapToBasicComment(SqlRowSet cm) {
+
+		CommentDTO comment = new CommentDTO();
+
+		comment.setCommentId(cm.getLong("comment_id"));
+		comment.setComment(cm.getString("user_comment"));
+		comment.setDateTime(cm.getString("posted_at"));
+
+		return comment;
+
+	}
+
 	private CommentDTO mapToComment(SqlRowSet cm) {
 
 		CommentDTO comments = new CommentDTO();
@@ -188,18 +263,6 @@ public class CommentSqlDAO implements CommentDAO {
 		comments.setLatitude(cm.getBigDecimal("lat"));
 		comments.setLongitude(cm.getBigDecimal("lng"));
 		return comments;
-
-	}
-
-	private CommentDTO mapToBasicComment(SqlRowSet cm) {
-
-		CommentDTO comment = new CommentDTO();
-
-		comment.setCommentId(cm.getLong("comment_id"));
-		comment.setComment(cm.getString("user_comment"));
-		comment.setDateTime(cm.getString("posted_at"));
-
-		return comment;
 
 	}
 
