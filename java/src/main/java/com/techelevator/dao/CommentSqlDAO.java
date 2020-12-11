@@ -98,11 +98,12 @@ public class CommentSqlDAO implements CommentDAO {
 
 			User user = getUserId(newComment);
 			CommentDTO newCommentWithId = getCommentId(newComment, user);
+			newComment.setCommentId(newCommentWithId.getCommentId());
 
-			if (addToUsersComments(newCommentWithId, user)) {
+			if (addToUsersComments(newComment, user)) {
 
 				// add to potholes_comments
-				if (addToPotholesComments(newCommentWithId)) {
+				if (addToPotholesComments(newComment)) {
 
 					comment = true;
 				}
@@ -122,13 +123,13 @@ public class CommentSqlDAO implements CommentDAO {
 		CommentDTO newCommentWithId = null;
 
 		String getNewCommentWithId = "SELECT comment_id, user_comment, posted_at FROM comments WHERE user_comment = ?";
-		
+
 		SqlRowSet result = jdbcTemplate.queryForRowSet(getNewCommentWithId, newComment.getComment());
-		
-		while(result.next()) {
-			newCommentWithId = mapToComment(result);
+
+		while (result.next()) {
+			newCommentWithId = mapToBasicComment(result);
 		}
-		
+
 		return newCommentWithId;
 	}
 
@@ -187,6 +188,18 @@ public class CommentSqlDAO implements CommentDAO {
 		comments.setLatitude(cm.getBigDecimal("lat"));
 		comments.setLongitude(cm.getBigDecimal("lng"));
 		return comments;
+
+	}
+
+	private CommentDTO mapToBasicComment(SqlRowSet cm) {
+
+		CommentDTO comment = new CommentDTO();
+
+		comment.setCommentId(cm.getLong("comment_id"));
+		comment.setComment(cm.getString("user_comment"));
+		comment.setDateTime(cm.getString("posted_at"));
+
+		return comment;
 
 	}
 
