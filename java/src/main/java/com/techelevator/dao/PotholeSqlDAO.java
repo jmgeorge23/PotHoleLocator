@@ -24,7 +24,9 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		List<PotholeDTO> allPotholes = new ArrayList<>();
 
-		String getAllPotholes = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p  INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id";
+		String getAllPotholes = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p  "
+								+ "INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
+								+ "INNER JOIN severity s ON s.severity_id = p.severity_id";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(getAllPotholes);
 
@@ -41,7 +43,9 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		PotholeDTO potholes = null;
 
-		String potholeById = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id WHERE pothole_id = ?;";
+		String potholeById = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p "
+							+ "INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
+							+ "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE pothole_id = ?;";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(potholeById, potholeId);
 
@@ -58,7 +62,9 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		List<PotholeDTO> potholesStat = new ArrayList<>();
 
-		String potholeByStat = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id INNER JOIN severity s ON s.severity_id = p.severity_id WHERE p.pothole_status_id = ?;";
+		String potholeByStat = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p "
+							  + "INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
+							  + "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE p.pothole_status_id = ?;";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(potholeByStat, statusId);
 
@@ -77,8 +83,9 @@ public class PotholeSqlDAO implements PotholeDAO {
 		newPothole.setStatus("Reported");
 
 		String addToPotholes = "BEGIN TRANSACTION;"
-				+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id)"
-				+ "VALUES(DEFAULT,?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),(SELECT severity_id FROM severity WHERE severity = ?));"
+				+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id) "
+				+ "VALUES(DEFAULT,?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?), "
+				+ "(SELECT severity_id FROM severity WHERE severity = ?)); "
 				+ "COMMIT;";
 
 		int result = jdbcTemplate.update(addToPotholes, newPothole.getLatitude(), newPothole.getLongitude(),
@@ -105,7 +112,8 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		boolean potholes = false;
 
-		String updatePotholes = "UPDATE potholes SET pothole_status_id=(SELECT pothole_status_id FROM pothole_status WHERE status = ?), severity_id =(SELECT severity_id FROM severity WHERE severity = ?), lat = ?, lng = ? WHERE pothole_id =?;";
+		String updatePotholes = "UPDATE potholes SET pothole_status_id=(SELECT pothole_status_id FROM pothole_status WHERE status = ?), "
+							  + "severity_id =(SELECT severity_id FROM severity WHERE severity = ?), lat = ?, lng = ? WHERE pothole_id =?;";
 
 		if (addToPotholesHistory(updatedPothole)) {
 			int result = jdbcTemplate.update(updatePotholes, updatedPothole.getStatus(), updatedPothole.getSeverity(),
@@ -286,8 +294,9 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		PotholeDTO potholes = null;
 
-		String getPotholeId = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
-				+ "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE lat = ? AND lng = ?";
+		String getPotholeId = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p "
+							+ "INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
+							+ "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE lat = ? AND lng = ?";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(getPotholeId, pothole.getLatitude(), pothole.getLongitude());
 
