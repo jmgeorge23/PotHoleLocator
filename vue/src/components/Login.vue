@@ -11,7 +11,6 @@
           v-on="on"
           style="margin-right: 1rem;"
           rounded
-          depressed
         >
           Login
         </v-btn>

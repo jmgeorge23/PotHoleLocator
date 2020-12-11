@@ -30,21 +30,17 @@
 
         <v-spacer></v-spacer>
 
-        <v-responsive 
-          max-width="300px"
-          height="70%">
-          <v-btn
-            v-if="isLoggedIn"
-            color="info lighten-2"
-            style="margin-right: 1rem;"
-            rounded
-            @click="logout"
-            >Logout</v-btn>
-          <login class="login"
-            v-else/>
-          <register
-            v-if="!isLoggedIn"/>
-        </v-responsive>
+        <v-btn
+          v-if="isLoggedIn"
+          color="info lighten-2"
+          style="margin-right: 1rem;"
+          rounded
+          @click="logout"
+          >Logout</v-btn>
+        <login class="login"
+          v-else/>
+        <register
+          v-if="!isLoggedIn"/>
       </v-container>
     </v-app-bar>
     <v-main class="grey lighten-3">
