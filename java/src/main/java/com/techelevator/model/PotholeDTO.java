@@ -16,7 +16,24 @@ public class PotholeDTO {
 	private String lane;
 	
 	
+	public PotholeDTO(String severity, BigDecimal latitude, BigDecimal longitude) {
+
+		this.severity = severity;
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+
+	public PotholeDTO(String severity, BigDecimal latitude, BigDecimal longitude, String status) {
+
+		this.severity = severity;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.status = status;
+	}
 	
+	public PotholeDTO() {
+		
+	}
 	
 
 	public Long getPotholeId() {
