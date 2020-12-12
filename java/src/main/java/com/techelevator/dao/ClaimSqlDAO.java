@@ -109,20 +109,22 @@ public class ClaimSqlDAO implements ClaimDAO {
 		return claim;
 	}
 
+	//able to update amount and status
 	@Override
 	public boolean updateClaim(ClaimDTO updatedClaim, int claimId) {
 		boolean claim = false;
 
-		String updatesClaims = "UPDATE claims SET amount = ? , description = ? claim_status_id =(SELECT claim_status_id FROM claim_status WHERE status=?) "
+		String updatesClaims = "UPDATE claims SET amount = ? , claim_status_id =(SELECT claim_status_id FROM claim_status WHERE status=?) "
 				+ " WHERE claim_id = ?;";
 
-		int result = jdbcTemplate.update(updatesClaims, updatedClaim.getClaimAmount(), updatedClaim.getDescription(),
+		if(addToClaimsHistory(updatedClaim)) {
+		int result = jdbcTemplate.update(updatesClaims, updatedClaim.getClaimAmount(),
 				updatedClaim.getStatus(), claimId);
 
 		if (result == 1) {
 			claim = true;
 		}
-
+		}
 		return claim;
 
 	}

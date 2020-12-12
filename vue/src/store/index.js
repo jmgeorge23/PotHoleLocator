@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-
+import potholeService from '../services/PotholeService'
+//import authService from "../services/AuthService";
 Vue.use(Vuex)
 
 /*
@@ -18,11 +19,15 @@ if(currentToken != null) {
 
 export default new Vuex.Store({
   state: {
+    loadingStatus: 'notLoading',
     potholes: [],
     token: currentToken || '',
     user: currentUser || {}
   },
   mutations: {
+    SET_LOADING_STATUS(state, status) {
+      state.loadingStatus = status;
+    },
     SET_AUTH_TOKEN(state, token) {
       state.token = token;
       localStorage.setItem('token', token);
@@ -42,5 +47,28 @@ export default new Vuex.Store({
     SET_POTHOLES(state, data) {
       state.potholes = data;
     }
-  }
+  },
+  actions:  {
+    fetchPotholes(context) {
+      context.commit('SET_LOADING_STATUS', 'loading');
+      potholeService.getPotholes()
+        .then(response => {
+          context.commit('SET_LOADING_STATUS', 'notLoading')
+          context.commit('SET_POTHOLES', response.data)
+        })
+        .catch(error => alert(error));
+    },
+  },
+  getters: {
+    allPotholes: (state) => {
+      return state.potholes;
+    },
+    notInspectedPotholes: (state) => {
+      return state.potholes
+        .filter( pothole => pothole.severity === 'Not Inspected');
+    },
+    notInspectedPotholeCount: (state, getters) => {
+      return getters.notInspectedPotholes.length;
+    }
+  },
 })

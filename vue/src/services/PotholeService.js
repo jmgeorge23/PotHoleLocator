@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export default {
 
-    getAllPothole() {
+    getPotholes() {
         return axios.get('/potholes')
     }
 }

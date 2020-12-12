@@ -13,7 +13,7 @@
         <gmap-map
             class="gmap"
             :center="myCoordinates"
-            :zoom="12.8"
+            :zoom="this.zoom"
             ref="mapRef"
             @dragend="handleDrag"
         >
@@ -23,15 +23,38 @@
                 :opened="isInfoWindowOpened"
                 @closeclick="handleInfoWindowClose"
                 >
-                    <div class="info-window">
-                        <h2>Pothole on [street name]</h2>
-                        <h5>Severity: [severity-level]</h5>
-                        <p>Reported on: [date]</p>
-                        <button>View Details</button>
-                    </div>
-                </gmap-info-window>
+                <div class="info-window"
+                    >
+                    <h2>
+                        <v-icon
+                            medium
+                            >
+                        mdi-road
+                        </v-icon>
+                        Pothole on {{activePothole.roadName}}
+                    </h2>
+                    <p>
+                        <v-icon
+                            medium
+                            color="orange darken-2"
+                            >
+                            mdi-alert
+                        </v-icon>
+                        Severity: {{activePothole.severity}}
+                    </p>
+                    <p>
+                        <v-icon
+                            medium
+                            color="blue"
+                            >
+                            mdi-clipboard-check
+                        </v-icon>
+                        Report Status: {{activePothole.status}}
+                    </p>
+                </div>
+            </gmap-info-window>
             <gmap-marker
-                v-for="pothole in this.$store.state.potholes"
+                v-for="pothole in potholes"
                 :key="pothole.potholeId"
                 :position="getPosition(pothole)"
                 :clickable="true"
@@ -43,130 +66,124 @@
 </template>
 <script>
 
-import potholeServices from '../services/PotholeService.js';
+//import potholeServices from '../services/PotholeService.js';
 
-    export default {
-        data() {
-            return {
-                map: null,
-                myCoordinates: {
+export default {
+    data: () => ({
+        map: null,
+        myCoordinates: {
+            lat: 0,
+            lng: 0
+        },
+        zoom: 12,
+        infoWindowOptions: {
+            pixelOffset: {
+                witdth: 0,
+                height: -35
+            }
+        },
+        activePothole: {},
+        isInfoWindowOpened: false
+    }),
+    props: {
+        listedPothole: {
+            type: Object,
+        }
+    },
+    computed: {
+        mapCoordinates() {
+            if(!this.map) {
+                return {
                     lat: 0,
                     lng: 0
-                },
-                zoom: 12,
-                infoWindowOptions: {
-                    pixelOffset: {
-                        witdth: 0,
-                        height: -35
-                    }
-                },
-                activePothole: {},
-                isInfoWindowOpened: false
-            }
-        },
-        created() {
-            // does the user have a saved center? use it instead of the default
-            this.getAllPotholes();
-
-            if(localStorage.center) {
-                this.myCoordinates = JSON.parse(localStorage.center);
-            } else {
-                // get user's coordinates from browser request
-                this.$getLocation({})
-                    .then(coordinates => {
-                        this.myCoordinates = coordinates;
-                    })
-                    .catch(error => alert(error));
-            }
-            // does the user have a saved zoom? use it instead of the default
-            if(localStorage.zoom) {
-                this.zoom = parseInt(localStorage.zoom);
-            }
-        },
-        mounted() {
-            // add the map to a data object
-            this.$refs.mapRef.$mapPromise.then(map => this.map = map);
-        },
-        methods: {
-            handleDrag() {
-                // get center and zoom level, store in localstorage
-                let center = {
-                    lat: this.map.getCenter().lat(),
-                    lng: this.map.getCenter().lng()
                 };
-                let zoom = this.map.getZoom();
-                localStorage.center = JSON.stringify(center);
-                localStorage.zoom = zoom;
-            },
-            getPosition(pothole) {
-                return {
-                    lat: parseFloat(pothole.latitude),
-                    lng: parseFloat(pothole.longitude)
-                }
-            },
-            getAllPotholes() {
-                potholeServices.getAllPothole()
-                    .then(response => {
-                        this.$store.commit('SET_POTHOLES', response.data);
-                    })
-                    .catch(error => alert(error));
-            },
-            handleMarkerClicked(pothole) {
-                this.activePothole = pothole;
-                this.isInfoWindowOpened = true;
-            },
-            handleInfoWindowClose() {
-                this.activePothole = {};
-                this.isInfoWindowOpened = false;
-            },
+            }
+            return {
+                lat: this.map.getCenter().lat().toFixed(4),
+                lng: this.map.getCenter().lng().toFixed(4)
+            }
         },
-        computed: {
-            mapCoordinates() {
-                if(!this.map) {
-                    return {
-                        lat: 0,
-                        lng: 0
-                    };
-                }
-                return {
-                    lat: this.map.getCenter().lat().toFixed(4),
-                    lng: this.map.getCenter().lng().toFixed(4)
-                }
-            },
-            infoWindowPosition() {
-                return {
-                    lat: parseFloat(this.activePothole.latitude),
-                    lng: parseFloat(this.activePothole.longitude),
-                }
+        infoWindowPosition() {
+            return {
+                lat: parseFloat(this.activePothole.latitude),
+                lng: parseFloat(this.activePothole.longitude),
+            }
+        },
+        potholes: {
+            get() {
+                return this.$store.getters.allPotholes;
+                //return this.$store.getters.notInspectedPotholes;
             }
         }
-    }
+    },
+    methods: {
+        fetchPotholes() {
+            this.$store.dispatch('fetchPotholes');
+        },
+        handleDrag() {
+            // get center and zoom level, store in localstorage
+            let center = {
+                lat: this.map.getCenter().lat(),
+                lng: this.map.getCenter().lng()
+            };
+            let zoom = this.map.getZoom();
+            localStorage.center = JSON.stringify(center);
+            localStorage.zoom = zoom;
+        },
+        getPosition(pothole) {
+            return {
+                lat: parseFloat(pothole.latitude),
+                lng: parseFloat(pothole.longitude)
+            }
+        },
+        handleMarkerClicked(pothole) {
+            this.activePothole = pothole;
+            this.isInfoWindowOpened = true;
+        },
+        handleInfoWindowClose() {
+            this.activePothole = {};
+            this.isInfoWindowOpened = false;
+        },
+    },
+    created() {
+        // Immediately load all potholes into the $store
+        this.fetchPotholes();
+
+        // does the user have a saved center? use it instead of the default
+        if(localStorage.center) {
+            this.myCoordinates = JSON.parse(localStorage.center);
+        } else {
+            // get user's coordinates from browser request
+            this.$getLocation({})
+                .then(coordinates => {
+                    this.myCoordinates = coordinates;
+                })
+                .catch(error => alert(error));
+        }
+        // does the user have a saved zoom? use it instead of the default
+        if(localStorage.zoom) {
+            this.zoom = parseInt(localStorage.zoom);
+        }
+    },
+    mounted() {
+        // add the map to a data object
+        this.$refs.mapRef.$mapPromise.then(map => this.map = map);
+    },
+}
 </script>
 <style>
     .gmap {
-        width:300px;
-        height:300px;
-        margin: 32px auto;
+        /* width: 500px; */
+        height: 79vh;
+        margin: 5px auto;
     }
-    @media screen and (min-width: 960px){
-        .gmap {
-            width:450px;
-            height:600px;
-            margin: 32px auto;
-        }       
+    .info-window {
+        padding: 0.5em;
     }
-    @media screen and (min-width: 1264px){
-        .gmap {
-            width:780px;
-            height:600px;
-            margin: 32px auto;
-        }       
+    .info-window h2 {
+        padding-bottom: 0.5em;
     }
-    @media screen and (min-width: 1904px){
-        .gmap {
-            width:1200px;
-            height:600px;
-            margin: 32px auto;
-        }       
+    .info-window p {
+        margin: 0;
     }
 </style>
