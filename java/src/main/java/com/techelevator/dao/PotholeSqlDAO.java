@@ -24,9 +24,9 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		List<PotholeDTO> allPotholes = new ArrayList<>();
 
-		String getAllPotholes = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p  "
-								+ "INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
-								+ "INNER JOIN severity s ON s.severity_id = p.severity_id";
+		String getAllPotholes = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p "
+				+ "INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
+				+ "INNER JOIN severity s ON s.severity_id = p.severity_id";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(getAllPotholes);
 
@@ -44,8 +44,8 @@ public class PotholeSqlDAO implements PotholeDAO {
 		PotholeDTO potholes = null;
 
 		String potholeById = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p "
-							+ "INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
-							+ "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE pothole_id = ?;";
+				+ "INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
+				+ "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE pothole_id = ?;";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(potholeById, potholeId);
 
@@ -63,8 +63,8 @@ public class PotholeSqlDAO implements PotholeDAO {
 		List<PotholeDTO> potholesStat = new ArrayList<>();
 
 		String potholeByStat = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p "
-							  + "INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
-							  + "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE p.pothole_status_id = ?;";
+				+ "INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
+				+ "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE p.pothole_status_id = ?;";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(potholeByStat, statusId);
 
@@ -83,9 +83,9 @@ public class PotholeSqlDAO implements PotholeDAO {
 		newPothole.setStatus("Reported");
 
 		String addToPotholes = "BEGIN TRANSACTION;"
-				+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id) "
-				+ "VALUES(DEFAULT,?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?), "
-				+ "(SELECT severity_id FROM severity WHERE severity = ?)); "
+				+ "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id)"
+				+ "VALUES(DEFAULT,?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),"
+				+ "(SELECT severity_id FROM severity WHERE severity = ?));"
 				+ "COMMIT;";
 
 		int result = jdbcTemplate.update(addToPotholes, newPothole.getLatitude(), newPothole.getLongitude(),
@@ -113,7 +113,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 		boolean potholes = false;
 
 		String updatePotholes = "UPDATE potholes SET pothole_status_id=(SELECT pothole_status_id FROM pothole_status WHERE status = ?), "
-							  + "severity_id =(SELECT severity_id FROM severity WHERE severity = ?), lat = ?, lng = ? WHERE pothole_id =?;";
+				+ "severity_id =(SELECT severity_id FROM severity WHERE severity = ?), lat = ?, lng = ? WHERE pothole_id =?;";
 
 		if (addToPotholesHistory(updatedPothole)) {
 			int result = jdbcTemplate.update(updatePotholes, updatedPothole.getStatus(), updatedPothole.getSeverity(),
@@ -147,7 +147,8 @@ public class PotholeSqlDAO implements PotholeDAO {
 	public boolean updatePotholeStatus(int potholeId, PotholeDTO updatedPothole) {
 		boolean potholes = false;
 
-		String updateStatus = "UPDATE potholes SET pothole_status_id =(SELECT pothole_status_id FROM pothole_status WHERE status =?) WHERE pothole_id = ?";
+		String updateStatus = "UPDATE potholes SET pothole_status_id =(SELECT pothole_status_id FROM pothole_status WHERE status =?) "
+				+ "WHERE pothole_id = ?";
 
 		if (addToPotholesHistory(updatedPothole)) {
 
@@ -294,9 +295,8 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		PotholeDTO potholes = null;
 
-		String getPotholeId = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p "
-							+ "INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
-							+ "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE lat = ? AND lng = ?";
+		String getPotholeId = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
+				+ "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE lat = ? AND lng = ?";
 
 		SqlRowSet result = jdbcTemplate.queryForRowSet(getPotholeId, pothole.getLatitude(), pothole.getLongitude());
 
@@ -311,16 +311,19 @@ public class PotholeSqlDAO implements PotholeDAO {
 	private PotholeDTO mapToPothole(SqlRowSet ph) {
 
 		PotholeDTO potholes = new PotholeDTO();
+//		String roadName = ph.getString("roadname");
+//		String direction = ph.getString("direction");
+//		String lane = ph.getString("lane");
+//		Long userId = ph.getLong("user_id");
 
 		potholes.setPotholeId(ph.getLong("pothole_id"));
 		potholes.setLatitude(ph.getBigDecimal("lat"));
 		potholes.setLongitude(ph.getBigDecimal("lng"));
 		potholes.setStatus(ph.getString("status"));
 		potholes.setSeverity(ph.getString("severity"));
-//		potholes.setRoadName(ph.getString("roadname"));
-//		potholes.setDirection(ph.getString("direction"));
-//		potholes.setLane(ph.getString("lane"));
-//		potholes.setUserId(ph.getLong("user_id"));
+
+	
+
 		return potholes;
 
 	}
