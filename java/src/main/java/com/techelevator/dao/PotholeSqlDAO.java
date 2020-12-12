@@ -238,7 +238,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		int result = jdbcTemplate.update(deleteFromUsersPotholes, potholeId);
 
-		if (result >= 1) {
+		if (result >= 0) {
 			potholes = true;
 		}
 		return potholes;
