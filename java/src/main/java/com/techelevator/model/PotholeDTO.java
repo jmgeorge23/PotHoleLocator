@@ -23,13 +23,28 @@ public class PotholeDTO {
 		this.longitude = longitude;
 	}
 
-	public PotholeDTO(String severity, BigDecimal latitude, BigDecimal longitude, String status) {
+	public PotholeDTO(String severity, BigDecimal latitude, BigDecimal longitude, String status, String username) {
 
 		this.severity = severity;
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.status = status;
+		this.username =  username;
+		
 	}
+	
+	public PotholeDTO(String severity, BigDecimal latitude, BigDecimal longitude, String status, String username, Long potholeId) {
+
+		this.severity = severity;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		this.status = status;
+		this.username =  username;
+		this.potholeId = potholeId;
+		
+	}
+	
+	
 	
 	public PotholeDTO() {
 		

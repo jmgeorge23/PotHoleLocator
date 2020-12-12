@@ -49,24 +49,37 @@ public class PotholeSqlDaoIntegrationTest extends DAOIntegrationTest {
 
 	@Test
 	public void createPothole_ShouldCreateANewPothole() {
-		PotholeDTO newPothole = new PotholeDTO ("Low", new BigDecimal(99.99), new BigDecimal(99.99),"Reported");
+		PotholeDTO newPothole = new PotholeDTO ("Low", new BigDecimal(99.99), new BigDecimal(99.99),"Reported", "user");
 
 		List<PotholeDTO> allPotholes = potholeSqlDAO.findAllPotholes();
 		boolean potholeCreated = potholeSqlDAO.createPothole(newPothole);
 		List<PotholeDTO> checkAllPotholes = potholeSqlDAO.findAllPotholes();
 
-//		Assert.assertTrue(potholeCreated);
+		Assert.assertTrue(potholeCreated);
 		Assert.assertEquals(allPotholes.size() + 1, checkAllPotholes.size());
 
 	}
 
-//	@Test
-//	public void updatePothole_ShouldUpdateAPotholeByPotholeId() {
-//
-//	}
-//
-//	@Test
-//	public void deletePothole_ShouldDeleteAPotholeByPotholeId() {
-//
-//	}
+	@Test
+	public void updatePothole_ShouldUpdateAPothole() {
+		
+		PotholeDTO newPothole = new PotholeDTO ("Low", new BigDecimal(99.99), new BigDecimal(99.99),"Reported", "user");
+
+		List<PotholeDTO> allPotholes = potholeSqlDAO.findAllPotholes();
+		potholeSqlDAO.createPothole(newPothole);
+		Long potholeId = potholeSqlDAO.getPotholesId(newPothole);
+		PotholeDTO updatedPothole = new PotholeDTO ("High", new BigDecimal(99.99), new BigDecimal(99.99),"Inspected", "user", potholeId);
+
+		boolean updatePothole = potholeSqlDAO.updatePothole(updatedPothole, potholeId.intValue());
+		List<PotholeDTO> checkAllPotholes = potholeSqlDAO.findAllPotholes();
+
+		Assert.assertTrue(updatePothole);
+		Assert.assertEquals(allPotholes.size() + 1, checkAllPotholes.size());
+
+	}
+
+	@Test
+	public void deletePothole_ShouldDeleteAPotholeByPotholeId() {
+
+	}
 }
