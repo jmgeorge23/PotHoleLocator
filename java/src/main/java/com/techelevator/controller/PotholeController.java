@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.techelevator.dao.PotholeDAO;
 import com.techelevator.model.Pothole;
+import com.techelevator.model.PotholeAlreadyExistException;
 import com.techelevator.model.PotholeDTO;
 
 @RestController
@@ -49,7 +50,12 @@ public class PotholeController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/potholes", method = RequestMethod.POST)
 	public void addPothole(@Valid @RequestBody PotholeDTO newPothole) {
-		potholeDAO.createPothole(newPothole);
+		PotholeDTO pothole = potholeDAO.getPotholeByLatLng(newPothole);
+		if (pothole == null) {
+			potholeDAO.createPothole(newPothole);
+		} else {
+			throw new PotholeAlreadyExistException();
+		}
 	}
 
 	// Update pothole

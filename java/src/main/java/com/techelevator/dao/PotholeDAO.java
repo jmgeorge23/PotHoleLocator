@@ -15,6 +15,9 @@ public interface PotholeDAO {
 
 	// get pothole by status
 	List<PotholeDTO> getPotholeByStatus(int statusId);
+	
+	// get pothole by lat and lng
+	PotholeDTO getPotholeByLatLng(PotholeDTO pothole);
 
 	// add pothole
 	boolean createPothole(PotholeDTO newPothole);

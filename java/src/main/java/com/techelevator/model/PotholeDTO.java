@@ -8,7 +8,7 @@ public class PotholeDTO {
 	private Long potholeId;
 	private String status;
 	private String severity;
-	private Long userId;
+	private String username;
 	private BigDecimal latitude;
 	private BigDecimal longitude;
 	private String roadName;
@@ -46,12 +46,12 @@ public class PotholeDTO {
 		
 	}
 
-	public Long getUserId() {
-		return userId;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public BigDecimal getLatitude() {
@@ -96,7 +96,7 @@ public class PotholeDTO {
 
 	@Override
 	public String toString() {
-		return "Pothole [potholeId=" + potholeId + ", status=" + status + ", severity=" + severity + ", userId=" + userId + ", latitude=" + latitude + ", longitude="
+		return "Pothole [potholeId=" + potholeId + ", status=" + status + ", severity=" + severity + ", username=" + username + ", latitude=" + latitude + ", longitude="
 				+ longitude + ", roadName=" + roadName + ", direction=" + direction + ", lane=" + lane + "]";
 	}
 
