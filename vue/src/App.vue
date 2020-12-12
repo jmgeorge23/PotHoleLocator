@@ -5,7 +5,7 @@
       color="info"
       flat
     >
-      <v-container class="py-0 fill-height">
+      <v-container class="py-0 fill-height" fluid>
         <v-avatar
           class="mr-10"
           color="grey darken-1"

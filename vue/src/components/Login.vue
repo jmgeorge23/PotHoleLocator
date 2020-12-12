@@ -90,32 +90,25 @@
 <script>
 import authService from "../services/AuthService";
 export default {
-    data() {
-      return {
-        dialog: false,
-        validForm: false,
-        validCredentials: false,
-        snackbar: false,
-        text: 'Invalid Username / Password.',
-        timeout: 3000,
-        user: {
-          username: "",
-          password: ""
-        },
-        nameRules: [
-          v => !!v || 'Name is required',
-          v => v.length <= 25 || 'Name must be less than 25 characters',
-        ],
-        passwordRules: [
-          v => !!v || 'Password is required'
-        ],
-        // email: '',
-        // emailRules: [
-        //   v => !!v || 'E-mail is required',
-        //   v => /.+@.+/.test(v) || 'E-mail must be valid',
-        // ],
-      }
-    },
+    data: () => ({
+      dialog: false,
+      validForm: false,
+      validCredentials: false,
+      snackbar: false,
+      text: 'Invalid Username / Password.',
+      timeout: 3000,
+      user: {
+        username: "",
+        password: ""
+      },
+      nameRules: [
+        v => !!v || 'Name is required',
+        v => v.length <= 25 || 'Name must be less than 25 characters',
+      ],
+      passwordRules: [
+        v => !!v || 'Password is required'
+      ],
+    }),
     methods: {
       login() {
         authService
