@@ -11,7 +11,7 @@ public interface ClaimDAO {
 	List<ClaimDTO> getAllClaims ();
 	
 	//Get claim by claim Id
-	ClaimDTO getClaimById(int claimId);
+	ClaimDTO getClaimById(Long claimId);
 	
 	//Get claim by username
 	List<ClaimDTO> getUsersClaim (String username);

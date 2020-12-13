@@ -33,7 +33,7 @@ public class ClaimController {
 	
 	//Get claim by claim ID
 	@RequestMapping(path = "/claims/{id}", method = RequestMethod.GET)
-	public ClaimDTO getClaimById(@PathVariable int id) {
+	public ClaimDTO getClaimById(@PathVariable Long id) {
 		return claimDAO.getClaimById(id);
 	}
 	

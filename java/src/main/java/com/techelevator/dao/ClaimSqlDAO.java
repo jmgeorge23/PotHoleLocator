@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
-
 import com.techelevator.model.ClaimDTO;
 
 @Service
@@ -39,7 +38,7 @@ public class ClaimSqlDAO implements ClaimDAO {
 	}
 
 	@Override
-	public ClaimDTO getClaimById(int claimId) {
+	public ClaimDTO getClaimById(Long claimId) {
 
 		ClaimDTO claim = null;
 
@@ -80,7 +79,7 @@ public class ClaimSqlDAO implements ClaimDAO {
 	public boolean createClaim(ClaimDTO newClaim) {
 
 		boolean claim = false;
-
+		// add to claims
 		String createNewClaim = "INSERT INTO claims(claim_id, amount, description, claim_status_id) "
 				+ "VALUES(DEFAULT, ?, ?,(SELECT claim_status_id FROM claim_status WHERE status=?));";
 
@@ -88,16 +87,17 @@ public class ClaimSqlDAO implements ClaimDAO {
 				newClaim.getStatus());
 
 		if (result == 1) {
-
-			ClaimDTO claimWithId = getClaimId(newClaim);
-			newClaim.setClaimId(claimWithId.getClaimId());
+			// add to users_claims
+			Long newClaimId = getClaimId(newClaim);
+			newClaim.setClaimId(newClaimId);
 
 			if (addToUsersClaims(newClaim)) {
-
+				// add to potholes_claims
 				if (addToPotholeClaims(newClaim)) {
+					// add to claims_history
+					if (addToClaimsHistory(newClaim)) {
 
-					if (addToClaimsHistory(claimWithId)) {
-
+						// add to user_claims_history
 						if (addToUsersClaimsHistory(newClaim)) {
 
 							claim = true;
@@ -109,7 +109,7 @@ public class ClaimSqlDAO implements ClaimDAO {
 		return claim;
 	}
 
-	//able to update amount and status
+	// able to update amount and status
 	@Override
 	public boolean updateClaim(ClaimDTO updatedClaim, int claimId) {
 		boolean claim = false;
@@ -117,13 +117,13 @@ public class ClaimSqlDAO implements ClaimDAO {
 		String updatesClaims = "UPDATE claims SET amount = ? , claim_status_id =(SELECT claim_status_id FROM claim_status WHERE status=?) "
 				+ " WHERE claim_id = ?;";
 
-		if(addToClaimsHistory(updatedClaim)) {
-		int result = jdbcTemplate.update(updatesClaims, updatedClaim.getClaimAmount(),
-				updatedClaim.getStatus(), claimId);
+		if (addToClaimsHistory(updatedClaim)) {
+			int result = jdbcTemplate.update(updatesClaims, updatedClaim.getClaimAmount(), updatedClaim.getStatus(),
+					claimId);
 
-		if (result == 1) {
-			claim = true;
-		}
+			if (result == 1) {
+				claim = true;
+			}
 		}
 		return claim;
 
@@ -184,30 +184,24 @@ public class ClaimSqlDAO implements ClaimDAO {
 				+ "VALUES((SELECT user_id FROM users WHERE username = ?), "
 				+ "(SELECT claim_history_id FROM claims_history WHERE claim_id = ?));";
 
-		int result = jdbcTemplate.update(addToUsersClaimsHistory, claimWithUser.getUsername(), claimWithUser.getClaimId());
+		int result = jdbcTemplate.update(addToUsersClaimsHistory, claimWithUser.getUsername(),
+				claimWithUser.getClaimId());
 		if (result == 1) {
 			claim = true;
 		}
 		return claim;
 	}
 
-	public ClaimDTO getClaimId(ClaimDTO claim) {
+	public Long getClaimId(ClaimDTO claim) {
 
-		ClaimDTO claims = null;
-
-		String getClaimId = "SELECT c.claim_id, c.amount, c.description, cs.status "
+		String getClaimId = "SELECT c.claim_id "
 				+ "FROM claims c INNER JOIN claim_status cs ON c.claim_status_id = cs.claim_status_id "
 				+ "WHERE amount = ? and description = ?;";
-		SqlRowSet result = jdbcTemplate.queryForRowSet(getClaimId, claim.getClaimAmount(), claim.getDescription());
+		return jdbcTemplate.queryForObject(getClaimId, long.class, claim.getClaimAmount(), claim.getDescription());
 
-		while (result.next()) {
-			claims = mapToClaimNoUsername(result);
-
-		}
-
-		return claims;
 	}
 
+	// map to claim with username
 	private ClaimDTO mapToClaim(SqlRowSet cl) {
 
 		ClaimDTO claims = new ClaimDTO();
@@ -222,16 +216,4 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 	}
 
-	private ClaimDTO mapToClaimNoUsername(SqlRowSet cl) {
-
-		ClaimDTO claims = new ClaimDTO();
-
-		claims.setClaimId(cl.getLong("claim_id"));
-		claims.setClaimAmount(cl.getBigDecimal("amount"));
-		claims.setStatus(cl.getString("status"));
-		claims.setDescription(cl.getString("description"));
-
-		return claims;
-
-	}
 }

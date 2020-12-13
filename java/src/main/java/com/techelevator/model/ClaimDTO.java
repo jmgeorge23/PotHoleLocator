@@ -11,6 +11,22 @@ public class ClaimDTO {
 	private String username;
 	private Long potholeId;
 	
+	public ClaimDTO() {
+		
+	}
+	
+	public ClaimDTO(Long claimId, BigDecimal claimAmount, String status, String description,
+			String username, Long potholeId) {
+		
+		this.claimId =  claimId;
+		this.claimAmount = claimAmount;
+		this.status = status;
+		this.description = description;
+		this.username = username;
+		this.potholeId = potholeId;
+		
+			
+	}
 
 	public Long getClaimId() {
 		return claimId;
