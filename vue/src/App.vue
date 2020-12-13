@@ -47,7 +47,7 @@
       <transition
         mode="out-in"
         enter-active-class="animate__animated animate__fadeIn"
-        leave-active-class="animate__animated animate__fadeOut"
+        leave-active-class="animate__animated animate__pulse"
       >
         <router-view/>
       </transition>
@@ -66,7 +66,7 @@
           color="white"
           text
           rounded
-          class="my-2"
+          class="my-0"
           @click="$router.push({name: link}).catch(()=>{})"
         >
           {{ link }}
@@ -93,28 +93,29 @@ export default {
     Register
   },
   data: () => ({
-      dialog: false,
-      headerLinks: [
-        'dashboard',
-        'Profile',
-      ],
-      footerLinks: [
-        'test',
-        'team',
-        'blog',
-        'contact',
-      ],
+    dialog: false,
+    headerLinks: [
+      'dashboard',
+      'Profile',
+    ],
+    footerLinks: [
+      'test',
+      'team',
+      'blog',
+      'contact',
+    ],
   }),
+  
   computed: {
     isLoggedIn() {
-      return (localStorage
-        .getItem('user') === null ? false : true);
+      return this.$store.getters.isLoggedIn;
     }
   },
+
   methods: {
     logout() {
-      this.$store.commit("LOGOUT");
-      window.location.reload();
+      this.$store.dispatch('logout');
+      this.$router.go();
     }
   }
 }
@@ -127,7 +128,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  /* margin-top: 60px; */
 }
 .login {
   margin-right: 1rem;

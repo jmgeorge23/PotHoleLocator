@@ -47,7 +47,6 @@
           <small>*indicates required field</small>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <!-- <v-spacer></v-spacer> -->
           <v-btn
             color="success lighten-1"
             type="submit"
@@ -88,12 +87,10 @@
 </template>
 
 <script>
-import authService from "../services/AuthService";
 export default {
     data: () => ({
       dialog: false,
       validForm: false,
-      validCredentials: false,
       snackbar: false,
       text: 'Invalid Username / Password.',
       timeout: 3000,
@@ -106,30 +103,27 @@ export default {
         v => v.length <= 25 || 'Name must be less than 25 characters',
       ],
       passwordRules: [
-        v => !!v || 'Password is required'
+        v => !!v || 'Password is required',
+        v => v.length >= 8 || 'Password must be at least 8 characters',
       ],
     }),
+
+    computed: {
+      isLoggedIn() {
+        return this.$store.getters.isLoggedIn;
+      },
+    },
+
     methods: {
       login() {
-        authService
-          .login(this.user)
-          .then(response => {
-            if (response.status == 200) {
-              this.invalidCredentials = false;
-              this.$store.commit("SET_AUTH_TOKEN", response.data.token);
-              this.$store.commit("SET_USER", response.data.user);
-              this.closeDialog();
-              this.$router.go();
-            }
-          })
-          .catch(error => {
-            const response = error.response;
-
-            if (response.status === 401) {
-              this.invalidCredentials = true;
-              this.runSnackbar();
-            }
-          });
+        const payload = this.user;
+        this.$store.dispatch('login', payload);
+        if(this.isLoggedIn) {
+          this.closeDialog();
+          this.$router.go();
+        } else {
+          this.runSnackbar();
+        }
       },
       closeDialog() {
         this.dialog = !this.dialog;

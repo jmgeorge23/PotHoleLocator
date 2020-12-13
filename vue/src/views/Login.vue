@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import authService from "../services/AuthService";
+//import authService from "../services/AuthService";
 
 export default {
   name: "login",
@@ -55,22 +55,25 @@ export default {
   },
   methods: {
     login() {
-      authService
-        .login(this.user)
-        .then(response => {
-          if (response.status == 200) {
-            this.$store.commit("SET_AUTH_TOKEN", response.data.token);
-            this.$store.commit("SET_USER", response.data.user);
-            this.$router.push("/");
-          }
-        })
-        .catch(error => {
-          const response = error.response;
+      // let username = this.username;
+      // let password = this.password;
+      // this.$store.dispatch
+      // authService
+      //   .login(this.user)
+      //   .then(response => {
+      //     if (response.status == 200) {
+      //       this.$store.commit("SET_AUTH_TOKEN", response.data.token);
+      //       this.$store.commit("SET_USER", response.data.user);
+      //       this.$router.push("/");
+      //     }
+      //   })
+      //   .catch(error => {
+      //     const response = error.response;
 
-          if (response.status === 401) {
-            this.invalidCredentials = true;
-          }
-        });
+      //     if (response.status === 401) {
+      //       this.invalidCredentials = true;
+      //     }
+      //   });
     }
   }
 };

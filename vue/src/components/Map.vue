@@ -20,7 +20,7 @@
             <gmap-info-window
                 :options="infoWindowOptions"
                 :position="infoWindowPosition"
-                :opened="isInfoWindowOpened"
+                :opened="isSelectionMade ? handleMarkerClicked(selection) : false"
                 @closeclick="handleInfoWindowClose"
                 >
                 <div class="info-window"
@@ -86,7 +86,10 @@ export default {
         isInfoWindowOpened: false
     }),
     props: {
-        listedPothole: {
+        potholes: {
+            type: Array,
+        },
+        selection: {
             type: Object,
         }
     },
@@ -109,12 +112,16 @@ export default {
                 lng: parseFloat(this.activePothole.longitude),
             }
         },
-        potholes: {
-            get() {
-                return this.$store.getters.allPotholes;
-                //return this.$store.getters.notInspectedPotholes;
+        isSelectionMade() {
+            if (this.selection == null || this.selection == undefined) {
+                return false;
             }
+            return true;
         }
+        // potholes() {
+        //     return this.$store.getters.allPotholes;
+        //     //return this.$store.getters.notInspectedPotholes;
+        // }
     },
     methods: {
         fetchPotholes() {
@@ -141,14 +148,11 @@ export default {
             this.isInfoWindowOpened = true;
         },
         handleInfoWindowClose() {
-            this.activePothole = {};
+            this.activePothole = this.selection;
             this.isInfoWindowOpened = false;
         },
     },
     created() {
-        // Immediately load all potholes into the $store
-        this.fetchPotholes();
-
         // does the user have a saved center? use it instead of the default
         if(localStorage.center) {
             this.myCoordinates = JSON.parse(localStorage.center);
