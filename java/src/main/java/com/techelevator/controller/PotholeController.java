@@ -1,5 +1,6 @@
 package com.techelevator.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -17,12 +18,14 @@ import com.techelevator.dao.PotholeDAO;
 
 import com.techelevator.model.PotholeAlreadyExistException;
 import com.techelevator.model.PotholeDTO;
+import com.techelevator.services.PotholeLatLngService;
 
 @RestController
 @CrossOrigin
 public class PotholeController {
 
 	private PotholeDAO potholeDAO;
+	private PotholeLatLngService potholeService;
 
 	public PotholeController(PotholeDAO potholeDAO) {
 		this.potholeDAO = potholeDAO;
@@ -50,8 +53,47 @@ public class PotholeController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/potholes", method = RequestMethod.POST)
 	public void addPothole(@Valid @RequestBody PotholeDTO newPothole) {
-		PotholeDTO pothole = potholeDAO.getPotholeByLatLng(newPothole);
-		if (pothole == null) {
+//		BigDecimal range = new BigDecimal(0.00001);
+//		BigDecimal currentLat = newPothole.getLatitude();
+//		BigDecimal currentLng = newPothole.getLongitude();
+//		
+//		PotholeDTO potholePlusLat = newPothole;
+//		PotholeDTO potholeMinusLat = newPothole;
+//		PotholeDTO potholePlusLng = newPothole;
+//		PotholeDTO potholeMinusLng = newPothole;
+//		PotholeDTO potholePlusBoth = newPothole;
+//		PotholeDTO potholeMinusBoth = newPothole;
+//		PotholeDTO potholePlusLatMinusLng = newPothole;
+//		PotholeDTO potholeMinusLatPlusLng = newPothole;
+//
+//		
+//		potholePlusLat.setLatitude(currentLat.add(range)); 
+//		potholeMinusLat.setLatitude(currentLat.subtract(range)); 
+//		potholePlusLng.setLongitude(currentLng.add(range)); 
+//		potholeMinusLng.setLongitude(currentLng.subtract(range)); 
+//		potholePlusBoth.setLatitude(currentLat.add(range)); 
+//		potholePlusBoth.setLongitude(currentLng.add(range)); 
+//		potholeMinusBoth.setLatitude(currentLat.subtract(range)); 
+//		potholeMinusBoth.setLongitude(currentLng.subtract(range)); 
+//		potholePlusLatMinusLng.setLatitude(currentLat.add(range));
+//		potholePlusLatMinusLng.setLongitude(currentLng.subtract(range));
+//		potholeMinusLatPlusLng.setLatitude(currentLat.subtract(range));
+//		potholeMinusLatPlusLng.setLongitude(currentLng.add(range));
+//		
+		PotholeDTO pothole1 = potholeDAO.getPotholeByLatLng(newPothole);
+//		PotholeDTO pothole2  = potholeDAO.getPotholeByLatLng(potholePlusLat);
+//		PotholeDTO pothole3  = potholeDAO.getPotholeByLatLng(potholeMinusLat);
+//		PotholeDTO pothole4  = potholeDAO.getPotholeByLatLng(potholePlusLng);
+//		PotholeDTO pothole5  = potholeDAO.getPotholeByLatLng(potholeMinusLng);
+//		PotholeDTO pothole6  = potholeDAO.getPotholeByLatLng(potholePlusBoth);
+//		PotholeDTO pothole7  = potholeDAO.getPotholeByLatLng(potholeMinusBoth);
+//		PotholeDTO pothole8  = potholeDAO.getPotholeByLatLng(potholeMinusBoth);
+//		PotholeDTO pothole9  = potholeDAO.getPotholeByLatLng(potholeMinusBoth);
+
+
+//		if (pothole1 == null && pothole2 == null && pothole3 == null && pothole4 == null && pothole5 == null
+//				&& pothole6 == null && pothole7 == null && pothole8 == null && pothole9 == null) {
+		if(pothole1 == null) {
 			potholeDAO.createPothole(newPothole);
 		} else {
 			throw new PotholeAlreadyExistException();
