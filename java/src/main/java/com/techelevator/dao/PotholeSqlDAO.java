@@ -20,10 +20,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
-	// Public get methods for all potholes, pothole by ID, potholes of a certain
-	// status, pothole by Lat & Lng, and a newly created potholes ID
-
-	// Return a list of all active potholes
+	// Method to get a list of all active potholes
 	@Override
 	public List<PotholeDTO> findAllPotholes() {
 
@@ -43,7 +40,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 		return allPotholes;
 	}
 
-	// Return a pothole from a pothole ID
+	// Method to get a pothole from a pothole ID
 	@Override
 	public PotholeDTO getPotholeById(int potholeId) {
 
@@ -63,7 +60,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 		return potholes;
 	}
 
-	// Return a list of potholes based on pothole Status
+	// Method to get a list of potholes based on pothole Status
 	@Override
 	public List<PotholeDTO> getPotholesByStatus(String status) {
 
@@ -83,7 +80,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 		return potholesStatus;
 	}
 
-	// Return a pothole from Lat and Lng
+	// Method to get a pothole from Lat and Lng
 	@Override
 	public PotholeDTO getPotholeByLatLng(PotholeDTO newPothole) {
 		PotholeDTO pothole = null;
@@ -113,7 +110,8 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 	}
 
-	// Create a new pothole
+	// Method to create a new pothole
+	// This method will also add the pothole to the potholes_history table
 	@Override
 	public boolean createPothole(PotholeDTO newPothole) {
 
@@ -124,7 +122,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 		String addToPotholes = "INSERT INTO potholes(pothole_id, lat, lng, pothole_status_id, severity_id)"
 				+ "VALUES(DEFAULT,?,?,(SELECT pothole_status_id FROM pothole_status WHERE status = ?),"
 				+ "(SELECT severity_id FROM severity WHERE severity = ?));";
-
+		// Adds the pothole to the potholes table
 		int result = jdbcTemplate.update(addToPotholes, newPothole.getLatitude(), newPothole.getLongitude(),
 				newPothole.getStatus(), newPothole.getSeverity());
 
@@ -146,9 +144,8 @@ public class PotholeSqlDAO implements PotholeDAO {
 		return potholes;
 	}
 
-	// Public update method for a update, update a potholes severity, and update a
-	// potholes status
-	// General update method that can update any info a pothole has
+	// Method to update any data in a pothole
+	// This method will also add the pothole to the potholes_history table
 	@Override
 	public boolean updatePothole(PotholeDTO updatedPothole, int potholeId) {
 
@@ -169,7 +166,8 @@ public class PotholeSqlDAO implements PotholeDAO {
 		return potholes;
 	}
 
-	// Updates just a potholes severity
+	// Method to udate just a potholes severity
+	// This method will also add the pothole to the potholes_history table
 	@Override
 	public boolean updatePotholeSeverity(int potholeId, PotholeDTO updatedPothole) {
 		boolean potholes = false;
@@ -187,7 +185,8 @@ public class PotholeSqlDAO implements PotholeDAO {
 		return potholes;
 	}
 
-	// Update a potholes status
+	// Method to update a potholes status
+	// This method will also add the pothole to the potholes_history table
 	@Override
 	public boolean updatePotholeStatus(int potholeId, PotholeDTO updatedPothole) {
 		boolean potholes = false;
@@ -206,7 +205,8 @@ public class PotholeSqlDAO implements PotholeDAO {
 		return potholes;
 	}
 
-	// Delete a pothole
+	// Method to delete a pothole from the potholes table and all associative tables.
+	// This method will also add the pothole to the potholes_history table
 	@Override
 	public boolean deletePothole(int potholeId) {
 
@@ -241,7 +241,6 @@ public class PotholeSqlDAO implements PotholeDAO {
 		return potholes;
 	}
 
-	// Private methods for adding a pothole to associative tables
 	// Method to add a pothole to the potholes_history table
 	private boolean addToPotholesHistory(PotholeDTO newPothole) {
 
@@ -278,7 +277,6 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 	}
 
-	// Private methods for deleting a pothole from associative tables
 	// Method to delete a pothole from the potholes_users table
 	private boolean deleteFromPotholesUsers(int potholeId) {
 
@@ -343,7 +341,7 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 	}
 
-	// Private method to map a Sql row set to a pothole object
+	// Method to map a Sql row set to a pothole object
 	private PotholeDTO mapToPothole(SqlRowSet ph) {
 
 		PotholeDTO potholes = new PotholeDTO();

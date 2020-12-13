@@ -19,6 +19,7 @@ public class CommentSqlDAO implements CommentDAO {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
+	// Method to get a list of all comments
 	@Override
 	public List<CommentDTO> getAllComments() {
 
@@ -39,7 +40,8 @@ public class CommentSqlDAO implements CommentDAO {
 
 		return allComments;
 	}
-
+	
+	// Method to get a list of comments by a username
 	@Override
 	public List<CommentDTO> getCommentsByUsername(String username) {
 
@@ -61,6 +63,7 @@ public class CommentSqlDAO implements CommentDAO {
 		return allCommentsByUsername;
 	}
 
+	// Method to get a list of comments by a potholes ID
 	@Override
 	public List<CommentDTO> getCommentsByPotholeId(Long potholeId) {
 
@@ -81,27 +84,44 @@ public class CommentSqlDAO implements CommentDAO {
 
 		return allCommentsByPothole;
 	}
+	
+	// Method to get a new comments comment ID
+	public CommentDTO getCommentId(CommentDTO newComment, User user) {
 
+			CommentDTO newCommentWithId = null;
+
+			String getNewCommentWithId = "SELECT comment_id, user_comment, posted_at FROM comments WHERE user_comment = ?";
+
+			SqlRowSet result = jdbcTemplate.queryForRowSet(getNewCommentWithId, newComment.getComment());
+
+			while (result.next()) {
+				newCommentWithId = mapToBasicComment(result);
+			}
+
+			return newCommentWithId;
+		}
+
+	// Method to create a new comment
 	@Override
 	public boolean createComment(CommentDTO newComment) {
 
 		boolean comment = false;
-		// add to comments
+		
 		String addToComments = "INSERT INTO comments (comment_id, user_comment, posted_at) "
 				+ "VALUES (DEFAULT, ?, CURRENT_TIMESTAMP);";
-
+		// Add to comment to comments table
 		int result = jdbcTemplate.update(addToComments, newComment.getComment());
 
 		if (result == 1) {
-			// add to users_comments
-
+			// Get the user ID who submitted the new comment
 			User user = getUserId(newComment);
+			// Get the comment ID of the new comment
 			CommentDTO newCommentWithId = getCommentId(newComment, user);
+			// Set the new comment with its comment ID
 			newComment.setCommentId(newCommentWithId.getCommentId());
-
+			// Add comment to the users_comment table
 			if (addToUsersComments(newComment, user)) {
-
-				// add to potholes_comments
+				// Add comment to potholes_comments table
 				if (addToPotholesComments(newComment)) {
 
 					comment = true;
@@ -110,16 +130,17 @@ public class CommentSqlDAO implements CommentDAO {
 		}
 		return comment;
 	}
-
+	
+	// Method to delete a comment from the comment table and all associative tables
 	@Override
 	public boolean deleteComment(Long commentId) {
 
 		boolean commentDeleted = false;
-		// Delete from users_comments
+		// Delete from users_comments table
 		if (deleteFromUsersComments(commentId)) {
-			// Delete from potholes_comments
+			// Delete from potholes_comments table
 			if (deleteFromPotholesComments(commentId)) {
-				// Delete from comments
+				// Delete from comments table
 				if (deleteFromComments(commentId)) {
 					commentDeleted = true;
 				}
@@ -129,22 +150,7 @@ public class CommentSqlDAO implements CommentDAO {
 
 	}
 
-	// Private Getters From CommentId and UserId
-	public CommentDTO getCommentId(CommentDTO newComment, User user) {
-
-		CommentDTO newCommentWithId = null;
-
-		String getNewCommentWithId = "SELECT comment_id, user_comment, posted_at FROM comments WHERE user_comment = ?";
-
-		SqlRowSet result = jdbcTemplate.queryForRowSet(getNewCommentWithId, newComment.getComment());
-
-		while (result.next()) {
-			newCommentWithId = mapToBasicComment(result);
-		}
-
-		return newCommentWithId;
-	}
-
+	// Method to get a users ID from the new comment
 	private User getUserId(CommentDTO newComment) {
 
 		User user = null;
@@ -159,7 +165,7 @@ public class CommentSqlDAO implements CommentDAO {
 		return user;
 	}
 
-	// Private inserts to users_comments and pothole_comments tables
+	// Method to add a comment to the users_comments table
 	private boolean addToUsersComments(CommentDTO newComment, User user) {
 
 		boolean comment = false;
@@ -175,6 +181,7 @@ public class CommentSqlDAO implements CommentDAO {
 		return comment;
 	}
 
+	// Method to add a comment to the potholes_comments table 
 	private boolean addToPotholesComments(CommentDTO newComment) {
 
 		boolean comment = false;
@@ -189,8 +196,7 @@ public class CommentSqlDAO implements CommentDAO {
 		return comment;
 	}
 
-	// Private deletes for users_comments, potholes_comments, and comment tables
-	//Delete from users_comments
+	// Method to delete a comment from users_comments table
 	private boolean deleteFromUsersComments(Long commentId) {
 
 		boolean deleted = false;
@@ -206,7 +212,7 @@ public class CommentSqlDAO implements CommentDAO {
 		return deleted;
 	}
 
-	// Delete from potholes_comments
+	// Method to delete a commment from potholes_comments table
 	private boolean deleteFromPotholesComments(Long commentId) {
 
 		boolean deleted = false;
@@ -222,7 +228,7 @@ public class CommentSqlDAO implements CommentDAO {
 		return deleted;
 	}
 
-	// Delete from comments
+	// Method to delete a comment from comments table
 	private boolean deleteFromComments(Long commentId) {
 
 		boolean deleted = false;
@@ -238,7 +244,7 @@ public class CommentSqlDAO implements CommentDAO {
 		return deleted;
 	}
 
-	// Private maps for a basic comment, a complex comment, and a user
+	// Method to map a Sql row set from the comments table
 	private CommentDTO mapToBasicComment(SqlRowSet cm) {
 
 		CommentDTO comment = new CommentDTO();
@@ -251,6 +257,7 @@ public class CommentSqlDAO implements CommentDAO {
 
 	}
 
+	// Method to map a Sql row set from the comments and associative tables
 	private CommentDTO mapToComment(SqlRowSet cm) {
 
 		CommentDTO comments = new CommentDTO();
@@ -266,6 +273,7 @@ public class CommentSqlDAO implements CommentDAO {
 
 	}
 
+	// Method to map a Sql row set from the users table
 	private User mapToUser(SqlRowSet u) {
 
 		User user = new User();
