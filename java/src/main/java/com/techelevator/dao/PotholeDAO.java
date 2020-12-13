@@ -2,7 +2,7 @@ package com.techelevator.dao;
 
 import java.util.List;
 
-import com.techelevator.model.Pothole;
+
 import com.techelevator.model.PotholeDTO;
 
 public interface PotholeDAO {
@@ -14,7 +14,7 @@ public interface PotholeDAO {
 	PotholeDTO getPotholeById(int potholeId);
 
 	// get pothole by status
-	List<PotholeDTO> getPotholeByStatus(int statusId);
+	List<PotholeDTO> getPotholesByStatus(String status);
 	
 	// get pothole by lat and lng
 	PotholeDTO getPotholeByLatLng(PotholeDTO pothole);

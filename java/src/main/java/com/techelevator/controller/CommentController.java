@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techelevator.dao.CommentDAO;
-import com.techelevator.model.Comment;
+
 import com.techelevator.model.CommentDTO;
 
 @RestController

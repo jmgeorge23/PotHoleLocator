@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
-import com.techelevator.model.Comment;
 import com.techelevator.model.CommentDTO;
 import com.techelevator.model.User;
 
@@ -131,7 +130,7 @@ public class CommentSqlDAO implements CommentDAO {
 	}
 
 	// Private Getters From CommentId and UserId
-	private CommentDTO getCommentId(CommentDTO newComment, User user) {
+	public CommentDTO getCommentId(CommentDTO newComment, User user) {
 
 		CommentDTO newCommentWithId = null;
 

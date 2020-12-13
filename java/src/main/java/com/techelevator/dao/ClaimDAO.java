@@ -2,7 +2,7 @@ package com.techelevator.dao;
 
 import java.util.List;
 
-import com.techelevator.model.Claim;
+
 import com.techelevator.model.ClaimDTO;
 
 public interface ClaimDAO {

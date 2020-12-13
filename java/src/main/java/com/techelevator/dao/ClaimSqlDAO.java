@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 
-import com.techelevator.model.Claim;
+
 import com.techelevator.model.ClaimDTO;
 
 @Service
@@ -191,7 +191,7 @@ public class ClaimSqlDAO implements ClaimDAO {
 		return claim;
 	}
 
-	private ClaimDTO getClaimId(ClaimDTO claim) {
+	public ClaimDTO getClaimId(ClaimDTO claim) {
 
 		ClaimDTO claims = null;
 

@@ -1,5 +1,5 @@
 package com.techelevator.dao;
-import com.techelevator.model.Claim;
+
 import javax.sql.DataSource;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,10 +19,6 @@ public class ClaimSqlDaoIntegrationTest extends DAOIntegrationTest {
 		
 	}
 	
-	@Test
-	public void getAllClaims_ShouldReturnAllClaims() {
-		
-	}
 	
 	@Test
 	public void getClaimById_ShouldReturnClaimbyClaimId() {

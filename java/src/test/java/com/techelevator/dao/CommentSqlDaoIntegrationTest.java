@@ -1,5 +1,5 @@
 package com.techelevator.dao;
-import com.techelevator.model.Comment;
+
 import javax.sql.DataSource;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,11 +17,7 @@ public class CommentSqlDaoIntegrationTest extends DAOIntegrationTest {
 		commentSqlDAO =  new CommentSqlDAO(jdbcTemplate);
 	}
 	
-	@Test
-	public void getAllComments_ShouldReturnAllComments() {
-		
-	}
-	
+
 	@Test
 	public void getCommentsByUsername_ShouldReturnAllCommentsFromAUsername(){
 		

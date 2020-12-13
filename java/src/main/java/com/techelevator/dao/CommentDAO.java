@@ -2,7 +2,7 @@ package com.techelevator.dao;
 
 import java.util.List;
 
-import com.techelevator.model.Comment;
+
 import com.techelevator.model.CommentDTO;
 
 public interface CommentDAO {

@@ -9,14 +9,14 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.techelevator.model.Pothole;
+
 import com.techelevator.model.PotholeDTO;
 
 @Service
 public class PotholeSqlDAO implements PotholeDAO {
 
 	private JdbcTemplate jdbcTemplate;
-	public HttpStatus response;
+	
 
 	public PotholeSqlDAO(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
@@ -63,22 +63,22 @@ public class PotholeSqlDAO implements PotholeDAO {
 	}
 
 	@Override
-	public List<PotholeDTO> getPotholeByStatus(int statusId) {
+	public List<PotholeDTO> getPotholesByStatus(String status) {
 
-		List<PotholeDTO> potholesStat = new ArrayList<>();
+		List<PotholeDTO> potholesStatus = new ArrayList<>();
 
-		String potholeByStat = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p "
+		String potholeByStatus = "SELECT p.pothole_id, p.lat, p.lng, ps.status, s.severity FROM potholes p "
 				+ "INNER JOIN pothole_status ps ON p.pothole_status_id = ps.pothole_status_id "
-				+ "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE p.pothole_status_id = ?;";
+				+ "INNER JOIN severity s ON s.severity_id = p.severity_id WHERE ps.status = ?;";
 
-		SqlRowSet result = jdbcTemplate.queryForRowSet(potholeByStat, statusId);
+		SqlRowSet result = jdbcTemplate.queryForRowSet(potholeByStatus, status);
 
 		while (result.next()) {
 			PotholeDTO pothole = mapToPothole(result);
-			potholesStat.add(pothole);
+			potholesStatus.add(pothole);
 		}
 
-		return potholesStat;
+		return potholesStatus;
 	}
 	
 	@Override

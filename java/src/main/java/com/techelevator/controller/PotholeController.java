@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techelevator.dao.PotholeDAO;
-import com.techelevator.model.Pothole;
+
 import com.techelevator.model.PotholeAlreadyExistException;
 import com.techelevator.model.PotholeDTO;
 
@@ -41,9 +41,9 @@ public class PotholeController {
 	}
 
 	// Get pothole by Status
-	@RequestMapping(value = "/potholes/status/{statusId}", method = RequestMethod.GET)
-	public List<PotholeDTO> getPotholeByStatus(@PathVariable int statusId) {
-		return potholeDAO.getPotholeByStatus(statusId);
+	@RequestMapping(value = "/potholes/status/{status}", method = RequestMethod.GET)
+	public List<PotholeDTO> getPotholeByStatus(@PathVariable String status) {
+		return potholeDAO.getPotholesByStatus(status);
 	}
 
 	// Add pothole
