@@ -86,19 +86,11 @@ public class CommentSqlDAO implements CommentDAO {
 	}
 	
 	// Method to get a new comments comment ID
-	public CommentDTO getCommentId(CommentDTO newComment, User user) {
+	public Long getCommentId(CommentDTO newComment, String username) {
 
-			CommentDTO newCommentWithId = null;
+			String getNewCommentWithId = "SELECT comment_id FROM comments WHERE user_comment = ?";
 
-			String getNewCommentWithId = "SELECT comment_id, user_comment, posted_at FROM comments WHERE user_comment = ?";
-
-			SqlRowSet result = jdbcTemplate.queryForRowSet(getNewCommentWithId, newComment.getComment());
-
-			while (result.next()) {
-				newCommentWithId = mapToBasicComment(result);
-			}
-
-			return newCommentWithId;
+			return jdbcTemplate.queryForObject(getNewCommentWithId, long.class, newComment.getComment());
 		}
 
 	// Method to create a new comment
@@ -116,9 +108,9 @@ public class CommentSqlDAO implements CommentDAO {
 			// Get the user ID who submitted the new comment
 			User user = getUserId(newComment);
 			// Get the comment ID of the new comment
-			CommentDTO newCommentWithId = getCommentId(newComment, user);
+			Long newCommentId = getCommentId(newComment, user.getUsername());
 			// Set the new comment with its comment ID
-			newComment.setCommentId(newCommentWithId.getCommentId());
+			newComment.setCommentId(newCommentId);
 			// Add comment to the users_comment table
 			if (addToUsersComments(newComment, user)) {
 				// Add comment to potholes_comments table
@@ -242,19 +234,6 @@ public class CommentSqlDAO implements CommentDAO {
 		}
 
 		return deleted;
-	}
-
-	// Method to map a Sql row set from the comments table
-	private CommentDTO mapToBasicComment(SqlRowSet cm) {
-
-		CommentDTO comment = new CommentDTO();
-
-		comment.setCommentId(cm.getLong("comment_id"));
-		comment.setComment(cm.getString("user_comment"));
-		comment.setDateTime(cm.getString("posted_at"));
-
-		return comment;
-
 	}
 
 	// Method to map a Sql row set from the comments and associative tables

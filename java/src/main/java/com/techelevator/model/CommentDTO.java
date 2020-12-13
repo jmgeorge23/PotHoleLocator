@@ -11,6 +11,24 @@ public class CommentDTO {
 	private String dateTime;
 	private BigDecimal latitude;
 	private BigDecimal longitude;
+	
+	public CommentDTO() {
+		
+	}
+	
+	public CommentDTO(Long commentId, String username, String comment, Long potholeId,String dateTime,
+						BigDecimal latitude, BigDecimal longitude) {
+		
+		this.commentId = commentId;
+		this.username = username;
+		this.comment = comment;
+		this.potholeId = potholeId;
+		this.dateTime = dateTime;
+		this.latitude = latitude;
+		this.longitude = longitude;
+		
+	}
+	
 
 	public Long getCommentId() {
 		return commentId;
