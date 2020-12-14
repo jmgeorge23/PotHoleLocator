@@ -1,17 +1,42 @@
 <template>
   <v-app id="inspire">
-    <v-main class="grey lighten-3">
+       <!----------------------- Parallax ------------------->
+ <v-container fluid ma-0 pa-0>
+    <v-parallax class="parallax"
+          dark
+          src="@/assets/contactus.png"
+  >
+          <v-row
+          align="center"
+          justify="center"
+          
+    >
+      <v-col
+        class="text-center"
+        cols="12"
+        
+      >
+        <h1 class="display-3 mb-3">
+          Having trouble finding what you need?
+        </h1>
+        <h3 class="subheading">
+          Contact us today
+        </h3>
+      </v-col>
+    </v-row>
+  </v-parallax>
+  </v-container>
+ <!----------------------- Contact Us Form ------------------->
+      <v-main class="grey lighten-3">
       <v-container>
         <v-row>
-
-
-          <v-col
+        <v-col
             cols="12"
             sm="12"
             
           >
             <v-sheet
-              min-height="70vh"
+              min-height="45vh"
               rounded="lg"
               
             >
@@ -25,6 +50,7 @@
            lazy-validation
     
   >
+   <!----------------------- Name ------------------->
     <v-text-field
       v-model="name"
       :counter="10"
@@ -32,14 +58,14 @@
       label="Name"
       required
     ></v-text-field>
-
+ <!----------------------- Email ------------------->
     <v-text-field
       v-model="email"
       :rules="emailRules"
       label="E-mail"
       required
     ></v-text-field>
-
+ <!----------------------- Reason ------------------->
     <v-select
       v-model="select"
       :items="items"
@@ -47,17 +73,26 @@
       label="Reason for email"
       required
     ></v-select>
-
-
+    <!----------------------- Message ------------------->   
+    <v-textarea
+      v-model="message"
+      :counter="20"
+      :rules="messageRules"
+      label="Please enter your message"
+      single-line
+    ></v-textarea>
+    
+ <!----------------------- Submit ------------------->
     <v-btn
       :disabled="!valid"
       color="success"
       class="mr-4"
       @click="validate"
     >
-      Validate
+      Send Email
     </v-btn>
 
+ <!----------------------- Reset ------------------->
     <v-btn
       color="error"
       class="mr-4"
@@ -66,23 +101,47 @@
       Reset Form
     </v-btn>
   </v-form>  
-          </v-container> 
-            </v-sheet>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
-  </v-app>
+
+<!----------------------- Snackbar------------------->
+
+      <v-snackbar
+      v-model="snackbar"
+      :multi-line="multiLine"
+    >
+      {{ text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="green"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+
+</v-container> 
+  </v-sheet>
+  </v-col>
+  </v-row>
+</v-container>
+</v-main>
+</v-app>
 </template>
 
 <script>
   export default {
     data: () => ({
+      multiLine: true,
+      snackbar: false,
+      text: `Message Received.`,
       valid: true,
       name: '',
       nameRules: [
         v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters',
+        v => (v && v.length <= 10) || 'Name must be less than 20 characters',
       ],
       email: '',
       emailRules: [
@@ -96,22 +155,27 @@
         'I want information regarding my claim',
         'Other',
       ],
-      checkbox: false,
+      message: '',
+      messageRules: [
+        v => !!v || 'Message is required',
+        v => (v && v.length >= 20) || 'Message must be more than 10 characters',
+      ],
     }),
 
     methods: {
       validate () {
         this.$refs.form.validate()
+        this.snackbar = true;
+          
+        
       },
       reset () {
         this.$refs.form.reset()
       },
-    },
+
+    }
   }
 </script>
 
 <style scoped>
-.form {
-
-}
 </style>
