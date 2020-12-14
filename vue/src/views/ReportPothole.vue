@@ -7,7 +7,7 @@
       <v-btn
         icon
         dark
-        @click="dialog = false"
+        @click="goBack"
       >
         <v-icon>mdi-close</v-icon>
       </v-btn>
@@ -30,14 +30,31 @@
       <v-subheader>User Controls</v-subheader>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>Content filtering</v-list-item-title>
-          <v-list-item-subtitle>Set the content filtering level to restrict apps that can be downloaded</v-list-item-subtitle>
+          <v-list-item-title>Click a spot on the map where you encountered a pothole</v-list-item-title>
+          <v-list-item-subtitle>latitude:longitude:</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>Password</v-list-item-title>
-          <v-list-item-subtitle>Require password for purchase or use password to restrict purchase</v-list-item-subtitle>
+        <v-list-item-title>Please provide additional details(optional)</v-list-item-title>
+        <v-form id="login-form">
+          <v-container>
+            <v-row> 
+              <v-col cols=12>
+                <v-text-field label="roadname"
+                  v-model="newPothole.roadName"
+                >
+                </v-text-field>
+              </v-col>
+               <v-col cols=12>
+                  <v-text-field label="direction"
+                    v-model="newPothole.direction"
+                  >
+                </v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-form>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -47,24 +64,7 @@
       subheader
     >
       <v-subheader>General</v-subheader>
-      <v-list-item>
-        <v-list-item-action>
-          <v-checkbox v-model="notifications"></v-checkbox>
-        </v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>Notifications</v-list-item-title>
-          <v-list-item-subtitle>Notify me about updates to apps or games that I downloaded</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-action>
-          <v-checkbox v-model="sound"></v-checkbox>
-        </v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>Sound</v-list-item-title>
-          <v-list-item-subtitle>Auto-update apps at any time. Data charges may apply</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+
       <v-list-item>
         <v-list-item-action>
           <v-checkbox v-model="widgets"></v-checkbox>
@@ -86,7 +86,27 @@ export default {
       notifications: false,
       sound: true,
       widgets: false,
+      newPothole: {
+        direction: '',
+        lane: '',
+        latitude: 0,
+        longitude: 0,
+        roadName: '',
+        severity: 'Not Inspected',
+        status: 'Reported',
+        username: this.username,
+      }
     }
   },  
+  computed:{
+      username(){
+        return this.$store.getters.username;
+      }
+  },
+  methods:{
+      goBack(){
+        this.$router.go(-1);
+      }
+  }
 }
 </script>

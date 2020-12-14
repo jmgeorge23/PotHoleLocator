@@ -3,6 +3,7 @@
   <list-filters/>
   <pothole-list :setHeight="'max-height: 59vh'"/>
   <v-btn
+    
     :to="{name: 'report'}"
     color="info lighten-2"
   >Report Pothole</v-btn>
@@ -25,6 +26,9 @@ export default {
   }),
 
   methods: {
+    makeReport(){
+        this.$store.dispatch('setReportModeOn');
+    }
   },
 }
 </script>
