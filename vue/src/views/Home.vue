@@ -1,4 +1,5 @@
 <template>
+
     <v-container fluid ma-0 pa-0>
      <!----------------------- Parallax ------------------->
     <v-parallax class="parallax"
@@ -24,6 +25,7 @@
       </v-col>
     </v-row>
   </v-parallax>
+  <v-main>
       <v-container justify-center>
           <v-row>
              <!----------------------- Card 1 ------------------->
@@ -98,6 +100,7 @@
             </v-sheet>
           </v-col>
           <!----------------------- FAQ SECTION ------------------->
+          <v-container pb-7>
             <v-card-title>
             Frequently Asked Questions
             </v-card-title>
@@ -115,16 +118,29 @@
                 <v-expansion-panel-content>Yes, we have a claim feature when you are signed in as a user.</v-expansion-panel-content>
               </v-expansion-panel>
             </v-expansion-panels>
+          </v-container>
          </v-row>
-         </v-container>
-      </v-container>
+        </v-container>
+      <Footer/>
+    </v-main>
+</v-container>
+       
+
 </template>
 
 
 
-<script> 
 
+
+<script>
+import Footer from '../components/Footer.vue'
+  export default {
+    components:{
+      Footer
+    }
+  }
 </script>
+
 
 <style scoped>
 

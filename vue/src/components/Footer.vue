@@ -14,7 +14,7 @@
         color="white"
         text
         rounded
-        class="my-0"
+        class="my-2"
         @click="$router.push({name: link}).catch(()=>{})"
       >
         {{ link }}

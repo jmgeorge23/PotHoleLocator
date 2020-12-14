@@ -1,6 +1,34 @@
 <template>
+    <v-container fluid ma-0 pa-0>
+     <!----------------------- Parallax ------------------->
+    <v-parallax class="parallax"
+          dark
+          src="@/assets/yellowteam.png"
+  >
+          <v-row
+          align="center"
+          justify="center"
+          
+    >
+      <v-col
+        class="text-center"
+        cols="12"
+        
+      >
+        <h1 class="display-3 mb-3">
+          Meet the Yellow Team
+        </h1>
+        <h3 class="subheading">
+        
+        </h3>
+      </v-col>
+      
+    </v-row>
+    
+  </v-parallax>
+  
    <v-main>
-    <v-container fluid ma-1 pa-1>
+    <v-container fluid ma-0 pa-0>
          <v-row>
              <!----------------------- Ben ------------------->
           <v-col
@@ -12,7 +40,7 @@
               <v-img
               src="@/assets/BenSquier.png" class="people-images">
               </v-img>
-                  <v-card-title>
+                  <v-card-title >
                   Ben Squier
                   </v-card-title>
                 <v-card-text   class="pb-2 pt-2 px-2">
@@ -161,19 +189,25 @@
                           <v-icon>mdi-web</v-icon>
                           </v-btn>
                 </v-container>
-                
-        </v-card>
+            </v-card>
       </v-sheet>
     </v-col>
   </v-row>
   </v-container>
 </v-main>
+ <Footer/>
+</v-container>
 </template>
 
-<script>
-  export default {
 
+
+<script>
+import Footer from '../components/Footer.vue'
+  export default {
+    components:{
+      Footer
     }
+  }
 </script>
 
 

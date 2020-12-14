@@ -38,16 +38,18 @@
             <v-sheet
               min-height="45vh"
               rounded="lg"
+
               
             >
           <v-card-title>
             Contact Us
           </v-card-title>
-          <v-container fluid>
+          <v-container>
              <v-form
             ref="form"
             v-model="valid"
            lazy-validation
+          
     
   >
    <!----------------------- Name ------------------->
@@ -127,12 +129,17 @@
   </v-col>
   </v-row>
 </v-container>
+<Footer/>
 </v-main>
 </v-app>
 </template>
 
 <script>
+import Footer from '../components/Footer.vue'
   export default {
+    components:{
+    Footer
+    },
     data: () => ({
       multiLine: true,
       snackbar: false,
@@ -176,6 +183,7 @@
     }
   }
 </script>
+
 
 <style scoped>
 </style>
