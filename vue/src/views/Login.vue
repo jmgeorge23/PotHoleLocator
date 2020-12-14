@@ -1,5 +1,5 @@
 <template>
-  
+
 
       <v-card>
         <v-card-title class="justify-center">
@@ -7,7 +7,7 @@
         </v-card-title>
         <v-card-text>
           <v-form v-model="validForm" id="login-form"
-            >
+            @submit.prevent="login">
             <v-container>
               <v-row>
                 <v-col cols="12" >
@@ -35,11 +35,10 @@
         <v-card-actions class="justify-center">
           <v-btn
             color="success lighten-1"
-            
+            type="submit"
             :disabled="!validForm"
             rounded
             form="login-form"
-            @click="login"
           >
             Login
           </v-btn>
@@ -52,26 +51,27 @@
             Cancel
           </v-btn>
         </v-card-actions>
-        <v-snackbar
-          v-if="!snackbar"
-          :timeout="timeout"
-          color="accent"
-          centered
-          >
-          {{ text }}
+              <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      color="accent"
+      centered
+      >
+      {{ text }}
 
-          <template v-slot:action="{ attrs }">
-            <v-btn
-              color="white"
-              text
-              v-bind="attrs"
-              @click="snackbar = false"
-            >
-              Close
-            </v-btn>
-          </template>
-        </v-snackbar>
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
       </v-card>
+
 
 </template>
 
@@ -82,7 +82,7 @@ export default {
       validForm: false,
       snackbar: false,
       text: 'Invalid Username / Password.',
-      timeout: 99999,
+      timeout: 2300,
       user: {
         username: "",
         password: ""
@@ -108,23 +108,19 @@ export default {
         const payload = this.user;
         this.$store.dispatch('login', payload)
           .then(() => {
-            
-             this.$router.push({name: 'user'})
-
-            
+            const self = this;
+            self.$router.push({name: 'user'});
           });
-        if(!this.snackbar) {
+        if(!this.isLoggedIn) {
           this.runSnackbar();
         }
-        
       },
       closeDialog() {
         this.dialog = !this.dialog;
       },
       runSnackbar() {
         this.snackbar = true;
-      },
-     
+      }
     }
 }
 </script>
