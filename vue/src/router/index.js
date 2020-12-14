@@ -125,19 +125,14 @@ const router = new Router({
           meta: {
             requiresAuth: true,
           },
-          beforeEnter:(to,next) =>{
+          beforeEnter:(to, from, next) =>{
               if(to.name=='report'){
                 store.dispatch('setReportModeOn');
-               next();
+                next();
               }
           },
-          beforeRouteLeave:(to,next) =>{
-            if(to.name=='user'){
-              store.dispatch('setReportModeOff');
-             next();
-            }
+
         },
-        }
       ],
     }
   ]
