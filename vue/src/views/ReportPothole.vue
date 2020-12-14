@@ -110,16 +110,16 @@ export default {
       },
 
   },
-  beforeRouteLeave: (to,from,next) => {
-    console.log(to.name);
-    console.log(from.name);
-    const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-    if (answer) {
-      next()
-    } else {
-      next(false)
-    }
-  },
+  // beforeRouteLeave: (to,from,next) => {
+  //   console.log(to.name);
+  //   console.log(from.name);
+  //   // const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
+  //   // if (answer) {
+  //   //   next()
+  //   // } else {
+  //   //   next(false)
+  //   // }
+  // },
   // beforeDestroy:() => {
   //   const answer = window.confirm('Do you really want to leave? you have unsaved changes!');
   //   if (answer) {
