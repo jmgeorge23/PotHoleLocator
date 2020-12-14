@@ -1,6 +1,7 @@
 package com.techelevator.controller;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -53,11 +54,11 @@ public class PotholeController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@RequestMapping(value = "/potholes", method = RequestMethod.POST)
 	public void addPothole(@Valid @RequestBody PotholeDTO newPothole) {
-//		BigDecimal range = new BigDecimal(0.00001);
-//		BigDecimal currentLat = newPothole.getLatitude();
-//		BigDecimal currentLng = newPothole.getLongitude();
+		BigDecimal range = new BigDecimal(.00001);
+		BigDecimal currentLat = newPothole.getLatitude();
+		BigDecimal currentLng = newPothole.getLongitude();
 //		
-//		PotholeDTO potholePlusLat = newPothole;
+		PotholeDTO potholePlusLat = new PotholeDTO(newPothole.getSeverity(), currentLat.add(range).setScale(5, RoundingMode.HALF_UP), currentLng);
 //		PotholeDTO potholeMinusLat = newPothole;
 //		PotholeDTO potholePlusLng = newPothole;
 //		PotholeDTO potholeMinusLng = newPothole;
@@ -81,7 +82,7 @@ public class PotholeController {
 //		potholeMinusLatPlusLng.setLongitude(currentLng.add(range));
 //		
 		PotholeDTO pothole1 = potholeDAO.getPotholeByLatLng(newPothole);
-//		PotholeDTO pothole2  = potholeDAO.getPotholeByLatLng(potholePlusLat);
+		PotholeDTO pothole2  = potholeDAO.getPotholeByLatLng(potholePlusLat);
 //		PotholeDTO pothole3  = potholeDAO.getPotholeByLatLng(potholeMinusLat);
 //		PotholeDTO pothole4  = potholeDAO.getPotholeByLatLng(potholePlusLng);
 //		PotholeDTO pothole5  = potholeDAO.getPotholeByLatLng(potholeMinusLng);
@@ -93,10 +94,11 @@ public class PotholeController {
 
 //		if (pothole1 == null && pothole2 == null && pothole3 == null && pothole4 == null && pothole5 == null
 //				&& pothole6 == null && pothole7 == null && pothole8 == null && pothole9 == null) {
-		if(pothole1 == null) {
-			potholeDAO.createPothole(newPothole);
-		} else {
+		if(pothole1 != null || pothole2 != null) {
 			throw new PotholeAlreadyExistException();
+
+		} else {
+			potholeDAO.createPothole(newPothole);
 		}
 	}
 
