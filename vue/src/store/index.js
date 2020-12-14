@@ -20,15 +20,21 @@ if(currentToken != null) {
 
 export default new Vuex.Store({
   state: {
-    loadingStatus: 'notLoading',
+    isLoading: false,
     potholes: [],
     token: currentToken || '',
-    user: currentUser || {}
+    user: currentUser || {},
+    activePothole: {},
+    hasMenuSelection: false,
+    reportMode: false,
   },
 
   mutations: {
-    SET_LOADING_STATUS(state, status) {
-      state.loadingStatus = status;
+    START_LOADING(state) {
+      state.isLoading = true;
+    },
+    STOP_LOADING(state) {
+      state.isLoading = false;
     },
     SET_AUTH_TOKEN(state, token) {
       state.token = token;
@@ -48,20 +54,60 @@ export default new Vuex.Store({
     },
     SET_POTHOLES(state, data) {
       state.potholes = data;
-    }
+    },
+    SET_ACTIVE_POTHOLE(state, pothole) {
+      state.activePothole = pothole;
+    },
+    MENU_SELECTION_MADE(state) {
+      state.hasMenuSelection = true;
+    },
+    MENU_SELECTION_REMOVED(state) {
+      state.hasMenuSelection = false;
+    },
+    REPORT_MODE_ON(state) {
+      state.reportMode = true;
+    },
+    REPORT_MODE_OFF(state) {
+      state.reportMode = false;
+    },
   },
   
   actions:  {
-    fetchPotholes(context) {
-      context.commit('SET_LOADING_STATUS', 'loading');
+    // ////////////////// POTHOLE MANAGEMENT /////////////////
+    fetchPotholes({commit}) {
+      commit('START_LOADING');
       potholeService.getPotholes()
         .then(response => {
-          context.commit('SET_LOADING_STATUS', 'notLoading')
-          context.commit('SET_POTHOLES', response.data)
+          commit('SET_POTHOLES', response.data);
         })
         .catch(error => alert(error));
+        commit('STOP_LOADING');
     },
+    // ///////////////// MAP MANAGEMENT /////////////////////
+    setActivePothole({commit}, pothole) {
+      commit('SET_ACTIVE_POTHOLE', pothole);
+    },
+    setMenuSelection({commit}, selection) {
+      commit('SET_ACTIVE_POTHOLE', selection);
+      commit('MENU_SELECTION_MADE');
+    },
+    mapMarkerSelection({commit}, selection) {
+      commit('SET_ACTIVE_POTHOLE', selection);
+      commit('MENU_SELECTION_REMOVED');
+    },
+    unsetMenuSelection({commit}) {
+      commit('MENU_SELECTION_REMOVED');
+    },
+    // ////////////////////// REPORTING MANAGEMENT /////////////////
+    setReportModeOn({commit}) {
+      commit('REPORT_MODE_ON');
+    },
+    setReportModeOff({commit}) {
+      commit('REPORT_MODE_OFF');
+    },
+    // /////////////////// ACCOUNT MANAGEMENT /////////////////////
     login({ commit }, user) {
+      commit('START_LOADING');
       authService.login(user)
         .then( response => {
           const token = response.data.token;
@@ -72,10 +118,11 @@ export default new Vuex.Store({
         .catch( err => {
           localStorage.removeItem('token');
           console.log(err);
-        })
+        });
+        commit('STOP_LOADING');
     },
-    logout(context) {
-      context.commit('LOGOUT');
+    logout({commit}) {
+      commit('LOGOUT');
     }
   },
   
@@ -91,8 +138,19 @@ export default new Vuex.Store({
     notInspectedPotholeCount: (state, getters) => {
       return getters.notInspectedPotholes.length;
     },
+    activePothole: (state) => {
+      return state.activePothole;
+    },
+    hasMenuSelection: (state) => {
+      return state.hasMenuSelection;
+    },
+    reportMode: (state) => {
+      return state.reportMode;
+    },
     // Login data
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
+    userId: state => state.user.id,
+    username: state => state.user.username,
   },
 })

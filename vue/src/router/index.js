@@ -9,7 +9,10 @@ import Team from '../views/Team.vue'
 import Blog from '../views/Blog.vue'
 import ContactUs from '../views/ContactUs.vue'
 import Dashboard from '../views/Dashboard.vue'
+import ReportPothole from '../views/ReportPothole.vue'
 import store from '../store/index'
+import AnonDash from '../components/AnonDash.vue'
+import UserDash from '../components/UserDash.vue'
 
 Vue.use(Router)
 
@@ -96,7 +99,34 @@ const router = new Router({
       component: Dashboard,
       meta: {
         requiresAuth: false
-      }
+      },
+      children: [
+        {
+          // TODO :: Fix routing to user report
+          path: '',
+          name: 'anon',
+          component: AnonDash,
+          meta: {
+            requiresAuth: false,
+          },
+        },
+        {
+          path: 'user',
+          name: 'user',
+          component: UserDash,
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: 'report',
+          name: 'report',
+          component: ReportPothole,
+          meta: {
+            requiresAuth: true,
+          },
+        }
+      ],
     }
   ]
 })

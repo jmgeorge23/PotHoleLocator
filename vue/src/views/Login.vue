@@ -1,80 +1,140 @@
 <template>
-<!-- DO NOT USE THIS IS NOW DEPRECATED -->
-  <div id="login" class="text-center">
-    <form class="form-signin" @submit.prevent="login">
-      <h1 class="h3 mb-3 font-weight-normal">Please Sign In</h1>
-      <div
-        class="alert alert-danger"
-        role="alert"
-        v-if="invalidCredentials"
-      >Invalid username and password!</div>
-      <div
-        class="alert alert-success"
-        role="alert"
-        v-if="this.$route.query.registration"
-      >Thank you for registering, please sign in.</div>
-      <label for="username" class="sr-only">Username</label>
-      <input
-        type="text"
-        id="username"
-        class="form-control"
-        placeholder="Username"
-        v-model="user.username"
-        required
-        autofocus
-      />
-      <label for="password" class="sr-only">Password</label>
-      <input
-        type="password"
-        id="password"
-        class="form-control"
-        placeholder="Password"
-        v-model="user.password"
-        required
-      />
-      <router-link :to="{ name: 'register' }">Need an account?</router-link>
-      <button type="submit">Sign in</button>
-    </form>
-  </div>
+  <v-dialog
+      v-model="dialog"
+      width="400"
+    >
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          color="success"
+          dark
+          v-bind="attrs"
+          v-on="on"
+          style="margin-right: 1rem;"
+          rounded
+        >
+          Login
+        </v-btn>
+      </template>
+
+      <v-card>
+        <v-card-title class="justify-center">
+          <span class="headline">Login to Your Account</span>
+        </v-card-title>
+        <v-card-text>
+          <v-form v-model="validForm" id="login-form"
+            @submit.prevent="login">
+            <v-container>
+              <v-row>
+                <v-col cols="12" >
+                  <v-text-field
+                    v-model="user.username"
+                    label="Username*"
+                    :rules="nameRules"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="user.password"
+                    label="Password*"
+                    type="password"
+                    :rules="passwordRules"
+                    required
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-form>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions class="justify-center">
+          <v-btn
+            color="success lighten-1"
+            type="submit"
+            :disabled="!validForm"
+            rounded
+            form="login-form"
+          >
+            Login
+          </v-btn>
+          <v-btn
+            color="primary lighten-1"
+            text
+            rounded
+            @click="dialog = false"
+          >
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+      <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      color="accent"
+      centered
+      >
+      {{ text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="white"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+  </v-dialog>
 </template>
 
 <script>
-//import authService from "../services/AuthService";
-
 export default {
-  name: "login",
-  components: {},
-  data() {
-    return {
+    data: () => ({
+      dialog: false,
+      validForm: false,
+      snackbar: false,
+      text: 'Invalid Username / Password.',
+      timeout: 2300,
       user: {
         username: "",
         password: ""
       },
-      invalidCredentials: false
-    };
-  },
-  methods: {
-    login() {
-      // let username = this.username;
-      // let password = this.password;
-      // this.$store.dispatch
-      // authService
-      //   .login(this.user)
-      //   .then(response => {
-      //     if (response.status == 200) {
-      //       this.$store.commit("SET_AUTH_TOKEN", response.data.token);
-      //       this.$store.commit("SET_USER", response.data.user);
-      //       this.$router.push("/");
-      //     }
-      //   })
-      //   .catch(error => {
-      //     const response = error.response;
+      nameRules: [
+        v => !!v || 'Name is required',
+        v => v.length <= 25 || 'Name must be less than 25 characters',
+      ],
+      passwordRules: [
+        v => !!v || 'Password is required',
+        v => v.length >= 8 || 'Password must be at least 8 characters',
+      ],
+    }),
 
-      //     if (response.status === 401) {
-      //       this.invalidCredentials = true;
-      //     }
-      //   });
+    computed: {
+      isLoggedIn() {
+        return this.$store.getters.isLoggedIn;
+      },
+    },
+
+    methods: {
+      login() {
+        const payload = this.user;
+        this.$store.dispatch('login', payload)
+          .then(() => {
+            const self = this;
+            self.$router.push({name: 'user'});
+          });
+        if(!this.isLoggedIn) {
+          this.runSnackbar();
+        }
+      },
+      closeDialog() {
+        this.dialog = !this.dialog;
+      },
+      runSnackbar() {
+        this.snackbar = true;
+      }
     }
-  }
-};
+}
 </script>
