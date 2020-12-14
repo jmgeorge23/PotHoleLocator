@@ -138,6 +138,8 @@ export default {
         },
         handleMarkerClicked(pothole) {
             this.$store.dispatch('setMenuSelection', pothole);
+            this.map.setZoom(15);
+            this.map.setCenter(this.getPosition(pothole));
         },
         handleInfoWindowClose() {
             this.$store.dispatch('unsetMenuSelection');
