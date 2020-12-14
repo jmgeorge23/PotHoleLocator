@@ -109,7 +109,7 @@ export default {
         this.$store.dispatch('login', payload)
           .then(() => {
             
-             this.$router.push({name: 'dashboard'})
+             this.$router.push({name: 'user'})
 
             
           });
