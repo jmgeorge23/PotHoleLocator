@@ -20,12 +20,12 @@
 
         <v-btn
           v-for="link in headerLinks"
-          :key="link"
-          @click="$router.push({name: link}).catch(()=>{})"
+          :key="link.name"
+          :to="(isLoggedIn && link.name == 'dashboard')? {name: 'user'} : link.route"
           text
           color="white"
         >
-          {{ link }}
+          {{ link.name }}
         </v-btn>
 
         <v-spacer></v-spacer>
@@ -37,8 +37,13 @@
           rounded
           @click="logout"
           >Logout</v-btn>
-        <login class="login"
-          v-else/>
+        <v-btn class="login"
+          v-else
+          :to="{name: 'login'}"
+        >
+          Login
+        </v-btn>
+
         <register
           v-if="!isLoggedIn"/>
       </v-container>
@@ -47,62 +52,30 @@
       <transition
         mode="out-in"
         enter-active-class="animate__animated animate__fadeIn"
-        leave-active-class="animate__animated animate__pulse"
+        leave-active-class="animate__animated animate__fadeOut"
       >
         <router-view/>
       </transition>
     </v-main>
-    <v-footer
-      color="info darken-1"
-      padless
-    >
-      <v-row
-        justify="center"
-        no-gutters
-      >
-        <v-btn
-          v-for="link in footerLinks"
-          :key="link"
-          color="white"
-          text
-          rounded
-          class="my-0"
-          @click="$router.push({name: link}).catch(()=>{})"
-        >
-          {{ link }}
-        </v-btn>
-        <v-col
-          class="info darken-2 text-center white--text"
-          cols="12"
-        >
-          {{ new Date().getFullYear() }} — <strong>Kony</strong>
-        </v-col>
-      </v-row>
-    </v-footer>
   </v-app>
 </template>
 
 <script>
-import Login from './components/Login.vue'
 import Register from './components/Register.vue'
 
 export default {
   name: 'App',
   components: {
-    Login,
     Register
   },
   data: () => ({
     dialog: false,
     headerLinks: [
-      'dashboard',
-      'Profile',
-    ],
-    footerLinks: [
-      'test',
-      'team',
-      'blog',
-      'contact',
+      {
+        name: 'dashboard',
+        route: { name: 'anon'},
+      }, 
+      //{name: 'profile' },
     ],
   }),
   
@@ -115,8 +88,11 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('logout');
-      this.$router.go();
+      this.$router.push('/').catch(()=>{});
     }
+  },
+  created() {
+    this.$store.dispatch('fetchPotholes');
   }
 }
 </script>
@@ -132,5 +108,8 @@ export default {
 }
 .login {
   margin-right: 1rem;
+}
+.animate__animated.animate__fadeOut {
+  --animate-duration: 250ms;
 }
 </style>

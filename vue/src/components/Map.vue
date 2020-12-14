@@ -20,7 +20,7 @@
             <gmap-info-window
                 :options="infoWindowOptions"
                 :position="infoWindowPosition"
-                :opened="isSelectionMade ? handleMarkerClicked(selection) : false"
+                :opened="hasMenuSelection"
                 @closeclick="handleInfoWindowClose"
                 >
                 <div class="info-window"
@@ -82,18 +82,12 @@ export default {
                 height: -35
             }
         },
-        activePothole: {},
-        isInfoWindowOpened: false
+        isInfoWindowOpened: false,
     }),
-    props: {
-        potholes: {
-            type: Array,
-        },
-        selection: {
-            type: Object,
-        }
-    },
     computed: {
+        potholes() {
+            return this.$store.getters.allPotholes;
+        },
         mapCoordinates() {
             if(!this.map) {
                 return {
@@ -102,31 +96,30 @@ export default {
                 };
             }
             return {
-                lat: this.map.getCenter().lat().toFixed(4),
-                lng: this.map.getCenter().lng().toFixed(4)
+                lat: this.map.getCenter().lat().toFixed(5),
+                lng: this.map.getCenter().lng().toFixed(5)
             }
         },
         infoWindowPosition() {
+            if (this.activePothole.latitude == undefined) {
+                return {
+                    lat: 0,
+                    lng: 0
+                }
+            }
             return {
                 lat: parseFloat(this.activePothole.latitude),
                 lng: parseFloat(this.activePothole.longitude),
             }
         },
-        isSelectionMade() {
-            if (this.selection == null || this.selection == undefined) {
-                return false;
-            }
-            return true;
+        activePothole() {
+            return this.$store.getters.activePothole;
+        },
+        hasMenuSelection() {
+            return this.$store.getters.hasMenuSelection;
         }
-        // potholes() {
-        //     return this.$store.getters.allPotholes;
-        //     //return this.$store.getters.notInspectedPotholes;
-        // }
     },
     methods: {
-        fetchPotholes() {
-            this.$store.dispatch('fetchPotholes');
-        },
         handleDrag() {
             // get center and zoom level, store in localstorage
             let center = {
@@ -144,12 +137,10 @@ export default {
             }
         },
         handleMarkerClicked(pothole) {
-            this.activePothole = pothole;
-            this.isInfoWindowOpened = true;
+            this.$store.dispatch('setMenuSelection', pothole);
         },
         handleInfoWindowClose() {
-            this.activePothole = this.selection;
-            this.isInfoWindowOpened = false;
+            this.$store.dispatch('unsetMenuSelection');
         },
     },
     created() {
@@ -170,6 +161,9 @@ export default {
         }
     },
     mounted() {
+        if(this.hasMenuSelection) {
+            this.isInfoWindowOpened = true;
+        }
         // add the map to a data object
         this.$refs.mapRef.$mapPromise.then(map => this.map = map);
     },
@@ -178,7 +172,7 @@ export default {
 <style>
     .gmap {
         /* width: 500px; */
-        height: 79vh;
+        height: 89vh;
         margin: 5px auto;
     }
     .info-window {

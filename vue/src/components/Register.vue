@@ -22,7 +22,9 @@
             <span class="headline">Register an Account</span>
           </v-card-title>
           <v-card-text>
-            <v-form v-model="validForm">
+            <v-form v-model="validForm"
+              id="reg-form"
+              @submit.prevent="register">
               <v-container>
                 <v-row>
                   <v-col cols="12" >
@@ -66,7 +68,8 @@
               color="success lighten-1"
               :disabled="!validForm"
               rounded
-              @click="register"
+              type="submit"
+              form="reg-form"
             >
               Create
             </v-btn>
@@ -82,14 +85,16 @@
         </v-card>
     </v-dialog>
     <v-snackbar
-    v-model="snackbar"
-    :timeout="timeout"
+      v-model="snackbar"
+      :timeout="timeout"
+      color="success"
+      centered
     >
       {{ this.registrationMsg }}
 
       <template v-slot:action="{ attrs }">
         <v-btn
-          color="blue"
+          color="white"
           text
           v-bind="attrs"
           @click="snackbar = false"
