@@ -109,8 +109,8 @@ export default {
         this.$store.dispatch('login', payload)
           .then(() => {
             
-            console.log(this.$store.getters.isLoggedIn);
-            this.$router.push({name: 'user'})
+             this.$router.push({name: 'dashboard'})
+
             
           });
         if(!this.snackbar) {
