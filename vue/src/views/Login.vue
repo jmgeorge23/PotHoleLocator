@@ -1,20 +1,5 @@
 <template>
-  <v-dialog
-      v-model="dialog"
-      width="400"
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="success"
-          dark
-          v-bind="attrs"
-          v-on="on"
-          style="margin-right: 1rem;"
-          rounded
-        >
-          Login
-        </v-btn>
-      </template>
+  
 
       <v-card>
         <v-card-title class="justify-center">
@@ -22,7 +7,7 @@
         </v-card-title>
         <v-card-text>
           <v-form v-model="validForm" id="login-form"
-            @submit.prevent="login">
+            >
             <v-container>
               <v-row>
                 <v-col cols="12" >
@@ -50,10 +35,11 @@
         <v-card-actions class="justify-center">
           <v-btn
             color="success lighten-1"
-            type="submit"
+            
             :disabled="!validForm"
             rounded
             form="login-form"
+            @click="login"
           >
             Login
           </v-btn>
@@ -66,27 +52,27 @@
             Cancel
           </v-btn>
         </v-card-actions>
-      </v-card>
-      <v-snackbar
-      v-model="snackbar"
-      :timeout="timeout"
-      color="accent"
-      centered
-      >
-      {{ text }}
+        <v-snackbar
+          v-if="!snackbar"
+          :timeout="timeout"
+          color="accent"
+          centered
+          >
+          {{ text }}
 
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          color="white"
-          text
-          v-bind="attrs"
-          @click="snackbar = false"
-        >
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
-  </v-dialog>
+          <template v-slot:action="{ attrs }">
+            <v-btn
+              color="white"
+              text
+              v-bind="attrs"
+              @click="snackbar = false"
+            >
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
+      </v-card>
+
 </template>
 
 <script>
@@ -96,7 +82,7 @@ export default {
       validForm: false,
       snackbar: false,
       text: 'Invalid Username / Password.',
-      timeout: 2300,
+      timeout: 99999,
       user: {
         username: "",
         password: ""
@@ -122,19 +108,23 @@ export default {
         const payload = this.user;
         this.$store.dispatch('login', payload)
           .then(() => {
-            const self = this;
-            self.$router.push({name: 'user'});
+            
+            console.log(this.$store.getters.isLoggedIn);
+            this.$router.push({name: 'user'})
+            
           });
-        if(!this.isLoggedIn) {
+        if(!this.snackbar) {
           this.runSnackbar();
         }
+        
       },
       closeDialog() {
         this.dialog = !this.dialog;
       },
       runSnackbar() {
         this.snackbar = true;
-      }
+      },
+     
     }
 }
 </script>
