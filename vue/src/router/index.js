@@ -9,6 +9,7 @@ import Team from '../views/Team.vue'
 import Blog from '../views/Blog.vue'
 import ContactUs from '../views/ContactUs.vue'
 import Dashboard from '../views/Dashboard.vue'
+import ReportPothole from '../views/ReportPothole.vue'
 import store from '../store/index'
 import AnonDash from '../components/AnonDash.vue'
 import UserDash from '../components/UserDash.vue'
@@ -117,6 +118,14 @@ const router = new Router({
             requiresAuth: true,
           },
         },
+        {
+          path: 'report',
+          name: 'report',
+          component: ReportPothole,
+          meta: {
+            requiresAuth: true,
+          },
+        }
       ],
     }
   ]
