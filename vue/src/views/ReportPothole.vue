@@ -80,6 +80,7 @@
 </template>
 
 <script>
+import potholeService from '../services/PotholeService'
 export default {
   data () {
     return {
@@ -100,7 +101,7 @@ export default {
     }
   },  
   computed:{
-      curentUser(){
+      currentUser(){
         return this.$store.getters.username;
       },
       mapClick(){
@@ -115,9 +116,12 @@ export default {
       sendReport(){
         this.newPothole.latitude = this.mapClick.latitude;
         this.newPothole.longitude = this.mapClick.longitude;
-        this.username = this.curentUser;
-        this.$store.dispatch('sendReport',this.newPothole)
+        this.newPothole.username = this.$store.getters.username;
+        console.log(this.$store.getters.username);
+        // this.$store.dispatch('sendReport',this.newPothole)
+        potholeService.sendReport(this.newPothole)
             .then(response =>{
+              console.log(response.status)
               if(response.status === 201){
                 console.log(response)
               }
