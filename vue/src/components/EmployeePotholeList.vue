@@ -48,7 +48,10 @@
             {{pothole.severity}}
           </v-list-item-subtitle>
         </v-list-item-content>
+        <v-btn
+        :to="{name: 'update'}">Update</v-btn>
       </v-list-item>
+      
     </v-list-item-group>
   </v-list>
 </div>

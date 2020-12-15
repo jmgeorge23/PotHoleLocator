@@ -14,6 +14,7 @@ import store from '../store/index'
 import AnonDash from '../components/AnonDash.vue'
 import UserDash from '../components/UserDash.vue'
 import EmployeeDash from '../components/EmployeeDash.vue'
+import UpdatePothole from '../views/UpdatePothole.vue'
 
 
 Vue.use(Router)
@@ -144,6 +145,14 @@ const router = new Router({
           },
 
         },
+        {
+        path: 'update',
+          name: 'update',
+          component: UpdatePothole,
+          meta: {
+            requiresAuth: true,
+          }
+        }
       ],
     }
   ]
