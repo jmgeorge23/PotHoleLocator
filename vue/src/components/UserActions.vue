@@ -14,6 +14,7 @@
           class="ma-2"
           outlined
           color="secondary darken-2"
+          @click="$router.push({name: 'claim'})"
         >
           Submit a Damage Claim
         </v-btn>

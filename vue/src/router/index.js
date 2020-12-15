@@ -15,6 +15,7 @@ import AnonDash from '../components/AnonDash.vue'
 import UserDash from '../components/UserDash.vue'
 import EmployeeDash from '../components/EmployeeDash.vue'
 import UpdatePothole from '../views/UpdatePothole.vue'
+import Claim from '../views/Claim.vue'
 
 
 Vue.use(Router)
@@ -152,7 +153,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
           }
-        }
+        },
+        {
+          path: 'claim',
+            name: 'claim',
+            component: Claim,
+            meta: {
+              requiresAuth: true,
+            }
+          }
       ],
     }
   ]
