@@ -104,7 +104,12 @@ export default {
           password: this.user.password
         })
           .then(() => {
+            if(this.user.username === 'admin'){
+              this.$router.push({name: 'employee'});
+            }else{
             this.$router.push({ name: 'user' });
+            }
+            
           })
           .catch(() => {
             this.runSnackbar();
