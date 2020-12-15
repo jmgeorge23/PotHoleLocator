@@ -13,7 +13,7 @@
         <gmap-map
             class="gmap"
             :center="myCoordinates"
-            :zoom="reportMode ? 18 : this.zoom"
+            :zoom="reportMode ? 14 : this.zoom"
             :options="mapOptions"
             ref="mapRef"
             @dragend="handleDrag"
@@ -53,7 +53,7 @@
                         </v-icon>
                         Report Status: {{activePothole.status}}
                     </p>
-                    <v-btn x-small class="mx-auto my-0">View Details</v-btn>
+                    <v-btn x-small class="mx-auto my-0" @click="runTest">View Details</v-btn>
                 </div>
             </gmap-info-window>
             <gmap-marker
@@ -209,6 +209,9 @@ export default {
             this.mapClick.latitude = e.latLng.lat().toFixed(5);
             this.mapClick.longitude = e.latLng.lng().toFixed(5);
             this.$store.dispatch('setMapClick',this.mapClick);
+        },
+        runTest(){
+            // this.$store.dispatch('fetchComments', this.activePothole.potholeId);
         },
         // addMarker: function(lat, lng) {
         //     let marker = new google.maps.Marker({

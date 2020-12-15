@@ -113,6 +113,13 @@ export default {
         this.$store.dispatch('setReportModeOff');
         this.$router.go(-1);
       },
+      clearForm(){
+           this.newPothole.latitude=0,
+                this.newPothole.longitude=0
+                this.roadName= ''
+                this.direction=''
+
+      },
       sendReport(){
         this.newPothole.latitude = this.mapClick.latitude;
         this.newPothole.longitude = this.mapClick.longitude;
@@ -124,6 +131,9 @@ export default {
               console.log(response.status)
               if(response.status === 201){
                 console.log(response)
+                //snackbar here for saved pothole
+                this.clearForm()
+                this.goBack()
               }
             })
             .catch(error =>{

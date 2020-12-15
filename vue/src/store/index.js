@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import potholeService from '../services/PotholeService'
 import authService from '../services/AuthService'
+import commentService from '../services/CommentService'
+
 //import authService from "../services/AuthService";
 Vue.use(Vuex)
 
@@ -31,6 +33,8 @@ export default new Vuex.Store({
       latitude: 0,
       longitude: 0
     },
+    potholeComments:  [],
+    
   },
 
   mutations: {
@@ -77,6 +81,9 @@ export default new Vuex.Store({
     SET_MAP_CLICK(state,mapClick) {
       state.mapClick = mapClick;
     },
+    SET_POTHOLE_COMMENTS(state, comments){
+      state.potholeComments=comments;
+    }
   },
   
   actions:  {
@@ -140,7 +147,23 @@ export default new Vuex.Store({
     },
     logout({commit}) {
       commit('LOGOUT');
-    }
+    },
+     // /////////////////// COMMENT MANAGEMENT /////////////////////
+      fetchComments(context, potholeId){
+
+        return new Promise((resolve, reject)=>{
+          commentService.getComments(potholeId)
+          .then(response=>{
+            context.commit('SET_POTHOLE_COMMENTS', response.data);
+            console.log(response)
+            resolve(response)
+          })
+          .catch(error =>{
+            console.log(error)
+            reject(error)
+          })
+        })
+      }
   },
   
   getters: {
@@ -178,6 +201,9 @@ export default new Vuex.Store({
     },
     mapClick: (state) => {
       return state.mapClick;
+    },
+    potholeComments: (state) =>{
+      return state.potholeComments;
     },
     // Login data
     isLoggedIn: state => !!state.token,
