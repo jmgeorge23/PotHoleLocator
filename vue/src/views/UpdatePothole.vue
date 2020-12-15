@@ -31,7 +31,9 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>Current potholes:</v-list-item-title>
-          <v-list-item-subtitle>Latitude: {{currentPothole.latitude}} </v-list-item-subtitle>
+          <v-list-item-subtitle
+          v-model="newPothole.latitude"
+          >Latitude: {{currentPothole.latitude}} </v-list-item-subtitle>
           <v-list-item-subtitle>Longitude: {{currentPothole.longitude}} </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>

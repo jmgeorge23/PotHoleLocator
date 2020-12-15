@@ -32,8 +32,8 @@
       mandatory
     >
       <v-list-item
-        v-for="pothole in listItems"
-        :key="pothole.potholeId"
+        v-for="pothole in getPotholesByStatus"
+        :key="pothole.id"
         link
         @click="setMenuSelection"
       >
@@ -45,7 +45,7 @@
         <v-list-item-content>
           <v-list-item-title v-text="pothole.text"></v-list-item-title>
           <v-list-item-subtitle>
-            {{pothole.severity}}
+            Pothole on {{pothole.roadName}} Severity: {{pothole.severity}} 
           </v-list-item-subtitle>
         </v-list-item-content>
         <v-btn
@@ -66,7 +66,8 @@ export default {
   },
   data() {
     return {
-      model: 1,
+      model: 0,
+      clickedPotholeId: 0,
       currentList: "All",
        filters: [
         'All',
@@ -100,6 +101,9 @@ export default {
     currentUserId() {
       return this.$store.getters.userId;
     },
+    currentPotholeId() {
+        return this.$store.getters.activePothole.potholeId;
+    },
     getPotholesByStatus(){
       let list = []
       if(this.currentList === 'Reported'){
@@ -118,58 +122,55 @@ export default {
     listItems() {
       let list = [];
       this.getPotholesByStatus.forEach(pothole => {
-        switch(pothole.severity) {
-          case 'Not Inspected':
-            list = list.concat([{
-              id: `${pothole.potholeId}`,
-              icon: 'mdi-new-box',
-              text: `New Pothole on ${pothole.roadName}`,
-              color: 'info',
-              severity: `${pothole.severity}`
-            }]);
-            break;
-          case 'Low':
-            list = list.concat([{
-              id: `${pothole.potholeId}`,
-              icon: 'mdi-timeline-alert-outline',
-              text: `Small Pothole on ${pothole.roadName}`,
-              color: 'yellow darken-1',
-              severity: `${pothole.severity}`
-              
-            }]);
-            break;
-          case 'Medium':
-            list = list.concat([{
-              id: `${pothole.potholeId}`,
-              icon: 'mdi-timeline-alert-outline',
-              text: `Pothole on ${pothole.roadName}`,
-              color: 'warning',
-              severity: `${pothole.severity}`
-            }]);
-            break;
-          case 'High':
-            list = list.concat([{
-              id: `${pothole.potholeId}`,
-              icon: 'mdi-alert-octagram',
-              text: `Large Pothole on ${pothole.roadName}`,
-              color: 'accent',
-              severity: `${pothole.severity}`
-            }]);
-            break;
-        }
-      });
-      list.sort((a,b) => {
-          if(a.severity == 'High'){
-              return -1;
+            if(pothole.severity === 'Not Inspected'){
+                list = list.concat([{
+                id: pothole.potholeId,
+                icon: 'mdi-new-box',
+                text: `New Pothole on ${pothole.roadName}`,
+                color: 'info',
+                severity: `${pothole.severity}`
+                }]);
             }
-          if(a.severity == 'Medium'){
-              return -1;
+            if(pothole.severity === 'Low'){
+                list = list.concat([{
+                id: pothole.potholeId,
+                icon: 'mdi-timeline-alert-outline',
+                text: `Small Pothole on ${pothole.roadName}`,
+                color: 'yellow darken-1',
+                severity: `${pothole.severity}`
+                }])
             }
-          if(a.severity == 'Low'){
-              return 1;
+            if(pothole.severity === 'Medium'){
+                list = list.concat([{
+                id: pothole.potholeId,
+                icon: 'mdi-timeline-alert-outline',
+                text: `Pothole on ${pothole.roadName}`,
+                color: 'warning',
+                severity: `${pothole.severity}`
+                }]);
             }
-          return 0;
-        })
+            if(pothole.severity ==='High'){
+                list = list.concat([{
+                id: pothole.potholeId,
+                icon: 'mdi-alert-octagram',
+                text: `Large Pothole on ${pothole.roadName}`,
+                color: 'accent',
+                severity: `${pothole.severity}`
+                }]);
+            }
+        });
+    //   list.sort((a,b) => {
+    //       if(a.severity == 'High'){
+    //           return -1;
+    //         }
+    //       if(a.severity == 'Medium'){
+    //           return -1;
+    //         }
+    //       if(a.severity == 'Low'){
+    //           return 1;
+    //         }
+    //       return 0;
+    //     })
       return list;
     },
   },
