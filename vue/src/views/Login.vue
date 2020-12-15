@@ -105,7 +105,7 @@ export default {
         })
           .then(() => {
             if(this.user.username === 'admin'){
-              this.$router.push({name: 'employee'});
+              this.$router.push({name: 'admin'});
             }else{
             this.$router.push({ name: 'user' });
             }

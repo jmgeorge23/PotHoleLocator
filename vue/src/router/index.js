@@ -123,8 +123,8 @@ const router = new Router({
           },
         },
         {
-          path: 'employee',
-          name: 'employee',
+          path: 'admin',
+          name: 'admin',
           component: EmployeeDash,
           meta: {
             requiresAuth: true,

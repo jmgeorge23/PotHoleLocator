@@ -96,7 +96,7 @@ export default {
       }
       else if(this.$store.getters.isLoggedIn){
         if(this.$store.getters.username ==='admin'){
-          this.$router.push({name: 'employee'})
+          this.$router.push({name: 'admin'})
           .catch(()=> { });
         }
         else{
