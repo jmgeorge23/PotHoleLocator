@@ -109,6 +109,7 @@
       <v-snackbar
       v-model="snackbar"
       :multi-line="multiLine"
+      centered
     >
       {{ text }}
 
@@ -118,6 +119,7 @@
           text
           v-bind="attrs"
           @click="snackbar = false"
+          
         >
           Close
         </v-btn>
@@ -173,12 +175,16 @@ import Footer from '../components/Footer.vue'
       validate () {
         this.$refs.form.validate()
         this.snackbar = true;
-          
+        window.setTimeout(this.goBack, 1500); 
         
       },
       reset () {
         this.$refs.form.reset()
       },
+      goBack(){
+        this.$router.go(-1);
+
+      }
 
     }
   }

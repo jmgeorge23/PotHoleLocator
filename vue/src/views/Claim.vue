@@ -53,7 +53,6 @@
    <!----------------------- Name ------------------->
     <v-text-field
       v-model="name"
-      :rules="nameRules"
       label="Name"
       required
     ></v-text-field>
@@ -66,7 +65,7 @@
     ></v-text-field>
  <!----------------------- Reason ------------------->
     <v-text-field
-      v-model="Amount"
+      v-model="amount"
       :counter="10"
       label="Dollar Amount of Claim"
       required
@@ -104,19 +103,13 @@
       <v-snackbar
       v-model="snackbar"
       :multi-line="multiLine"
+      centered
+      left
+     
     >
       {{ text }}
 
-      <template v-slot:action="{ attrs }">
-        <v-btn
-          color="green"
-          text
-          v-bind="attrs"
-          @click="snackbar = false"
-        >
-          Close
-        </v-btn>
-      </template>
+
     </v-snackbar>
 
 </v-container> 
@@ -135,7 +128,7 @@
     data: () => ({
       multiLine: true,
       snackbar: false,
-      text: `Claim Received.`,
+      text: `         Claim Received.`,
       valid: true,
       name: '',
 
@@ -153,13 +146,17 @@
     methods: {
       validate () {
         this.$refs.form.validate()
-        
-        this.$router.go(-1);
+        this.snackbar = true;
+        window.setTimeout(this.goBack, 1500);
         
       },
       reset () {
         this.$refs.form.reset()
       },
+      goBack(){
+        this.$router.go(-1);
+
+      }
 
     }
   }
