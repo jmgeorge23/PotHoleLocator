@@ -21,7 +21,7 @@
         <v-btn
           v-for="link in headerLinks"
           :key="link.name"
-          :to="(isLoggedIn && link.name == 'dashboard')? {name: 'user'} : link.route"
+          @click="routeChange"
           text
           color="white"
         >
@@ -89,10 +89,30 @@ export default {
     logout() {
       this.$store.dispatch('logout');
       this.$router.push('/').catch(()=>{});
-    }
+    },
+    routeChange(){
+      if(!this.$store.getters.isLoggedIn){
+        this.$router.push({name: 'anon'});
+      }
+      else if(this.$store.getters.isLoggedIn){
+        if(this.$store.getters.username ==='admin'){
+          this.$router.push({name: 'employee'})
+          .catch(()=> {
+            
+          });
+        }
+        else{
+          this.$router.push({name: 'user'})
+          .catch(() => {
+            
+          });
+        }
+      }
   },
   created() {
     this.$store.dispatch('fetchPotholes');
+  },
+
   }
 }
 </script>
