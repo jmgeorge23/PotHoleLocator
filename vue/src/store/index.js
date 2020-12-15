@@ -135,6 +135,18 @@ export default new Vuex.Store({
       return state.potholes
         .filter( pothole => pothole.severity === 'Not Inspected');
     },
+    reportedPotholes: (state) => {
+      return state.potholes
+      .filter( pothole => pothole.status === 'Reported');
+    },
+    inspectedPotholes: (state) => {
+      return state.potholes
+      .filter( pothole => pothole.status === 'Inspected');
+    },
+    completedPotholes: (state) => {
+      return state.potholes
+      .filter( pothole => pothole.status === 'Completed');
+    },
     notInspectedPotholeCount: (state, getters) => {
       return getters.notInspectedPotholes.length;
     },

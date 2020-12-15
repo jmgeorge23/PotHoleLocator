@@ -97,23 +97,27 @@ export default {
       ],
     }),
 
-    computed: {
-      isLoggedIn() {
-        return this.$store.getters.isLoggedIn;
-      },
-    },
+    
 
     methods: {
       login() {
         const payload = this.user;
         this.$store.dispatch('login', payload)
           .then(() => {
+            console.log(this.isLoggedIn);
             const self = this;
-            self.$router.push({name: 'user'});
+            if(self.user.username === 'user'){
+              this.$router.push({name: 'user'});
+            }
+            if(self.user.username === 'admin'){
+              this.$router.push({name: 'employee'});
+            }
           });
         if(!this.isLoggedIn) {
           this.runSnackbar();
         }
+        console.log(this.isLoggedIn);
+
       },
       closeDialog() {
         this.dialog = !this.dialog;
@@ -121,6 +125,12 @@ export default {
       runSnackbar() {
         this.snackbar = true;
       }
-    }
+    },
+    computed: {
+      isLoggedIn() {
+        return this.$store.getters.isLoggedIn;
+
+      },
+    },
 }
 </script>

@@ -10,8 +10,12 @@
               <v-chip
                 v-for="(filter, i) in filters"
                 :key="i"
+                @click="setCurrentList(filter)"
               >
                 {{ filter }}
+              </v-chip>
+              <v-chip
+              >Reported
               </v-chip>
             </v-chip-group>
           </v-card-text>

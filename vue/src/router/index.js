@@ -13,6 +13,8 @@ import ReportPothole from '../views/ReportPothole.vue'
 import store from '../store/index'
 import AnonDash from '../components/AnonDash.vue'
 import UserDash from '../components/UserDash.vue'
+import EmployeeDash from '../components/EmployeeDash.vue'
+
 
 Vue.use(Router)
 
@@ -117,7 +119,15 @@ const router = new Router({
           meta: {
             requiresAuth: true,
           },
-          
+        },
+        {
+          path: 'employee',
+          name: 'employee',
+          component: EmployeeDash,
+          meta: {
+            requiresAuth: true,
+            
+          }
         },
         {
           path: 'report',

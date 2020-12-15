@@ -1,30 +1,38 @@
 <template>
 <div>
-  <employee-filters/>
-  <pothole-list :setHeight="'max-height: 59vh'"/>
-  <v-btn
-    :to="{name: 'report'}"
-    color="info lighten-2"
-  >Report Pothole</v-btn>
+  
+  <employee-pothole-list :setHeight="'max-height: 59vh'"/>
 </div>
   
 </template>
 
 <script>
-import EmployeeFilters from './EmployeeFilters.vue'
-import PotholeList from './PotholeList.vue'
+import EmployeePotholeList from './EmployeePotholeList.vue'
 
 export default {
-  name: 'user-dash',
+  name: 'employee-dash',
   components: {
-    PotholeList,
-    EmployeeFilters
+    EmployeePotholeList,
+  
   },
   data: () => ({
 
   }),
-
-  methods: {
+  computed: {
+    potholes() {
+      return this.$store.getters.allPotholes;
+    },
+    filterReported() {
+      let reported = [];
+      this.potholes.forEach(pothole => {
+        if(pothole.status === 'Reported'){
+          reported.push(pothole);
+        }
+      });
+      return reported;
+    }
   },
+
+
 }
 </script>
