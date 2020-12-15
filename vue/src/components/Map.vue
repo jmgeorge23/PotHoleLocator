@@ -68,6 +68,7 @@
                 :position="getPosition(mapClick)"
                 :clickable="true"
                 :draggable="true"
+                :icon="{url: require('@/assets/map-pin-legend-received.png')}"
                 :visible="reportMode"
                 @click="handleMapClick"
             ></gmap-marker>    
@@ -88,7 +89,45 @@ export default {
         zoom: 12,
         mapOptions: {
             clickableIcons: false,
-            disableDoubleClickZoom: true
+            disableDoubleClickZoom: true,
+             styles: [
+            {
+                featureType: "poi",
+                elementType: "labels.text",
+                stylers: [
+                {
+                    visibility: "off"
+                }
+                ]
+            },
+            {
+                featureType: "poi.business",
+                elementType: "labels",
+                stylers: [
+                {
+                    visibility: "off"
+                }
+                ]
+            },
+            {
+                featureType: "road",
+                elementType: "labels.icon",
+                stylers: [
+                {
+                    visibility: "off"
+                }
+                ]
+            },
+            {
+                featureType: "transit",
+                stylers: [
+                {
+                    visibility: "off"
+                }
+                ]
+            }
+            ]
+
         },
         infoWindowOptions: {
             pixelOffset: {

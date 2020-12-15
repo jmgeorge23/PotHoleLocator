@@ -30,7 +30,7 @@
       <v-subheader>User Controls</v-subheader>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>Click a spot on the map where you encountered a pothole</v-list-item-title>
+          <v-list-item-title>Click on the map to drop a pin</v-list-item-title>
           <v-list-item-subtitle>Latitude: {{mapClick.latitude}} </v-list-item-subtitle>
           <v-list-item-subtitle>Longitude: {{mapClick.longitude}} </v-list-item-subtitle>
         </v-list-item-content>
@@ -42,13 +42,13 @@
           <v-container>
             <v-row> 
               <v-col cols=12>
-                <v-text-field label="roadname"
+                <v-text-field label="Street Name"
                   v-model="newPothole.roadName"
                 >
                 </v-text-field>
               </v-col>
                <v-col cols=12>
-                  <v-text-field label="direction"
+                  <v-text-field label="Direction"
                     v-model="newPothole.direction"
                   >
                 </v-text-field>
