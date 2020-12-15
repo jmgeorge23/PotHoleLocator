@@ -32,7 +32,7 @@
       mandatory
     >
       <v-list-item
-        v-for="pothole in getPotholesByStatus"
+        v-for="pothole in listItems"
         :key="pothole.potholeId"
         link
         @click="setMenuSelection"
@@ -45,7 +45,7 @@
         <v-list-item-content>
           <v-list-item-title v-text="pothole.text"></v-list-item-title>
           <v-list-item-subtitle>
-            Secondary line text Lorem ipsum dolor sit amet,
+            {{pothole.severity}}
           </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -113,22 +113,25 @@ export default {
     // Gets list and assigns corresponding colored icons
     listItems() {
       let list = [];
-      this.potholes.forEach(pothole => {
+      this.getPotholesByStatus.forEach(pothole => {
         switch(pothole.severity) {
           case 'Not Inspected':
             list = list.concat([{
               id: `${pothole.potholeId}`,
               icon: 'mdi-new-box',
               text: `New Pothole on ${pothole.roadName}`,
-              color: 'info'
+              color: 'info',
+              severity: `${pothole.severity}`
             }]);
             break;
           case 'Low':
             list = list.concat([{
               id: `${pothole.potholeId}`,
               icon: 'mdi-timeline-alert-outline',
-              text: `Pothole on ${pothole.roadName}`,
-              color: 'yellow darken-1'
+              text: `Small Pothole on ${pothole.roadName}`,
+              color: 'yellow darken-1',
+              severity: `${pothole.severity}`
+              
             }]);
             break;
           case 'Medium':
@@ -136,7 +139,8 @@ export default {
               id: `${pothole.potholeId}`,
               icon: 'mdi-timeline-alert-outline',
               text: `Pothole on ${pothole.roadName}`,
-              color: 'warning'
+              color: 'warning',
+              severity: `${pothole.severity}`
             }]);
             break;
           case 'High':
@@ -144,7 +148,8 @@ export default {
               id: `${pothole.potholeId}`,
               icon: 'mdi-alert-octagram',
               text: `Large Pothole on ${pothole.roadName}`,
-              color: 'accent'
+              color: 'accent',
+              severity: `${pothole.severity}`
             }]);
             break;
         }
