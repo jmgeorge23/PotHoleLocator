@@ -22,7 +22,7 @@ export default new Vuex.Store({
   state: {
     isLoading: false,
     potholes: [],
-    token: currentToken || '',
+    token: currentToken || null,
     user: currentUser || {},
     activePothole: {},
     hasMenuSelection: false,
@@ -122,20 +122,22 @@ export default new Vuex.Store({
       commit('STOP_LOADING');
     },
     // /////////////////// ACCOUNT MANAGEMENT /////////////////////
-    login({ commit }, user) {
-      commit('START_LOADING');
-      authService.login(user)
-        .then( response => {
-          const token = response.data.token;
-          const user = response.data.user;
-          commit('SET_AUTH_TOKEN', token);
-          commit('SET_USER', user);
-        })
-        .catch( err => {
-          localStorage.removeItem('token');
-          console.log(err);
-        });
-        commit('STOP_LOADING');
+    authenticate(context, credentials) {
+
+      return new Promise((resolve, reject) => {
+        authService.login(credentials)
+          .then(response => {
+            const token = response.data.token;
+            const user = response.data.user
+            context.commit('SET_AUTH_TOKEN', token);
+            context.commit('SET_USER', user);
+            resolve(response)
+          })
+          .catch(error => {
+            console.log(error);
+            reject(error)
+          })
+      })
     },
     logout({commit}) {
       commit('LOGOUT');

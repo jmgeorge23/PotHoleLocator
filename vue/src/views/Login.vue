@@ -97,27 +97,18 @@ export default {
       ],
     }),
 
-    
-
     methods: {
       login() {
-        const payload = this.user;
-        this.$store.dispatch('login', payload)
+        this.$store.dispatch('authenticate', {
+          username: this.user.username,
+          password: this.user.password
+        })
           .then(() => {
-            console.log(this.isLoggedIn);
-            const self = this;
-            if(self.user.username == 'user'){
-              this.$router.push({name: 'user'});
-            }
-            if(self.user.username == 'admin'){
-              this.$router.push({name: 'employee'});
-            }
+            this.$router.push({ name: 'user' });
+          })
+          .catch(() => {
+            this.runSnackbar();
           });
-        if(!this.isLoggedIn) {
-          this.runSnackbar();
-        }
-        console.log(this.isLoggedIn);
-
       },
       closeDialog() {
         this.dialog = !this.dialog;
