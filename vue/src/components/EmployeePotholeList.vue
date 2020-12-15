@@ -108,6 +108,7 @@ export default {
       if(this.currentList === 'Inspected'){
         list = (this.$store.getters.inspectedPotholes);
       }
+
       return list;
     },
     // Gets list and assigns corresponding colored icons
@@ -154,6 +155,18 @@ export default {
             break;
         }
       });
+      list.sort((a,b) => {
+          if(a.severity == 'High'){
+              return -1;
+            }
+          if(a.severity == 'Medium'){
+              return -1;
+            }
+          if(a.severity == 'Low'){
+              return 1;
+            }
+          return 0;
+        })
       return list;
     },
   },
