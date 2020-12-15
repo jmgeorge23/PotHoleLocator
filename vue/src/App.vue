@@ -97,23 +97,18 @@ export default {
       else if(this.$store.getters.isLoggedIn){
         if(this.$store.getters.username ==='admin'){
           this.$router.push({name: 'employee'})
-          .catch(()=> {
-            
-          });
+          .catch(()=> { });
         }
         else{
           this.$router.push({name: 'user'})
-          .catch(() => {
-            
-          });
+          .catch(() => { });
         }
       }
+    },
   },
   created() {
     this.$store.dispatch('fetchPotholes');
   },
-
-  }
 }
 </script>
 
