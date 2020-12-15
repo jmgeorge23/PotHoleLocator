@@ -27,6 +27,10 @@ export default new Vuex.Store({
     activePothole: {},
     hasMenuSelection: false,
     reportMode: false,
+    mapClick: {
+      latitude: 0,
+      longitude: 0
+    }
   },
 
   mutations: {
@@ -70,6 +74,10 @@ export default new Vuex.Store({
     REPORT_MODE_OFF(state) {
       state.reportMode = false;
     },
+    SET_MAP_CLICK(state,mapClick) {
+      state.mapClick = mapClick;
+    },
+   
   },
   
   actions:  {
@@ -98,12 +106,20 @@ export default new Vuex.Store({
     unsetMenuSelection({commit}) {
       commit('MENU_SELECTION_REMOVED');
     },
+    setMapClick({commit},mapClick) {
+      commit('SET_MAP_CLICK',mapClick);
+    },
     // ////////////////////// REPORTING MANAGEMENT /////////////////
     setReportModeOn({commit}) {
       commit('REPORT_MODE_ON');
     },
     setReportModeOff({commit}) {
       commit('REPORT_MODE_OFF');
+    },
+    sendReport({commit},report){
+      commit('START_LOADING');
+      potholeService.sendReport(report);
+      commit('STOP_LOADING');
     },
     // /////////////////// ACCOUNT MANAGEMENT /////////////////////
     login({ commit }, user) {
@@ -158,6 +174,9 @@ export default new Vuex.Store({
     },
     reportMode: (state) => {
       return state.reportMode;
+    },
+    mapClick: (state) => {
+      return state.mapClick;
     },
     // Login data
     isLoggedIn: state => !!state.token,

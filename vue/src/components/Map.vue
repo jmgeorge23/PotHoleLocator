@@ -13,9 +13,10 @@
         <gmap-map
             class="gmap"
             :center="myCoordinates"
-            :zoom="this.zoom"
+            :zoom="reportMode ? 18 : this.zoom"
             ref="mapRef"
             @dragend="handleDrag"
+            @click="handleMapClick"
         >
             <gmap-info-window
                 :options="infoWindowOptions"
@@ -61,6 +62,12 @@
                 :draggable="false"
                 @click="handleMarkerClicked(pothole)"
             ></gmap-marker>    
+            <gmap-marker
+                :position="getPosition(mapClick)"
+                :clickable="true"
+                :draggable="true"
+                @click="handleMapClick"
+            ></gmap-marker>    
         </gmap-map>
     </div>
 </template>
@@ -82,11 +89,18 @@ export default {
                 height: -35
             }
         },
+        mapClick: {
+            latitude: 0,
+            longitude: 0,
+        },
         isInfoWindowOpened: false,
     }),
     computed: {
         potholes() {
             return this.$store.getters.allPotholes;
+        },
+        reportMode() {
+            return this.$store.getters.reportMode;
         },
         mapCoordinates() {
             if(!this.map) {
@@ -144,6 +158,19 @@ export default {
         handleInfoWindowClose() {
             this.$store.dispatch('unsetMenuSelection');
         },
+        handleMapClick(e) {
+            console.log(`lat: ${e.latLng.lat().toFixed(5)} lng: ${e.latLng.lng().toFixed(5)}`);
+            this.mapClick.latitude = e.latLng.lat().toFixed(5);
+            this.mapClick.longitude = e.latLng.lng().toFixed(5);
+            this.$store.dispatch('setMapClick',this.mapClick);
+        },
+        // addMarker: function(lat, lng) {
+        //     let marker = new google.maps.Marker({
+        //         position: new google.maps.LatLng(lat, lng),
+        //         draggable: true,
+        //     });
+        //     marker.setMap(this.map);
+        // },
     },
     created() {
         // does the user have a saved center? use it instead of the default
