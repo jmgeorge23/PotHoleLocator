@@ -160,8 +160,9 @@ export default {
         },
         handleMapClick(e) {
             console.log(`lat: ${e.latLng.lat().toFixed(5)} lng: ${e.latLng.lng().toFixed(5)}`);
-            this.mapClick.latitude = e.latLng.lat();
-            this.mapClick.longitude = e.latLng.lng();
+            this.mapClick.latitude = e.latLng.lat().toFixed(5);
+            this.mapClick.longitude = e.latLng.lng().toFixed(5);
+            this.$store.dispatch('setMapClick',this.mapClick);
         },
         // addMarker: function(lat, lng) {
         //     let marker = new google.maps.Marker({

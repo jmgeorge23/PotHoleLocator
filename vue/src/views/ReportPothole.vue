@@ -17,7 +17,7 @@
         <v-btn
           dark
           text
-          @click="dialog = false"
+          @click="sendReport"
         >
           Save
         </v-btn>
@@ -31,8 +31,8 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>Click a spot on the map where you encountered a pothole</v-list-item-title>
-          <v-list-item-subtitle>Latitude: </v-list-item-subtitle>
-          <v-list-item-subtitle>Longitude: </v-list-item-subtitle>
+          <v-list-item-subtitle>Latitude: {{mapClick.latitude}} </v-list-item-subtitle>
+          <v-list-item-subtitle>Longitude: {{mapClick.longitude}} </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
@@ -95,19 +95,39 @@ export default {
         roadName: '',
         severity: 'Not Inspected',
         status: 'Reported',
-        username: this.username,
+        username: '',
       }
     }
   },  
   computed:{
-      username(){
+      curentUser(){
         return this.$store.getters.username;
+      },
+      mapClick(){
+        return this.$store.getters.mapClick;
       }
   },
   methods:{
       goBack(){
         this.$store.dispatch('setReportModeOff');
         this.$router.go(-1);
+      },
+      sendReport(){
+        this.newPothole.latitude = this.mapClick.latitude;
+        this.newPothole.longitude = this.mapClick.longitude;
+        this.username = this.curentUser;
+        this.$store.dispatch('sendReport',this.newPothole)
+            .then(response =>{
+              if(response.status === 201){
+                console.log(response)
+              }
+            })
+            .catch(error =>{
+              if(error.status ===418){
+                console.log(error)
+              }
+            });
+        console.log('Here!');
       },
 
   },
