@@ -2,7 +2,7 @@
   <v-card>
     <v-toolbar
       dark
-      color="primary"
+      color="secondary darken-2"
     >
       <v-btn
         icon
@@ -31,12 +31,13 @@
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>Click a spot on the map where you encountered a pothole</v-list-item-title>
-          <v-list-item-subtitle>latitude:longitude:</v-list-item-subtitle>
+          <v-list-item-subtitle>Latitude: </v-list-item-subtitle>
+          <v-list-item-subtitle>Longitude: </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
         <v-list-item-content>
-        <v-list-item-title>Please provide additional details(optional)</v-list-item-title>
+        <v-list-item-title>Please provide additional details (Optional)</v-list-item-title>
         <v-form id="login-form">
           <v-container>
             <v-row> 
@@ -70,8 +71,8 @@
           <v-checkbox v-model="widgets"></v-checkbox>
         </v-list-item-action>
         <v-list-item-content>
-          <v-list-item-title>Auto-add widgets</v-list-item-title>
-          <v-list-item-subtitle>Automatically add home screen widgets</v-list-item-subtitle>
+          <v-list-item-title>Fluff information</v-list-item-title>
+          <v-list-item-subtitle>The contents of this are nonsense. Merely display.</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
     </v-list>
