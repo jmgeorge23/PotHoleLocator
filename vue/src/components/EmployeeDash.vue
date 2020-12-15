@@ -22,15 +22,7 @@ export default {
     potholes() {
       return this.$store.getters.allPotholes;
     },
-    filterReported() {
-      let reported = [];
-      this.potholes.forEach(pothole => {
-        if(pothole.status === 'Reported'){
-          reported.push(pothole);
-        }
-      });
-      return reported;
-    }
+  
   },
 
 

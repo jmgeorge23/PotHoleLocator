@@ -106,10 +106,10 @@ export default {
           .then(() => {
             console.log(this.isLoggedIn);
             const self = this;
-            if(self.user.username === 'user'){
+            if(self.user.username == 'user'){
               this.$router.push({name: 'user'});
             }
-            if(self.user.username === 'admin'){
+            if(self.user.username == 'admin'){
               this.$router.push({name: 'employee'});
             }
           });

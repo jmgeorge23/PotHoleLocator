@@ -64,7 +64,7 @@ export default {
   data() {
     return {
       model: 1,
-      currentList: "",
+      currentList: "All",
        filters: [
         'All',
         'Reported',
