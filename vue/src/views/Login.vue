@@ -46,7 +46,7 @@
             color="primary lighten-1"
             text
             rounded
-            @click="dialog = false"
+            @click="$router.push('/')"
           >
             Cancel
           </v-btn>
@@ -114,9 +114,6 @@ export default {
           .catch(() => {
             this.runSnackbar();
           });
-      },
-      closeDialog() {
-        this.dialog = !this.dialog;
       },
       runSnackbar() {
         this.snackbar = true;

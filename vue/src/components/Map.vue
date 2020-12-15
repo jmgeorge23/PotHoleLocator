@@ -14,6 +14,7 @@
             class="gmap"
             :center="myCoordinates"
             :zoom="reportMode ? 18 : this.zoom"
+            :options="mapOptions"
             ref="mapRef"
             @dragend="handleDrag"
             @click="handleMapClick"
@@ -52,6 +53,7 @@
                         </v-icon>
                         Report Status: {{activePothole.status}}
                     </p>
+                    <v-btn x-small class="mx-auto my-0">View Details</v-btn>
                 </div>
             </gmap-info-window>
             <gmap-marker
@@ -66,6 +68,7 @@
                 :position="getPosition(mapClick)"
                 :clickable="true"
                 :draggable="true"
+                :visible="reportMode"
                 @click="handleMapClick"
             ></gmap-marker>    
         </gmap-map>
@@ -83,6 +86,10 @@ export default {
             lng: 0
         },
         zoom: 12,
+        mapOptions: {
+            clickableIcons: false,
+            disableDoubleClickZoom: true
+        },
         infoWindowOptions: {
             pixelOffset: {
                 witdth: 0,

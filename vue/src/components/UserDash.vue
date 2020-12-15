@@ -2,11 +2,15 @@
 <div>
   <list-filters/>
   <pothole-list :setHeight="'max-height: 59vh'"/>
-  <v-btn
-    
-    :to="{name: 'report'}"
+  <v-btn :to="{name: 'report'}"
     color="info lighten-2"
   >Report Pothole</v-btn>
+  <v-btn :to="{name: 'claim'}"
+    color="info lighten-2"
+  >File a Claim</v-btn>
+  <v-btn color="info lighten-2"
+    @click="$router.go().catch(()=>{})"
+  >Refresh Map</v-btn>
 </div>
   
 </template>

@@ -30,7 +30,7 @@ export default new Vuex.Store({
     mapClick: {
       latitude: 0,
       longitude: 0
-    }
+    },
   },
 
   mutations: {
@@ -77,7 +77,6 @@ export default new Vuex.Store({
     SET_MAP_CLICK(state,mapClick) {
       state.mapClick = mapClick;
     },
-   
   },
   
   actions:  {
