@@ -151,18 +151,19 @@ public class PotholeSqlDAO implements PotholeDAO {
 
 		boolean potholes = false;
 
-		String updatePotholes = "UPDATE potholes SET pothole_status_id=(SELECT pothole_status_id FROM pothole_status WHERE status = ?), "
-				+ "severity_id =(SELECT severity_id FROM severity WHERE severity = ?), lat = ?, lng = ? WHERE pothole_id =?;";
-		// Adds the updated pothole to the pothole_history table
-		if (addToPotholesHistory(updatedPothole)) {
-			// Updates the pothole in the potholes table
-			int result = jdbcTemplate.update(updatePotholes, updatedPothole.getStatus(), updatedPothole.getSeverity(),
-					updatedPothole.getLatitude(), updatedPothole.getLongitude(), potholeId);
-
-			if (result == 1) {
-				potholes = true;
+			String updatePotholes = "UPDATE potholes SET pothole_status_id=(SELECT pothole_status_id FROM pothole_status WHERE status = ?), "
+					+ "severity_id =(SELECT severity_id FROM severity WHERE severity = ?), lat = ?, lng = ?, roadname = ?, direction = ? WHERE pothole_id =?;";
+			// Adds the updated pothole to the pothole_history table
+			if (addToPotholesHistory(updatedPothole)) {
+				// Updates the pothole in the potholes table
+				int result = jdbcTemplate.update(updatePotholes, updatedPothole.getStatus(), updatedPothole.getSeverity(),
+						updatedPothole.getLatitude(), updatedPothole.getLongitude(), updatedPothole.getRoadName(), updatedPothole.getDirection(), potholeId);
+	
+				if (result == 1) {
+					potholes = true;
+				}
 			}
-		}
+
 		return potholes;
 	}
 
