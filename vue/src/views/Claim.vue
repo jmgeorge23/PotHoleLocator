@@ -66,7 +66,8 @@
  <!----------------------- Reason ------------------->
     <v-text-field
       v-model="amount"
-      :counter="10"
+      :counter="5"
+      :rules="amountRules"
       label="Dollar Amount of Claim"
       required
     ></v-text-field>
@@ -74,6 +75,7 @@
     <v-textarea
       v-model="message"
       :counter="180"
+      :rules="messageRules"
       label="Please enter your message"
       single-line
     ></v-textarea>
@@ -89,12 +91,21 @@
     </v-btn>
 
  <!----------------------- Reset ------------------->
-    <v-btn
+    <!-- <v-btn
       color="error"
       class="mr-4"
       @click="reset"
     >
       Reset Form
+    </v-btn> -->
+
+<!----------------------- Reset ------------------->
+    <v-btn
+      color="error"
+      class="mr-4"
+      @click="goBack"
+    >
+      Cancel
     </v-btn>
   </v-form>  
 
@@ -128,7 +139,7 @@
     data: () => ({
       multiLine: true,
       snackbar: false,
-      text: `         Claim Received.`,
+      text: `Claim Received.`,
       valid: true,
       name: '',
 
@@ -137,9 +148,17 @@
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
-      amount: 0,
+      amount: '',
+      amountRules: [
+        v => !!v || 'Amount is required',
+        v => (v && v.length >= 5) || 'Amount must be less than $10,000',
+      ],
 
       message: '',
+      messageRules: [
+        v => !!v || 'Message is required',
+        v => (v && v.length >= 180) || 'Message must be more than 10 characters',
+      ],
 
     }),
 
@@ -154,6 +173,7 @@
         this.$refs.form.reset()
       },
       goBack(){
+        this.reset()
         this.$router.go(-1);
 
       }
