@@ -1,18 +1,20 @@
 <template>
 <div>
   <!-- <list-filters/> -->
-  <pothole-list :setHeight="'height: 59vh'"/>
+  <pothole-list :setHeight="'height: 73vh'"/>
   <v-divider class="my-0"></v-divider>
-  <v-btn :to="{name: 'report'}"
-    color="info lighten-2"
-  >Report Pothole</v-btn>
-  <v-btn :to="{name: 'claim'}"
-    color="info lighten-2"
-    class="my-2"
-  >File a Claim</v-btn>
-  <v-btn color="info lighten-2"
-    @click="$router.go().catch(()=>{})"
-  >Refresh Map</v-btn>
+  <div class="text-center">
+    <v-btn :to="{name: 'report'}"
+      color="info lighten-2"
+      rounded
+      class="mr-6"
+    >Report Pothole</v-btn>
+    <v-btn :to="{name: 'claim'}"
+      color="info lighten-2"
+      rounded
+      class="my-2"
+    >File a Claim</v-btn>
+  </div>
 </div>
   
 </template>
