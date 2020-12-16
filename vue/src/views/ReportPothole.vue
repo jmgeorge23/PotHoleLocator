@@ -153,7 +153,7 @@ export default {
                 
               
             })
-            .catch(error =>{
+            .catch(() =>{
               this.dialog = true
             });
         console.log('Here!');
