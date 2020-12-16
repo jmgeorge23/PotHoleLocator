@@ -151,13 +151,13 @@
       amount: '',
       amountRules: [
         v => !!v || 'Amount is required',
-        v => (v && v.length >= 5) || 'Amount must be less than $10,000',
+        v => (v && v.length <= 5) || 'Amount must be less than $10,000',
       ],
 
       message: '',
       messageRules: [
         v => !!v || 'Message is required',
-        v => (v && v.length >= 180) || 'Message must be more than 10 characters',
+        v => (v && v.length <= 180) || 'Message must be more than 10 characters',
       ],
 
     }),

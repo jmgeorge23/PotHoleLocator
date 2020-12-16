@@ -23,7 +23,7 @@
         class="info darken-2 text-center white--text"
         cols="12"
       >
-        {{ new Date().getFullYear() }} — <strong>Kony</strong>
+        {{ new Date().getFullYear() }} — <strong>PHL</strong>
       </v-col>
     </v-row>
   </v-footer>
@@ -33,7 +33,6 @@
 export default {
   data: () => ({
     footerLinks: [
-      'test',
       'team',
       'blog',
       'contact',
