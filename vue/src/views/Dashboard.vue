@@ -16,30 +16,21 @@
             <v-card-title class="info lighten-2 white--text py-2">
               <span class="headline">{{ isLoggedIn? `Welcome, ${username}`: 'Report Map'}}</span>
               <v-spacer></v-spacer>
-              <v-menu
-                bottom
-                left
-              >
+              <v-tooltip left>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    dark
+                   @click="$router.go().catch(()=>{})"
+                    color="white"
                     icon
                     v-bind="attrs"
                     v-on="on"
                   >
-                    <v-icon>mdi-dots-vertical</v-icon>
+                    <v-icon>mdi-cached</v-icon>
                   </v-btn>
                 </template>
-
-                <v-list>
-                  <!-- <v-list-item
-                    v-for="(item, i) in items"
-                    :key="i"
-                  >
-                  <v-list-item-title>{{ item.title }}</v-list-item-title>
-                </v-list-item> -->
-              </v-list>
-              </v-menu>
+                <span>Refresh Map</span>
+            </v-tooltip>
+                
             </v-card-title>
           </v-card>
           <!-- ////////////// POTHOLE LIST ////////////////////  -->

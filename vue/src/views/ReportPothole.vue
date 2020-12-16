@@ -66,16 +66,33 @@
     >
       <v-subheader>General</v-subheader>
 
-      <v-list-item>
-        <v-list-item-action>
-          <v-checkbox v-model="widgets"></v-checkbox>
-        </v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>Fluff information</v-list-item-title>
-          <v-list-item-subtitle>The contents of this are nonsense. Merely display.</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
     </v-list>
+     <v-dialog
+      v-model="dialog"
+      max-width="350"
+    >
+      <v-card>
+        <v-card-title class="headline">
+         Pothole already submitted!
+        </v-card-title>
+
+        <v-card-text>
+          Thank you for your submission, but it looks like this pothole has already been reported. Please refer to the existing pothole pin for updates. 
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="endDialog()"
+          >
+            Ok
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -85,9 +102,6 @@ export default {
   data () {
     return {
       dialog: false,
-      notifications: false,
-      sound: true,
-      widgets: false,
       newPothole: {
         direction: '',
         lane: '',
@@ -111,6 +125,8 @@ export default {
   methods:{
       goBack(){
         this.$store.dispatch('setReportModeOff');
+        // this.$router.go();
+        // location.reload();
         this.$router.go(-1);
       },
       clearForm(){
@@ -129,19 +145,23 @@ export default {
         potholeService.sendReport(this.newPothole)
             .then(response =>{
               console.log(response.status)
-              if(response.status === 201){
+              
                 console.log(response)
-                //snackbar here for saved pothole
+            
                 this.clearForm()
                 this.goBack()
-              }
+                
+              
             })
             .catch(error =>{
-              if(error.status ===418){
-                console.log(error)
-              }
+              this.dialog = true
             });
         console.log('Here!');
+      },
+      endDialog(){
+        this.dialog=false
+        this.clearForm()
+        this.goBack()
       },
 
   },
