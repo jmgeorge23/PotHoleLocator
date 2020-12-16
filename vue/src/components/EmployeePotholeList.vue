@@ -28,13 +28,11 @@
       v-model="menuSelectionIndex"
       active-class="border"
       color="blue-grey"
-      mandatory
     >
       <v-list-item
         v-for="pothole in listItems"
         :key="pothole.id"
-        link
-        @click="setMenuSelection"
+        @click="setActivePothole(pothole.id)"
       >
         <v-list-item-icon>
           <v-icon v-text="pothole.icon"
@@ -66,9 +64,6 @@ export default {
   },
   data() {
     return {
-      clickedPotholeId: 0,
-      menuSelectionIndex: 0,
-      currentFilter: "All",
        filters: [
         'All',
         'Reported',
@@ -90,7 +85,16 @@ export default {
       potholes: 'allPotholes',
       currentUserId: 'userId',
       activePothole: 'activePothole',
+      currentFilter: 'currentFilter',
     }),
+    menuSelectionIndex: {
+      get() {
+        return this.$store.getters.menuSelectionIndex;
+      },
+      set(potholeId) {
+        this.$store.dispatch('setMenuSelection', potholeId);
+      }
+    },
     filteredPotholes() {
       if (this.currentFilter == 'All') {
         return this.potholes;
@@ -98,11 +102,6 @@ export default {
       return this.potholes
         .filter( pothole => pothole.status === this.currentFilter);
     },
-    // Grabs currently selected item
-    clickedItem() {
-       return this.filteredPotholes[this.menuSelectionIndex];
-    },
-    // Gets list and assigns corresponding colored icons
     listItems() {
       let list = [];
       this.filteredPotholes.forEach(pothole => {
@@ -114,6 +113,7 @@ export default {
               text: `New Pothole on ${pothole.roadName}`,
               color: 'info',
               roadName: `${pothole.roadName}`,
+              severity: `${pothole.severity}`,
             }]);
             break;
           case 'Low':
@@ -123,6 +123,7 @@ export default {
               text: `Pothole on ${pothole.roadName}`,
               color: 'yellow darken-1',
               roadName: `${pothole.roadName}`,
+              severity: `${pothole.severity}`,
             }]);
             break;
           case 'Medium':
@@ -132,6 +133,7 @@ export default {
               text: `Pothole on ${pothole.roadName}`,
               color: 'warning',
               roadName: `${pothole.roadName}`,
+              severity: `${pothole.severity}`,
             }]);
             break;
           case 'High':
@@ -141,6 +143,7 @@ export default {
               text: `Large Pothole on ${pothole.roadName}`,
               color: 'accent',
               roadName: `${pothole.roadName}`,
+              severity: `${pothole.severity}`,
             }]);
             break;
         }
@@ -163,12 +166,11 @@ export default {
   },
 
   methods: {
-    setMenuSelection() {
-      this.$store.dispatch('setActivePothole', this.clickedItem);
+    setActivePothole(id) {
+      this.$store.dispatch('setActivePothole', id);
     },
-    // TODO :: Allow user to filter map by watchlist / user-submitted
     setCurrentFilter(filter) {
-      this.currentFilter = filter;
+      this.$store.dispatch('setCurrentFilter', filter)
     },
   },
 }

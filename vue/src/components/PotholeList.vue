@@ -100,14 +100,6 @@ export default {
       return this.potholes
         .filter( pothole => pothole.status === this.currentFilter);
     },
-    // Grabs currently selected item
-    // clickedItem() {
-    //    return this.filteredPotholes[this.menuSelectionIndex];
-    // },
-    // currentSelectionId() {
-    //   return this.listItems[this.menuSelectionIndex]
-    // },
-    // Gets list and assigns corresponding colored icons
     listItems() {
       let list = [];
       this.filteredPotholes.forEach(pothole => {
@@ -175,7 +167,6 @@ export default {
     setActivePothole(id) {
       this.$store.dispatch('setActivePothole', id);
     },
-    // TODO :: Allow user to filter map by watchlist / user-submitted
     setCurrentFilter(filter) {
       this.$store.dispatch('setCurrentFilter', filter)
     },
