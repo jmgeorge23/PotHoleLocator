@@ -53,6 +53,7 @@
    <!----------------------- Name ------------------->
     <v-text-field
       v-model="name"
+      :rules="nameRules"
       label="Name"
       required
     ></v-text-field>
@@ -142,7 +143,7 @@
       text: `Claim Received.`,
       valid: true,
       name: '',
-
+      nameRules: [v => !!v || 'Name is required'],
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -156,9 +157,7 @@
 
       message: '',
       messageRules: [
-        v => !!v || 'Message is required',
-        v => (v && v.length <= 180) || 'Message must be more than 10 characters',
-      ],
+        v => ( v.length <= 180) ],
 
     }),
 
