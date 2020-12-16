@@ -28,13 +28,11 @@
       v-model="menuSelectionIndex"
       active-class="border"
       color="blue-grey"
-      mandatory
     >
       <v-list-item
         v-for="pothole in listItems"
         :key="pothole.id"
-        link
-        @click="setMenuSelection"
+        @click="setActivePothole(pothole.id)"
       >
         <v-list-item-icon>
           <v-icon v-text="pothole.icon"
@@ -47,11 +45,10 @@
             Severity: {{pothole.severity}} 
           </v-list-item-subtitle>
         </v-list-item-content>
-        <v-btn @click.stop="toggleInfoWindow">Show</v-btn>
       </v-list-item>
-      <v-subheader>End of list</v-subheader>
       
     </v-list-item-group>
+    <v-subheader>End of list</v-subheader>
   </v-list>
 </div>
 </template>
@@ -65,9 +62,6 @@ export default {
   },
   data() {
     return {
-      clickedPotholeId: 0,
-      menuSelectionIndex: 0,
-      currentFilter: "All",
        filters: [
         'All',
         'Reported',
@@ -89,8 +83,16 @@ export default {
       potholes: 'allPotholes',
       currentUserId: 'userId',
       activePothole: 'activePothole',
-      isInfoWindowOpen: 'isInfoWindowOpen'
+      currentFilter: 'currentFilter'
     }),
+    menuSelectionIndex: {
+      get() {
+        return this.$store.getters.menuSelectionIndex;
+      },
+      set(potholeId) {
+        this.$store.dispatch('setMenuSelection', potholeId);
+      }
+    },
     filteredPotholes() {
       if (this.currentFilter == 'All') {
         return this.potholes;
@@ -99,9 +101,12 @@ export default {
         .filter( pothole => pothole.status === this.currentFilter);
     },
     // Grabs currently selected item
-    clickedItem() {
-       return this.filteredPotholes[this.menuSelectionIndex];
-    },
+    // clickedItem() {
+    //    return this.filteredPotholes[this.menuSelectionIndex];
+    // },
+    // currentSelectionId() {
+    //   return this.listItems[this.menuSelectionIndex]
+    // },
     // Gets list and assigns corresponding colored icons
     listItems() {
       let list = [];
@@ -167,19 +172,12 @@ export default {
   },
 
   methods: {
-    setMenuSelection() {
-      this.$store.dispatch('setActivePothole', this.clickedItem);
-    },
-    toggleInfoWindow() {
-      if(this.isInfoWindowOpen) {
-        this.$store.dispatch('closeInfoWindow');
-      } else {
-        this.$store.dispatch('openInfoWindow');
-      }
+    setActivePothole(id) {
+      this.$store.dispatch('setActivePothole', id);
     },
     // TODO :: Allow user to filter map by watchlist / user-submitted
     setCurrentFilter(filter) {
-      this.currentFilter = filter;
+      this.$store.dispatch('setCurrentFilter', filter)
     },
   },
 }

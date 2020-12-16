@@ -53,8 +53,9 @@
                         </v-icon>
                         Report Status: {{activePothole.status}}
                     </p>
-                    <v-btn x-small class="mx-auto my-0" @click="runTest">View Details</v-btn>
-                    <v-btn x-small color="accent" class="mx-auto my-0" >Delete</v-btn>
+                    <v-btn x-small class="mx-auto mt-2" @click="runTest">View Details</v-btn>
+                    <v-btn x-small color="accent" class="mx-auto my-0"
+                        v-if="username === 'admin'" >Delete</v-btn>
                 </div>
             </gmap-info-window>
             <gmap-marker
@@ -63,7 +64,7 @@
                 :position="getPosition(pothole)"
                 :clickable="true"
                 :draggable="false"
-                @click="handleMarkerClicked(pothole)"
+                @click="handleMarkerClicked(pothole.potholeId)"
             ></gmap-marker>    
             <gmap-marker
                 :position="getPosition(mapClick)"
@@ -147,7 +148,8 @@ export default {
             potholes: 'allPotholes',
             reportMode: 'reportMode',
             activePothole: 'activePothole',
-            isInfoWindowOpen: 'isInfoWindowOpen'
+            isInfoWindowOpen: 'isInfoWindowOpen',
+            username: 'username',
         }),
         mapCoordinates() {
             if(!this.map) {
@@ -162,7 +164,7 @@ export default {
             }
         },
         infoWindowPosition() {
-            if (this.activePothole.latitude == undefined) {
+            if (this.activePothole.latitude === undefined) {
                 return {
                     lat: 0,
                     lng: 0
@@ -197,12 +199,15 @@ export default {
                 lng: parseFloat(pothole.longitude)
             }
         },
-        handleMarkerClicked(pothole) {
-            this.$store.dispatch('setActivePothole', pothole);
+        handleMarkerClicked(id) {
+            this.$store.dispatch('setActivePothole', id);
+            this.$store.dispatch('unsetMenuSelection')
+            this.$store.dispatch('setMenuSelection', id)
             this.map.setZoom(14);
-            this.map.setCenter(this.getPosition(pothole));
+            this.map.setCenter(this.getPosition(this.activePothole));
         },
         handleInfoWindowClose() {
+            this.$store.dispatch('unsetMenuSelection')
             this.$store.dispatch('unsetActivePothole');
         },
         handleMapClick(e) {

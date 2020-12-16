@@ -28,7 +28,8 @@ export default new Vuex.Store({
     user: currentUser || {},
     activePothole: {},
     hasMenuSelection: false,
-    menuSelectionIndex: 0,
+    menuSelectionIndex: null,
+    currentFilter: 'All',
     reportMode: false,
     mapClick: {
       latitude: 0,
@@ -65,16 +66,29 @@ export default new Vuex.Store({
     SET_POTHOLES(state, data) {
       state.potholes = data;
     },
-    SET_ACTIVE_POTHOLE(state, pothole) {
-      state.activePothole = pothole;
+    SET_ACTIVE_POTHOLE(state, potholeId) {
+      for(let i = 0; i<state.potholes.length; i++) {
+        if(state.potholes[i].potholeId == potholeId) {
+          state.activePothole = state.potholes[i]
+        }
+      }
     },
     UNSET_ACTIVE_POTHOLE(state) {
       state.activePothole = {};
     },
-    SET_MENU_SELECTION_INDEX(state, index){
-      state.menuSelectionIndex = index;
+    SET_MENU_SELECTION(state, potholeId){
+      const filteredList = state.potholes
+        .filter( pothole => pothole.status == state.currentFilter);
+      for(let i = 0; i<filteredList.length; i++) {
+        if(state.filteredList[i].potholeId == potholeId) {
+          state.menuSelectionIndex = i;
+        }
+      }
     },
-    UNSET_MENU_SELECTION_INDEX(state){
+    SET_CURRENT_FILTER(state, filter) {
+      state.currentFilter = filter;
+    },
+    UNSET_MENU_SELECTION(state){
       state.menuSelectionIndex = null;
     },
     MENU_SELECTION_MADE(state) {
@@ -128,12 +142,12 @@ export default new Vuex.Store({
       });
     },
     // ///////////////// MAP MANAGEMENT /////////////////////
-    setActivePothole({commit}, pothole) {
-      commit('SET_ACTIVE_POTHOLE', pothole);
+    setActivePothole({commit}, potholeId) {
+      commit('SET_ACTIVE_POTHOLE', potholeId);
       commit("OPEN_INFO_WINDOW");
     },
-    unsetActivePothole(context, pothole) {
-      context.commit('UNSET_ACTIVE_POTHOLE', pothole);
+    unsetActivePothole(context) {
+      context.commit('UNSET_ACTIVE_POTHOLE');
       context.commit('CLOSE_INFO_WINDOW');
     },
     closeInfoWindow(context) {
@@ -142,12 +156,14 @@ export default new Vuex.Store({
     openInfoWindow(context) {
       context.commit('OPEN_INFO_WINDOW');
     },
-    setMenuSelection({commit}, selection) {
-      commit('SET_ACTIVE_POTHOLE', selection.pothole);
+    setMenuSelection({commit}, potholeId) {
+      commit('SET_MENU_SELECTION', potholeId)
     },
-    unsetMenuSelection({commit}) {
-      commit('UNSET_MENU_SELECTION_INDEX')
-      commit('MENU_SELECTION_REMOVED');
+    unsetMenuSelection(context) {
+      context.commit('UNSET_MENU_SELECTION')
+    },
+    setCurrentFilter(context, filter) {
+      context.commit('SET_CURRENT_FILTER', filter);
     },
     mapMarkerSelection({commit}, selection) {
       commit('SET_ACTIVE_POTHOLE', selection);
@@ -243,6 +259,9 @@ export default new Vuex.Store({
     },
     hasMenuSelection: (state) => {
       return state.hasMenuSelection;
+    },
+    currentFilter: (state) => {
+      return state.currentFilter;
     },
     reportMode: (state) => {
       return state.reportMode;
