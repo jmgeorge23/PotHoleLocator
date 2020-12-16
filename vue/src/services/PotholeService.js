@@ -10,5 +10,8 @@ export default {
     },
     updatePothole(pothole) {
         return axios.put(`/potholes/${pothole.potholeId}`, pothole);
+    },
+    deletePothole(potholeId) {
+        return axios.delete(`/potholes/${potholeId}`);
     }
 }

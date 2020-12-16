@@ -55,7 +55,7 @@
                     </p>
                     <v-btn x-small class="mx-auto mt-2" :to="{name:'details'}">View Details</v-btn>
                     <v-btn x-small color="accent" class="mx-auto mt-2"
-                        v-if="username === 'admin'" >Delete</v-btn>
+                        v-if="username === 'admin'" @click="dialog = true">Delete</v-btn>
                 </div>
             </gmap-info-window>
             <gmap-marker
@@ -75,6 +75,39 @@
                 @click="handleMapClick"
             ></gmap-marker>    
         </gmap-map>
+    <v-dialog
+      v-model="dialog"
+      max-width="350"
+    >
+      <v-card>
+        <v-card-title class="headline">
+         Confirm Delete
+        </v-card-title>
+
+        <v-card-text>
+        Are you sure you would like to delete this pothole?
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deletePothole"
+          >
+            Ok
+          </v-btn>
+        <v-btn
+            color="darken-1"
+            text
+            @click="endDialog()"
+        >
+            Cancel
+        </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     </div>
 </template>
 <script>
@@ -83,6 +116,7 @@
 import { mapGetters } from 'vuex'
 export default {
     data: () => ({
+        dialog: false,
         map: null,
         myCoordinates: {
             lat: 0,
@@ -216,6 +250,23 @@ export default {
             this.mapClick.longitude = e.latLng.lng().toFixed(5);
             this.$store.dispatch('setMapClick',this.mapClick);
         },
+        deletePothole() {
+            const potholeId = this.activePothole.potholeId;
+            this.$store.dispatch('deletePothole', potholeId)
+                .then(response => {
+                    if(response.status === 200){
+                        console.log('it worked');
+                        this.endDialog();
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                });
+        },
+        endDialog(){
+        this.dialog=false
+        this.$router.go();
+      },
         runTest(){
             // this.$store.dispatch('fetchComments', this.activePothole.potholeId);
         },

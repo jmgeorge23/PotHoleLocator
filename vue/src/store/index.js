@@ -141,6 +141,18 @@ export default new Vuex.Store({
           })
       });
     },
+    deletePothole(context, potholeId) {
+      return new Promise((resolve, reject) => {
+        potholeService.deletePothole(potholeId)
+          .then((response) => {
+            resolve(response)
+          })
+          .catch(err => {
+            console.log(err)
+            reject(err)
+          })
+      });
+    },
     // ///////////////// MAP MANAGEMENT /////////////////////
     setActivePothole({commit}, potholeId) {
       commit('SET_ACTIVE_POTHOLE', potholeId);
