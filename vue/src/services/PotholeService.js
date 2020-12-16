@@ -7,5 +7,8 @@ export default {
     },
     sendReport(report){
         return axios.post('/potholes',report)
+    },
+    updatePothole(pothole) {
+        return axios.put(`/potholes/${pothole.potholeId}`, pothole);
     }
 }

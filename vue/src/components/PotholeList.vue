@@ -47,8 +47,7 @@
             Severity: {{pothole.severity}} 
           </v-list-item-subtitle>
         </v-list-item-content>
-        <v-btn
-        :to="{name: 'update'}">Update</v-btn>
+        <v-btn @click.stop="toggleInfoWindow">Show</v-btn>
       </v-list-item>
       <v-subheader>End of list</v-subheader>
       
@@ -90,6 +89,7 @@ export default {
       potholes: 'allPotholes',
       currentUserId: 'userId',
       activePothole: 'activePothole',
+      isInfoWindowOpen: 'isInfoWindowOpen'
     }),
     filteredPotholes() {
       if (this.currentFilter == 'All') {
@@ -169,6 +169,13 @@ export default {
   methods: {
     setMenuSelection() {
       this.$store.dispatch('setActivePothole', this.clickedItem);
+    },
+    toggleInfoWindow() {
+      if(this.isInfoWindowOpen) {
+        this.$store.dispatch('closeInfoWindow');
+      } else {
+        this.$store.dispatch('openInfoWindow');
+      }
     },
     // TODO :: Allow user to filter map by watchlist / user-submitted
     setCurrentFilter(filter) {

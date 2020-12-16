@@ -114,6 +114,19 @@ export default new Vuex.Store({
         .catch(error => alert(error));
         commit('STOP_LOADING');
     },
+    updatePothole(context, pothole) {
+      return new Promise((resolve, reject) => {
+        potholeService.updatePothole(pothole)
+          .then((response) => {
+            resolve(response)
+            console.log(response)
+          })
+          .catch(err => {
+            console.log(err)
+            reject(err)
+          })
+      });
+    },
     // ///////////////// MAP MANAGEMENT /////////////////////
     setActivePothole({commit}, pothole) {
       commit('SET_ACTIVE_POTHOLE', pothole);
@@ -155,6 +168,7 @@ export default new Vuex.Store({
       potholeService.sendReport(report);
       commit('STOP_LOADING');
     },
+
     // /////////////////// ACCOUNT MANAGEMENT /////////////////////
     authenticate(context, credentials) {
 
@@ -177,21 +191,21 @@ export default new Vuex.Store({
       commit('LOGOUT');
     },
      // /////////////////// COMMENT MANAGEMENT /////////////////////
-      fetchComments(context, potholeId){
+    fetchComments(context, potholeId){
 
-        return new Promise((resolve, reject)=>{
-          commentService.getComments(potholeId)
-          .then(response=>{
-            context.commit('SET_POTHOLE_COMMENTS', response.data);
-            console.log(response)
-            resolve(response)
-          })
-          .catch(error =>{
-            console.log(error)
-            reject(error)
-          })
+      return new Promise((resolve, reject)=>{
+        commentService.getComments(potholeId)
+        .then(response=>{
+          context.commit('SET_POTHOLE_COMMENTS', response.data);
+          console.log(response)
+          resolve(response)
         })
-      }
+        .catch(error =>{
+          console.log(error)
+          reject(error)
+        })
+      })
+    }
   },
   
   getters: {

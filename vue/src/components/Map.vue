@@ -54,6 +54,7 @@
                         Report Status: {{activePothole.status}}
                     </p>
                     <v-btn x-small class="mx-auto my-0" @click="runTest">View Details</v-btn>
+                    <v-btn x-small color="accent" class="mx-auto my-0" >Delete</v-btn>
                 </div>
             </gmap-info-window>
             <gmap-marker
