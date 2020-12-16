@@ -1,7 +1,13 @@
 <template>
 
-
-      <v-card>
+<v-container bg fill-height grid-list-md>
+  <v-layout row wrap align-center justify-center>
+    <v-flex align-self-center>
+      <v-card
+        max-width="500"
+        hover
+        class="justify-center"
+      >
         <v-card-title class="justify-center">
           <span class="headline">Login to Your Account</span>
         </v-card-title>
@@ -71,6 +77,10 @@
       </template>
     </v-snackbar>
       </v-card>
+
+    </v-flex>
+  </v-layout>
+</v-container>
 
 
 </template>
