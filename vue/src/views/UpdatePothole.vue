@@ -35,6 +35,8 @@
           v-model="newPothole.latitude"
           >Latitude: {{currentPothole.latitude}} </v-list-item-subtitle>
           <v-list-item-subtitle>Longitude: {{currentPothole.longitude}} </v-list-item-subtitle>
+          <v-list-item-subtitle>Street: {{currentPothole.roadName}} </v-list-item-subtitle>
+          <v-list-item-subtitle>Direction: {{currentPothole.direction}} </v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
@@ -96,7 +98,7 @@ export default {
         username: '',
       },
       severities: ['High', 'Medium', 'Low'],
-      status: ['Inspected', 'Completed']
+      status: ['Inspected', 'Completed', 'Deleted']
     }
   },  
   computed:{

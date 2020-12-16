@@ -28,11 +28,13 @@ export default new Vuex.Store({
     user: currentUser || {},
     activePothole: {},
     hasMenuSelection: false,
+    menuSelectionIndex: 0,
     reportMode: false,
     mapClick: {
       latitude: 0,
       longitude: 0
     },
+    isInfoWindowOpen: false,
     potholeComments:  [],
     
   },
@@ -66,6 +68,15 @@ export default new Vuex.Store({
     SET_ACTIVE_POTHOLE(state, pothole) {
       state.activePothole = pothole;
     },
+    UNSET_ACTIVE_POTHOLE(state) {
+      state.activePothole = {};
+    },
+    SET_MENU_SELECTION_INDEX(state, index){
+      state.menuSelectionIndex = index;
+    },
+    UNSET_MENU_SELECTION_INDEX(state){
+      state.menuSelectionIndex = null;
+    },
     MENU_SELECTION_MADE(state) {
       state.hasMenuSelection = true;
     },
@@ -82,8 +93,14 @@ export default new Vuex.Store({
       state.mapClick = mapClick;
     },
     SET_POTHOLE_COMMENTS(state, comments){
-      state.potholeComments=comments;
-    }
+      state.potholeComments = comments;
+    },
+    CLOSE_INFO_WINDOW(state) {
+      state.isInfoWindowOpen = false;
+    },
+    OPEN_INFO_WINDOW(state) {
+      state.isInfoWindowOpen = true;
+    },
   },
   
   actions:  {
@@ -100,16 +117,27 @@ export default new Vuex.Store({
     // ///////////////// MAP MANAGEMENT /////////////////////
     setActivePothole({commit}, pothole) {
       commit('SET_ACTIVE_POTHOLE', pothole);
+      commit("OPEN_INFO_WINDOW");
+    },
+    unsetActivePothole(context, pothole) {
+      context.commit('UNSET_ACTIVE_POTHOLE', pothole);
+      context.commit('CLOSE_INFO_WINDOW');
+    },
+    closeInfoWindow(context) {
+      context.commit('CLOSE_INFO_WINDOW');
+    },
+    openInfoWindow(context) {
+      context.commit('OPEN_INFO_WINDOW');
     },
     setMenuSelection({commit}, selection) {
-      commit('SET_ACTIVE_POTHOLE', selection);
-      commit('MENU_SELECTION_MADE');
+      commit('SET_ACTIVE_POTHOLE', selection.pothole);
+    },
+    unsetMenuSelection({commit}) {
+      commit('UNSET_MENU_SELECTION_INDEX')
+      commit('MENU_SELECTION_REMOVED');
     },
     mapMarkerSelection({commit}, selection) {
       commit('SET_ACTIVE_POTHOLE', selection);
-      commit('MENU_SELECTION_REMOVED');
-    },
-    unsetMenuSelection({commit}) {
       commit('MENU_SELECTION_REMOVED');
     },
     setMapClick({commit},mapClick) {
@@ -193,6 +221,12 @@ export default new Vuex.Store({
     activePothole: (state) => {
       return state.activePothole;
     },
+    activePotholeIndex: (state) => {
+      return state.potholes.indexOf(state.activePothole);
+    },
+    menuSelectionIndex: (state) => {
+      return state.menuSelectionIndex;
+    },
     hasMenuSelection: (state) => {
       return state.hasMenuSelection;
     },
@@ -201,6 +235,9 @@ export default new Vuex.Store({
     },
     mapClick: (state) => {
       return state.mapClick;
+    },
+    isInfoWindowOpen: (state) => {
+      return state.isInfoWindowOpen;
     },
     potholeComments: (state) =>{
       return state.potholeComments;

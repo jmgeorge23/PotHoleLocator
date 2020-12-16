@@ -22,7 +22,7 @@
             <gmap-info-window
                 :options="infoWindowOptions"
                 :position="infoWindowPosition"
-                :opened="hasMenuSelection"
+                :opened="isInfoWindowOpen"
                 @closeclick="handleInfoWindowClose"
                 >
                 <div class="info-window"
@@ -78,7 +78,7 @@
 <script>
 
 //import potholeServices from '../services/PotholeService.js';
-
+import { mapGetters } from 'vuex'
 export default {
     data: () => ({
         map: null,
@@ -142,12 +142,12 @@ export default {
         isInfoWindowOpened: false,
     }),
     computed: {
-        potholes() {
-            return this.$store.getters.allPotholes;
-        },
-        reportMode() {
-            return this.$store.getters.reportMode;
-        },
+        ...mapGetters({
+            potholes: 'allPotholes',
+            reportMode: 'reportMode',
+            activePothole: 'activePothole',
+            isInfoWindowOpen: 'isInfoWindowOpen'
+        }),
         mapCoordinates() {
             if(!this.map) {
                 return {
@@ -172,12 +172,12 @@ export default {
                 lng: parseFloat(this.activePothole.longitude),
             }
         },
-        activePothole() {
-            return this.$store.getters.activePothole;
-        },
-        hasMenuSelection() {
-            return this.$store.getters.hasMenuSelection;
-        }
+        // activePotholeIndex() {
+        //     return this.$store.getters.activePotholeIndex;
+        // },
+        // hasMenuSelection() {
+        //     return this.$store.getters.hasMenuSelection;
+        // }
     },
     methods: {
         handleDrag() {
@@ -197,15 +197,15 @@ export default {
             }
         },
         handleMarkerClicked(pothole) {
-            this.$store.dispatch('setMenuSelection', pothole);
-            this.map.setZoom(15);
+            this.$store.dispatch('setActivePothole', pothole);
+            this.map.setZoom(14);
             this.map.setCenter(this.getPosition(pothole));
         },
         handleInfoWindowClose() {
-            this.$store.dispatch('unsetMenuSelection');
+            this.$store.dispatch('unsetActivePothole');
         },
         handleMapClick(e) {
-            console.log(`lat: ${e.latLng.lat().toFixed(5)} lng: ${e.latLng.lng().toFixed(5)}`);
+            //console.log(`lat: ${e.latLng.lat().toFixed(5)} lng: ${e.latLng.lng().toFixed(5)}`);
             this.mapClick.latitude = e.latLng.lat().toFixed(5);
             this.mapClick.longitude = e.latLng.lng().toFixed(5);
             this.$store.dispatch('setMapClick',this.mapClick);

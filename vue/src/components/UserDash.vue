@@ -1,6 +1,6 @@
 <template>
 <div>
-  <list-filters/>
+  <!-- <list-filters/> -->
   <pothole-list :setHeight="'max-height: 59vh'"/>
   <v-btn :to="{name: 'report'}"
     color="info lighten-2"
@@ -16,14 +16,14 @@
 </template>
 
 <script>
-import ListFilters from './ListFilters.vue'
+//import ListFilters from './ListFilters.vue'
 import PotholeList from './PotholeList.vue'
 
 export default {
   name: 'user-dash',
   components: {
     PotholeList,
-    ListFilters
+    // ListFilters
   },
   data: () => ({
 
