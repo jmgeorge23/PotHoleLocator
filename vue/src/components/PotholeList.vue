@@ -155,7 +155,7 @@ export default {
               return -1;
             }
           if(b.severity == 'Low'){
-              return 1;
+              return -1;
             }
           return 0;
         })
