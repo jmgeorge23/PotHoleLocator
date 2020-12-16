@@ -1,57 +1,109 @@
 <template>
-  <v-card
-    class="mx-auto"
-    max-width="344"
-  >
-    <v-img
-      src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
-      height="200px"
-    ></v-img>
-
-    <v-card-title>
-      Top western road trips
-    </v-card-title>
-
-    <v-card-subtitle>
-      1,000 miles of wonder
-    </v-card-subtitle>
-
-    <v-card-actions>
-      <v-btn
-        color="orange lighten-2"
-        text
-      >
-        Explore
-      </v-btn>
-
-      <v-spacer></v-spacer>
-
+  <v-card>
+    <v-toolbar
+      dark
+      color="warning darken-1"
+    >
       <v-btn
         icon
-        @click="show = !show"
+        dark
+        @click="goBack"
       >
-        <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+        <v-icon>mdi-close</v-icon>
       </v-btn>
-    </v-card-actions>
+      <v-toolbar-title>Pothole details</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items>
+      </v-toolbar-items>
+    </v-toolbar>
+    <v-list
+      three-line
+      subheader
+      
+    >
 
-    <v-expand-transition>
-      <div v-show="show">
-        <v-divider></v-divider>
+      <v-list-item>
+        <v-list-item-content>
+          <h2 class="font-weight-regular">Pothole ID: {{currentPothole.potholeId}} </h2>
+          <h2 class="font-weight-regular">Latitude: {{currentPothole.latitude}} </h2>
+          <h2 class="font-weight-regular">Longitude: {{currentPothole.longitude}} </h2>
+          <h2 class="font-weight-regular">Street: {{currentPothole.roadName}} </h2>
+          <h2 class="font-weight-regular">Direction: {{currentPothole.direction}} </h2>
+          <h2 class="font-weight-regular">Current Severity: {{currentPothole.severity}} </h2>
+          <h2 class="font-weight-regular">Current Status: {{currentPothole.status}} </h2>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item    v-if="currentUser === 'admin'">
+        <v-list-item-content>
+          <v-container>
+            <v-row> 
+            <v-btn color="info" :to="{name: 'update'}">Edit</v-btn>
+            </v-row>
+          </v-container>
 
-        <v-card-text>
-          I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
-        </v-card-text>
-      </div>
-    </v-expand-transition>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+    <v-divider></v-divider>
+    <v-list
+      three-line
+      subheader
+    >
+     
+    </v-list>
   </v-card>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+// import potholeService from '../services/PotholeService'
 export default {
+  data () {
+    return {
+      dialog: false,
+      notifications: false,
+      sound: true,
+      widgets: false,
+      newPothole: {
+        direction: '',
+        lane: '',
+        latitude: 0,
+        longitude: 0,
+        roadName: '',
+        severity: '',
+        status: '',
+        username: '',
+      },
+      severities: ['High', 'Medium', 'Low'],
+      status: ['Inspected', 'Completed', 'Deleted'],
+      rules: [ (v) => !!v || 'Cannot be blank' ],
+    }
+  },  
+  computed:{
+    ...mapGetters({
+      currentUser: 'username',
+      currentPothole: 'activePothole'
+    }),
+  },
+  methods:{
+      goBack(){
+        // this.$store.dispatch('setReportModeOff');
+         this.$router.go(-1);
+      },
+      updatePothole(){
+        const updatedPothole = this.currentPothole;
+        updatedPothole.username = this.currentUser;
 
+         
+        }
+
+
+  },
 }
 </script>
 
-<style>
-
+<style scoped>
+.h2 {
+  font-size: xx-small;
+}
 </style>

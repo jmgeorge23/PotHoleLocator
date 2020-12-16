@@ -16,6 +16,7 @@ import UserDash from '../components/UserDash.vue'
 import EmployeeDash from '../components/EmployeeDash.vue'
 import UpdatePothole from '../views/UpdatePothole.vue'
 import Claim from '../views/Claim.vue'
+import PotholeDetails from '../components/PotholeDetails.vue'
 
 
 Vue.use(Router)
@@ -154,6 +155,14 @@ const router = new Router({
             requiresAuth: true,
           }
         },
+        {
+          path: 'details',
+            name: 'details',
+            component: PotholeDetails,
+            meta: {
+              requiresAuth: false,
+            }
+          },
         {
           path: 'claim',
             name: 'claim',

@@ -53,8 +53,8 @@
                         </v-icon>
                         Report Status: {{activePothole.status}}
                     </p>
-                    <v-btn x-small class="mx-auto mt-2" @click="runTest">View Details</v-btn>
-                    <v-btn x-small color="accent" class="mx-auto my-0"
+                    <v-btn x-small class="mx-auto mt-2" :to="{name:'details'}">View Details</v-btn>
+                    <v-btn x-small color="accent" class="mx-auto mt-2"
                         v-if="username === 'admin'" >Delete</v-btn>
                 </div>
             </gmap-info-window>
