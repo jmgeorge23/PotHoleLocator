@@ -55,8 +55,6 @@
    <!----------------------- Name ------------------->
     <v-text-field
       v-model="name"
-      :counter="10"
-      :rules="nameRules"
       label="Name"
       required
     ></v-text-field>
@@ -78,7 +76,7 @@
     <!----------------------- Message ------------------->   
     <v-textarea
       v-model="message"
-      :counter="20"
+      :counter="180"
       :rules="messageRules"
       label="Please enter your message"
       single-line
@@ -148,10 +146,6 @@ import Footer from '../components/Footer.vue'
       text: `Message Received.`,
       valid: true,
       name: '',
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 20 characters',
-      ],
       email: '',
       emailRules: [
         v => !!v || 'E-mail is required',
@@ -167,7 +161,7 @@ import Footer from '../components/Footer.vue'
       message: '',
       messageRules: [
         v => !!v || 'Message is required',
-        v => (v && v.length >= 20) || 'Message must be more than 10 characters',
+        v => (v && v.length >= 180) || 'Message must be more than 10 characters',
       ],
     }),
 
