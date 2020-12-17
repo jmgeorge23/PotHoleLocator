@@ -1,9 +1,10 @@
 <template>
-  <v-app id="inspire">
+  <div>
        <!----------------------- Parallax ------------------->
  <v-container fluid ma-0 pa-0>
     <v-parallax class="parallax"
           dark
+          height="300"
           src="@/assets/yellowteam.png"
   >
           <v-row
@@ -25,7 +26,7 @@
   </v-parallax>
   </v-container>
  <!----------------------- Contact Us Form ------------------->
-      <v-main class="grey lighten-3">
+      
       <v-container>
         <v-row>
         <v-col
@@ -140,8 +141,8 @@
   </v-row>
 </v-container>
 <Footer/>
-</v-main>
-</v-app>
+</div>
+
 </template>
 
 <script>

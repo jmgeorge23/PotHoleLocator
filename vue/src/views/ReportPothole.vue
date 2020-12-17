@@ -64,7 +64,7 @@
       three-line
       subheader
     >
-      <v-subheader>General</v-subheader>
+      
 
     </v-list>
      <v-dialog
