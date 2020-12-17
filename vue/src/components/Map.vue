@@ -101,7 +101,7 @@
         <v-btn
             color="darken-1"
             text
-            @click="endDialog()"
+            @click="dialog = false"
         >
             Cancel
         </v-btn>

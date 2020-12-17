@@ -96,6 +96,32 @@
     >
      
     </v-list>
+    <v-dialog
+      v-model="dialog"
+      max-width="350"
+    >
+      <v-card>
+        <v-card-title class="headline">
+         Update Successful
+        </v-card-title>
+
+        <v-card-text>
+          Refresh map to see your changes
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="endDialog"
+          >
+            Ok
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -148,13 +174,17 @@ export default {
             .then(response =>{
               console.log(response.status)
               if(response.status === 200){
-                console.log('yay')
+                this.dialog = true
               }
             })
             .catch(err =>{
                 console.log(err)
             });
       },
+      endDialog() {
+        this.dialog = false;
+        this.$router.push({name: 'admin'})
+      }
 
   },
 }

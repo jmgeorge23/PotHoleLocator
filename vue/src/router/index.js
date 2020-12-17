@@ -165,12 +165,19 @@ const router = new Router({
           },
         {
           path: 'claim',
-            name: 'claim',
-            component: Claim,
-            meta: {
-              requiresAuth: true,
-            }
+          name: 'claim',
+          component: Claim,
+          meta: {
+            requiresAuth: true,
           }
+        },
+        // {
+        //   path: '*',
+        //   component: Blog,
+        //   meta: {
+        //     requiresAuth: false,
+        //   }
+        // }
       ],
     }
   ]

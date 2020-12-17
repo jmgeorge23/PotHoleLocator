@@ -6,7 +6,7 @@
       flat
     >
       <v-container class="py-0 fill-height" fluid>
-      <v-navigation-drawer v-model="sidebar" temporary app>
+      <v-navigation-drawer v-model="sidebar" app>
         <v-list>
           <v-list-item
             :to="{name: 'dashboard'}">
