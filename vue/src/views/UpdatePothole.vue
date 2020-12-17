@@ -28,7 +28,7 @@
       three-line
       subheader
     >
-      <v-subheader>Admin Controls</v-subheader>
+     
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>Current potholes:</v-list-item-title>

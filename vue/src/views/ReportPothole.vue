@@ -27,7 +27,7 @@
       three-line
       subheader
     >
-      <v-subheader>User Controls</v-subheader>
+      
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title>Click on the map to drop a pin</v-list-item-title>
