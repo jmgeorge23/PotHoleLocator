@@ -161,7 +161,7 @@ import Footer from '../components/Footer.vue'
       message: '',
       messageRules: [
         v => !!v || 'Message is required',
-        v => (v && v.length >= 180) || 'Message must be more than 10 characters',
+        v => (v && v.length <= 180) || 'Message must be more than 10 characters',
       ],
     }),
 
