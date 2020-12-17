@@ -157,7 +157,7 @@
 
       message: '',
       messageRules: [
-        v => ( v.length <= 180) ],
+        v => ( v.length <= 180)],
 
     }),
 
