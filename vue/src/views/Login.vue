@@ -1,7 +1,7 @@
 <template>
 <v-parallax
   src="@/assets/login.jpg"
-  height="600"
+  height="1500"
   style="width: 100% !important;"
 >
 <v-container bg fill-height grid-list-md>
