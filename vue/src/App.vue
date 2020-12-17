@@ -6,41 +6,23 @@
       flat
     >
       <v-container class="py-0 fill-height" fluid>
-
-        <v-navigation-drawer v-model="sidebar" app>
-          <v-list>
-            <v-list-item
-              v-if="isLoggedIn"
-              @click="logout">
-              <v-list-item-action>
-                <v-icon>mdi-logout</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>Logout</v-list-item-content>
-            </v-list-item>
-            <v-list-item
-              v-else
-              :to="{name: 'login'}">
-              <v-list-item-action>
-                <v-icon>mdi-logout</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>Logout</v-list-item-content>
-            </v-list-item>
-            <v-list-item
-              v-for="link in headerLinks"
-              :key="link.name"
-              @click="routeChange">
-              <v-list-item-action>
-                <v-icon>mdi-monitor-dashboard</v-icon>
-              </v-list-item-action>
-              <v-list-item-content>
-                {{ link.name }}
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-navigation-drawer>
+      <v-navigation-drawer v-model="sidebar" temporary app>
+        <v-list>
+          <v-list-item
+            :to="{name: 'dashboard'}">
+            <v-list-item-action>
+              <v-icon>mdi-monitor-dashboard</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              Dashboard
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
         <span class="hidden-sm-and-up">
           <v-app-bar-nav-icon @click="sidebar = !sidebar"></v-app-bar-nav-icon>
         </span>
+
         <v-avatar
           class="mr-10"
           color="grey darken-1"
@@ -54,6 +36,7 @@
         </v-avatar>
 
         <v-btn
+          v-if="$vuetify.breakpoint.smAndUp"
           :to="{name: 'dashboard'}"
           text
           color="white"
@@ -61,7 +44,7 @@
           Dashboard
         </v-btn>
 
-        <v-spacer></v-spacer>
+        <v-spacer v-if="$vuetify.breakpoint.smAndUp"></v-spacer>
         <v-btn
           v-if="isLoggedIn"
           color="info lighten-2"
