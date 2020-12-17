@@ -1,7 +1,7 @@
 <template>
 <div>
   <!-- <list-filters/> -->
-  <pothole-list :setHeight="'height: 73vh'"/>
+  <pothole-list :setHeight="$vuetify.breakpoint.smAndUp ? 'max-height: 73vh': 'max-height: 60vh'"/>
   <v-divider class="my-0"></v-divider>
   <div class="text-center">
     <v-btn :to="{name: 'report'}"

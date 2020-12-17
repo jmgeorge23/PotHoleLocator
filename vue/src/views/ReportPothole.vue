@@ -92,6 +92,33 @@
           </v-btn>
         </v-card-actions>
       </v-card>
+     
+    </v-dialog>
+    <v-dialog
+        v-model="success"
+        max-width="350"
+      >
+        <v-card>
+          <v-card-title class="headline">
+            Pothole Added!
+          </v-card-title>
+
+          <v-card-text>
+            Refresh the map now to see your report.
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+
+            <v-btn
+              color="green darken-1"
+              text
+              @click="endDialog()"
+            >
+              Ok
+            </v-btn>
+          </v-card-actions>
+        </v-card>
     </v-dialog>
   </v-card>
 </template>
@@ -102,6 +129,7 @@ export default {
   data () {
     return {
       dialog: false,
+      success: false,
       newPothole: {
         direction: '',
         lane: '',
@@ -143,23 +171,17 @@ export default {
         console.log(this.$store.getters.username);
         // this.$store.dispatch('sendReport',this.newPothole)
         potholeService.sendReport(this.newPothole)
-            .then(response =>{
-              console.log(response.status)
-              
-                console.log(response)
-            
-                this.clearForm()
-                this.goBack()
-                
-              
+            .then(() =>{
+              this.success = true;
             })
             .catch(() =>{
-              this.dialog = true
+              this.dialog = true;
             });
         console.log('Here!');
       },
       endDialog(){
         this.dialog=false
+        this.success=false;
         this.clearForm()
         this.goBack()
       },

@@ -9,7 +9,7 @@
       <v-navigation-drawer v-model="sidebar" app>
         <v-list>
           <v-list-item
-            :to="{name: 'dashboard'}">
+            @click="routeChange">
             <v-list-item-action>
               <v-icon>mdi-monitor-dashboard</v-icon>
             </v-list-item-action>
@@ -37,9 +37,9 @@
 
         <v-btn
           v-if="$vuetify.breakpoint.smAndUp"
-          :to="{name: 'dashboard'}"
           text
           color="white"
+          @click="routeChange"
         >
           Dashboard
         </v-btn>

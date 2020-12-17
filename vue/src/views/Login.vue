@@ -1,12 +1,16 @@
 <template>
-
+<v-parallax
+  src="@/assets/login.jpg"
+  height="600"
+  style="width: 100% !important;"
+>
 <v-container bg fill-height grid-list-md>
   <v-layout row wrap align-center justify-center>
-    <v-flex align-self-center>
+    <v-flex align-self-center
+      class="d-flex justify-center">
       <v-card
         max-width="500"
         hover
-        class="justify-center"
       >
         <v-card-title class="justify-center">
           <span class="headline">Login to Your Account</span>
@@ -81,6 +85,7 @@
     </v-flex>
   </v-layout>
 </v-container>
+</v-parallax>
 
 
 </template>

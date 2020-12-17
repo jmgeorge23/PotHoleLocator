@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-subheader>Please sign in to report a pothole</v-subheader>
-    <pothole-list :setHeight="'max-height: 74vh'"/>
+    <pothole-list :setHeight="$vuetify.breakpoint.smAndUp ? 'max-height: 73vh': 'max-height: 60vh'"/>
   </div>
 </template>
 

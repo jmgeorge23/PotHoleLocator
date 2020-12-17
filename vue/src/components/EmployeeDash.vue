@@ -1,14 +1,7 @@
 <template>
 <div>
   
-  <employee-pothole-list :setHeight="'max-height: 73vh'"/>
-  <v-btn
-    class="ma-2"
-    outlined
-    color="secondary darken-2"
-  >
-    Submit a Damage Claim
-  </v-btn>
+  <employee-pothole-list :setHeight="$vuetify.breakpoint.smAndUp ? 'max-height: 79vh': 'max-height: 60vh'"/>
 </div>
   
 </template>

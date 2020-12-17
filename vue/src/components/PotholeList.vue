@@ -3,8 +3,9 @@
     
   <v-card-text class="px-1 py-0">
     <v-chip-group
-      active-class="info--text"
+      active-class="info lighten-2 white--text"
       center-active
+      mandatory
     >
       <v-chip
         v-for="(filter, i) in filters"

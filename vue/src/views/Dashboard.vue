@@ -1,15 +1,18 @@
 <template>
   <v-container fluid>
-    <v-row dense>
-
+    <v-row dense
+        class="d-flex flex-column-reverse flex-md-row flex-lg-row"
+    >
+      <!-- LIST VIEW -->
       <v-col
         md="5"
         lg="4"
+        sm="12"
+        xs="12"
       >
-        <!-- LIST VIEW -->
         <v-sheet rounded
           elevation="2"
-          height="100%"
+          :height="mobileListCheck"
         >
 
           <v-card flat>
@@ -52,22 +55,23 @@
         </v-sheet>
       </v-col>
 
-
       <!-- MAP -->
       <v-col
         md="7"
-        lg="8">
+        lg="8"
+        sm="12"
+        xs="12"
+        class="flex-sm-column-reverse"
+        >
         <v-sheet
-          min-height="90vh"
+          :height="mobileCheck"
           rounded
           elevation="2"
         >
           <Map/>
-          <!--  -->
         </v-sheet>
       </v-col>
     </v-row>
-
   </v-container>
 </template>
 
@@ -98,6 +102,20 @@ export default {
     username: {
       get() {
         return this.$store.getters.username;
+      }
+    },
+    mobileCheck() {
+      if(this.$vuetify.breakpoint.smAndUp) {
+        return '90vh';
+      } else {
+        return '60vh';
+      }
+    },
+    mobileListCheck() {
+      if(this.$vuetify.breakpoint.smAndUp) {
+        return '100%';
+      } else {
+        return '50%';
       }
     }
   },

@@ -63,7 +63,9 @@
                 :key="pothole.potholeId"
                 :position="getPosition(pothole)"
                 :clickable="true"
+                :icon="icon"
                 :draggable="false"
+                :size="30"
                 @click="handleMarkerClicked(pothole.potholeId)"
             ></gmap-marker>    
             <gmap-marker
@@ -123,9 +125,15 @@ export default {
             lng: 0
         },
         zoom: 12,
+        icon: {
+            url: require('@/assets/pin.png'),
+            scaledSize: {width: 38, height: 38},
+            labelOrigin: {x: 16, y: -10}
+        },
         mapOptions: {
             clickableIcons: false,
             disableDoubleClickZoom: true,
+            gestureHandling: "greedy",
              styles: [
             {
                 featureType: "poi",
@@ -309,6 +317,12 @@ export default {
         /* width: 500px; */
         height: 89vh;
         margin: 5px auto;
+    }
+    @media screen and (max-width: 375px){
+        .gmap {
+            height: 69vh;
+            border-radius: 5px;
+        }
     }
     .info-window {
         padding: 0.5em;
