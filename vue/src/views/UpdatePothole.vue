@@ -146,7 +146,7 @@ export default {
         username: '',
       },
       severities: ['High', 'Medium', 'Low'],
-      status: ['Inspected', 'Completed', 'Deleted'],
+      status: ['Inspected', 'Completed'],
       rules: [ (v) => !!v || 'Cannot be blank' ],
     }
   },  
