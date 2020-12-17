@@ -42,6 +42,16 @@
             <v-card-title>
             Submit a Claim
           </v-card-title>
+          <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>Please select a pothole pin from the map for your claim</v-list-item-title>
+          <v-list-item-subtitle>Pothole ID: {{currentPothole.potholeId}} </v-list-item-subtitle>
+          <v-list-item-subtitle>Street: {{currentPothole.roadName}} </v-list-item-subtitle>
+          <v-list-item-subtitle>Direction: {{currentPothole.direction}}</v-list-item-subtitle>
+
+        </v-list-item-content>
+      </v-list-item>
+
           <v-container>
              <v-form
             ref="form"
@@ -64,17 +74,17 @@
       label="E-mail"
       required
     ></v-text-field>
- <!----------------------- Reason ------------------->
+ <!----------------------- Amount ------------------->
     <v-text-field
       v-model="amount"
-      :counter="5"
+      :counter="7"
       :rules="amountRules"
       label="Dollar Amount of Claim"
       required
     ></v-text-field>
     <!----------------------- Message ------------------->   
     <v-textarea
-      v-model="message"
+      v-model="newClaim.description"
       :counter="180"
       :rules="messageRules"
       label="Please enter your message"
@@ -86,7 +96,7 @@
       :disabled="!valid"
       color="success"
       class="mr-4"
-      @click="validate"
+      @click="sendClaim"
     >
       Send Claim
     </v-btn>
@@ -135,10 +145,19 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
   export default {
 
     data: () => ({
       multiLine: true,
+      newClaim: {
+        amount: 0,
+        description: '',
+        username: '',
+        potholeId: ''
+        
+      },
       snackbar: false,
       text: `Claim Received.`,
       valid: true,
@@ -149,21 +168,40 @@
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
-      amount: '',
+      amount: 0.00,
       amountRules: [
         v => !!v || 'Amount is required',
-        v => (v && v.length <= 5) || 'Amount must be less than $10,000',
+        v => (v && v.length <= 7) || 'Amount must be less than $10,000',
       ],
-
-      message: '',
       messageRules: [
-        v => ( v.length <= 180)],
+        v => ( v.length <= 180) || 'Message must be less than 180 characters'] ,
 
     }),
+     computed:{
+        ...mapGetters({
+          currentUser: 'username',
+          currentPothole: 'activePothole'
+    }),
+  },
 
     methods: {
+      sendClaim(){
+        this.newClaim.username=this.currentUser
+        this.newClaim.potholeId=this.currentPothole.potholeId
+        this.newClaim.amount=parseFloat(this.amount);
+        this.$store.dispatch('sendClaim', this.newClaim)
+          .then(response=>{
+            if(response.status===201){
+                console.log('its working!')
+            }
+          })
+          .catch(err=>{
+            console.log(err)
+          })
+      },
       validate () {
         this.$refs.form.validate()
+        this.sendClaim()
         this.snackbar = true;
         window.setTimeout(this.goBack, 1500);
         

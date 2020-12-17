@@ -4,6 +4,7 @@ import axios from 'axios'
 import potholeService from '../services/PotholeService'
 import authService from '../services/AuthService'
 import commentService from '../services/CommentService'
+import claimService from '../services/ClaimService'
 
 //import authService from "../services/AuthService";
 Vue.use(Vuex)
@@ -233,9 +234,24 @@ export default new Vuex.Store({
           reject(error)
         })
       })
-    }
-  },
+    },
   
+       // /////////////////// Claim MANAGEMENT /////////////////////
+    sendClaim(context, newClaim){
+
+      return new Promise((resolve, reject)=>{
+        claimService.createClaim(newClaim)
+          .then((response)=>{
+            resolve(response)
+          })
+          .catch(err=>{
+            console.log('error here?')
+            console.log(newClaim)
+            reject(err)
+          })
+      });
+    },
+  },
   getters: {
     // Potholes and filters
     allPotholes: (state) => {

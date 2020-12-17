@@ -1,5 +1,6 @@
 package com.techelevator.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -79,6 +80,10 @@ public class ClaimSqlDAO implements ClaimDAO {
 	public boolean createClaim(ClaimDTO newClaim) {
 
 		boolean claim = false;
+		
+	
+		
+		newClaim.setStatus("Submitted");
 		// add to claims
 		String createNewClaim = "INSERT INTO claims(claim_id, amount, description, claim_status_id) "
 				+ "VALUES(DEFAULT, ?, ?,(SELECT claim_status_id FROM claim_status WHERE status=?));";
@@ -194,8 +199,8 @@ public class ClaimSqlDAO implements ClaimDAO {
 
 	public Long getClaimId(ClaimDTO claim) {
 
-		String getClaimId = "SELECT c.claim_id "
-				+ "FROM claims c INNER JOIN claim_status cs ON c.claim_status_id = cs.claim_status_id "
+		String getClaimId = "SELECT claim_id "
+				+ "FROM claims "
 				+ "WHERE amount = ? and description = ?;";
 		return jdbcTemplate.queryForObject(getClaimId, long.class, claim.getClaimAmount(), claim.getDescription());
 
@@ -207,7 +212,7 @@ public class ClaimSqlDAO implements ClaimDAO {
 		ClaimDTO claims = new ClaimDTO();
 
 		claims.setClaimId(cl.getLong("claim_id"));
-		claims.setClaimAmount(cl.getBigDecimal("amount"));
+		claims.setClaimAmount(cl.getFloat("amount"));
 		claims.setStatus(cl.getString("status"));
 		claims.setDescription(cl.getString("description"));
 		claims.setUsername(cl.getString("username"));

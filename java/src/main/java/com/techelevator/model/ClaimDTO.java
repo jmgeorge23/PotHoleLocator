@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 public class ClaimDTO {
 
 	private Long claimId;
-	private BigDecimal claimAmount;
+	private Float claimAmount;
 	private String status;
 	private String description;
 	private String username;
@@ -15,7 +15,7 @@ public class ClaimDTO {
 		
 	}
 	
-	public ClaimDTO(Long claimId, BigDecimal claimAmount, String status, String description,
+	public ClaimDTO(Long claimId, Float claimAmount, String status, String description,
 			String username, Long potholeId) {
 		
 		this.claimId =  claimId;
@@ -36,11 +36,11 @@ public class ClaimDTO {
 		this.claimId = claimId;
 	}
 
-	public BigDecimal getClaimAmount() {
+	public Float getClaimAmount() {
 		return claimAmount;
 	}
 
-	public void setClaimAmount(BigDecimal claimAmount) {
+	public void setClaimAmount(Float claimAmount) {
 		this.claimAmount = claimAmount;
 	}
 
@@ -48,8 +48,8 @@ public class ClaimDTO {
 		return status;
 	}
 
-	public void setStatus(String statusId) {
-		this.status = statusId;
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	public String getUsername() {
