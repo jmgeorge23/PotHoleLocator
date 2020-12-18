@@ -3,7 +3,8 @@
     
   <v-card-text class="px-1 py-0">
     <v-chip-group
-      active-class="info--text"
+      active-class="info lighten-1 white--text"
+      mandatory
       center-active
     >
       <v-chip

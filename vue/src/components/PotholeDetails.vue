@@ -16,23 +16,77 @@
       <v-toolbar-items>
       </v-toolbar-items>
     </v-toolbar>
-    <v-list
-      three-line
-      subheader
-      
-    >
-
+    <v-list>
       <v-list-item>
-        <v-list-item-content>
-          <h2 class="font-weight-regular">Pothole ID: {{currentPothole.potholeId}} </h2>
-          <h2 class="font-weight-regular">Latitude: {{currentPothole.latitude}} </h2>
-          <h2 class="font-weight-regular">Longitude: {{currentPothole.longitude}} </h2>
-          <h2 class="font-weight-regular">Street: {{currentPothole.roadName}} </h2>
-          <h2 class="font-weight-regular">Direction: {{currentPothole.direction}} </h2>
-          <h2 class="font-weight-regular">Current Severity: {{currentPothole.severity}} </h2>
-          <h2 class="font-weight-regular">Current Status: {{currentPothole.status}} </h2>
-        </v-list-item-content>
+        <v-text-field 
+          class="mt-2 mr-6"
+          label="Latitude"
+          :value="currentPothole.latitude" 
+          readonly
+          outlined
+        >
+        </v-text-field>
+        <v-text-field 
+          class="mt-2"
+          label="Longitude"
+          :value="currentPothole.longitude" 
+          readonly
+          outlined
+        >
+        </v-text-field>
       </v-list-item>
+      <v-list-item>
+        <v-list-item-title>Pothole ID</v-list-item-title>
+        <v-text-field 
+          class="mt-5"
+          label="ID"
+          :value="currentPothole.potholeId" 
+          readonly
+          solo
+        >
+        </v-text-field>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-title>Street</v-list-item-title>
+        <v-text-field 
+          label="Street"
+          :value="currentPothole.roadName" 
+          readonly
+          solo
+        >
+        </v-text-field>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-title>Direction</v-list-item-title>
+        <v-text-field 
+          label="Direction"
+          :value="currentPothole.direction" 
+          readonly
+          solo
+        >
+        </v-text-field>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-title>Current Severity</v-list-item-title>
+        <v-text-field 
+          label="Severity"
+          :value="currentPothole.severity" 
+          readonly
+          solo
+        >
+        </v-text-field>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-title>Current Status</v-list-item-title>
+        <v-text-field 
+          label="Status"
+          :value="currentPothole.status" 
+          readonly
+          solo
+        >
+        </v-text-field>
+      </v-list-item>
+
       <v-list-item    v-if="currentUser === 'admin'">
         <v-list-item-content>
           <v-container>
@@ -43,13 +97,6 @@
 
         </v-list-item-content>
       </v-list-item>
-    </v-list>
-    <v-divider></v-divider>
-    <v-list
-      three-line
-      subheader
-    >
-     
     </v-list>
   </v-card>
 </template>
