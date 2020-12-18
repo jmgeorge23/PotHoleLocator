@@ -95,9 +95,9 @@
  <!----------------------- Submit ------------------->
     <v-btn
       :disabled="!valid"
-      color="success"
+      color="info"
       class="mr-4"
-      @click="sendClaim"
+      @click="dialog = true"
     >
       Send Claim
     </v-btn>
@@ -113,7 +113,6 @@
 
 <!----------------------- Reset ------------------->
     <v-btn
-      color="error"
       class="mr-4"
       @click="goBack"
     >
@@ -121,19 +120,34 @@
     </v-btn>
   </v-form>  
 
-<!----------------------- Snackbar------------------->
+<!----------------------- Dialog ------------------->
 
-      <v-snackbar
-      v-model="snackbar"
-      :multi-line="multiLine"
-      centered
-      left
-     
+    <v-dialog
+      v-model="dialog"
+      max-width="350"
     >
-      {{ text }}
+      <v-card>
+        <v-card-title class="headline">
+         Feature Unavailable
+        </v-card-title>
 
+        <v-card-text>
+          Sorry, this feature is currently down for maintenance. Come back soon!
+        </v-card-text>
 
-    </v-snackbar>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="info darken-1"
+            text
+            @click="endDialog"
+          >
+            Ok
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
 </v-container> 
   </v-sheet>
@@ -151,9 +165,10 @@ import { mapGetters } from 'vuex';
   export default {
 
     data: () => ({
+      dialog: false,
       multiLine: true,
       newClaim: {
-        amount: 0,
+        amount: '',
         description: '',
         username: '',
         potholeId: ''
@@ -169,7 +184,7 @@ import { mapGetters } from 'vuex';
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail must be valid',
       ],
-      amount: 0.00,
+      amount: '',
       amountRules: [
         v => !!v || 'Amount is required',
         v => (v && v.length <= 7) || 'Amount must be less than $10,000',
@@ -214,8 +229,11 @@ import { mapGetters } from 'vuex';
         this.reset()
         this.$router.go(-1);
 
+      },
+      endDialog() {
+        this.dialog = false;
+        this.$router.go(-1)
       }
-
     }
   }
 </script>

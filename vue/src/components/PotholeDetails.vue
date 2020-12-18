@@ -87,11 +87,11 @@
         </v-text-field>
       </v-list-item>
 
-      <v-list-item    v-if="currentUser === 'admin'">
+      <v-list-item v-if="currentUser === 'admin'">
         <v-list-item-content>
           <v-container>
             <v-row> 
-            <v-btn color="info" :to="{name: 'update'}">Edit</v-btn>
+            <v-btn color="warning" :to="{name: 'update'}">Edit</v-btn>
             </v-row>
           </v-container>
 

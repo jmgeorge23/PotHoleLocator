@@ -8,7 +8,7 @@
     <v-flex align-self-center
       class="d-flex justify-center">
       <v-card
-        max-width="500"
+        max-width="425"
         hover
       >
         <v-card-title class="justify-center">
