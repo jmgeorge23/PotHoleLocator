@@ -4,7 +4,7 @@
  <v-container fluid ma-0 pa-0>
     <v-parallax class="parallax"
           dark
-          height="300"
+          height="150"
           src="@/assets/yellowteam.png"
   >
           <v-row

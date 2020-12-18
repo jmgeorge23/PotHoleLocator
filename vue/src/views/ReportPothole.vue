@@ -30,9 +30,25 @@
       
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>Click on the map to drop a pin</v-list-item-title>
-          <v-list-item-subtitle>Latitude: {{mapClick.latitude}} </v-list-item-subtitle>
-          <v-list-item-subtitle>Longitude: {{mapClick.longitude}} </v-list-item-subtitle>
+          <v-list-item-title class="mb-6 mt-5">Click on the map to drop a pin</v-list-item-title>
+          <v-list-item>
+            <v-text-field 
+              class="mt-2 mr-6"
+              label="Latitude"
+              :value="mapClick.latitude" 
+              readonly
+              outlined
+            >
+            </v-text-field>
+            <v-text-field 
+              class="mt-2"
+              label="Longitude"
+              :value="mapClick.longitude" 
+              readonly
+              outlined
+            >
+            </v-text-field>
+          </v-list-item>
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
@@ -58,14 +74,6 @@
         </v-form>
         </v-list-item-content>
       </v-list-item>
-    </v-list>
-    <v-divider></v-divider>
-    <v-list
-      three-line
-      subheader
-    >
-      
-
     </v-list>
      <v-dialog
       v-model="dialog"
@@ -168,7 +176,6 @@ export default {
         this.newPothole.latitude = this.mapClick.latitude;
         this.newPothole.longitude = this.mapClick.longitude;
         this.newPothole.username = this.$store.getters.username;
-        console.log(this.$store.getters.username);
         // this.$store.dispatch('sendReport',this.newPothole)
         potholeService.sendReport(this.newPothole)
             .then(() =>{
@@ -177,7 +184,6 @@ export default {
             .catch(() =>{
               this.dialog = true;
             });
-        console.log('Here!');
       },
       endDialog(){
         this.dialog=false

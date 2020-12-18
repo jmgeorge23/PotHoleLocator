@@ -1,8 +1,7 @@
 <template>
 <v-parallax
   src="@/assets/login.jpg"
-  height="1500"
-  style="width: 100% !important;"
+  height="900"
 >
 <v-container bg fill-height grid-list-md>
   <v-layout row wrap align-center justify-center>

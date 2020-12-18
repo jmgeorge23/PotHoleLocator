@@ -14,14 +14,6 @@
       <v-toolbar-title>Update a Pothole</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn
-          dark
-          text
-          form="update-form"
-          type="submit"
-        >
-          Save
-        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
     <v-list
@@ -31,7 +23,7 @@
      
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>Current potholes:</v-list-item-title>
+          <v-list-item-title>Current pothole:</v-list-item-title>
           <v-list-item-subtitle>Pothole ID: {{currentPothole.potholeId}} </v-list-item-subtitle>
           <v-list-item-subtitle>Latitude: {{currentPothole.latitude}} </v-list-item-subtitle>
           <v-list-item-subtitle>Longitude: {{currentPothole.longitude}} </v-list-item-subtitle>
@@ -44,57 +36,78 @@
       <v-list-item>
         <v-list-item-content>
         <v-list-item-title>Please update this pothole </v-list-item-title>
-        <v-form id="update-form"
-          @submit.prevent="updatePothole"
-        >
-          <v-container>
-            <v-row> 
-              <v-col cols=12>
-                <v-select
-                    :items="severities"
-                    label="Severity"
-                    dense
-                    v-model="currentPothole.severity"
-                    :rules="rules"
-                ></v-select>
-              </v-col>
-               <v-col cols=12>
-                  <v-select
-                    :items="status"
-                    label="Status"
-                    dense
-                    v-model="currentPothole.status"
-                    :rules="rules"
-                ></v-select>
-              </v-col>
-              <v-col cols=12>
-                <v-text-field 
-                  label="Street Name"
-                  v-model="currentPothole.roadName"
-                  :rules="rules"
-                >
-                </v-text-field>
-              </v-col>
-               <v-col cols=12>
-                  <v-text-field 
-                    label="Direction"
-                    v-model="currentPothole.direction"
-                    :rules="rules"
-                  >
-                </v-text-field>
-               </v-col>
-            </v-row>
-          </v-container>
-        </v-form>
+  <validation-observer
+    ref="observer"
+    v-slot="{ invalid }"
+  >
+    <form @submit.prevent="submit">
+      <validation-provider
+        immediate
+        v-slot="{ errors }"
+        name="status"
+        rules="required"
+      >
+        <v-select
+          v-model="currentPothole.status"
+          :items="status"
+          :error-messages="errors"
+          label="Status"
+          data-vv-name="select"
+          required
+        ></v-select>
+      </validation-provider>
+      <validation-provider
+        immediate
+        v-slot="{ errors }"
+        name="severity"
+        rules="required"
+      >
+        <v-select
+          v-model="currentPothole.severity"
+          :items="severities"
+          :error-messages="errors"
+          label="Severity"
+          data-vv-name="select"
+          required
+        ></v-select>
+      </validation-provider>
+      <validation-provider
+        v-slot="{ errors }"
+        name="Street"
+        rules="required|max:25"
+      >
+        <v-text-field
+          v-model="currentPothole.roadName"
+          :counter="25"
+          :error-messages="errors"
+          label="Street Name(s)"
+          required
+        ></v-text-field>
+      </validation-provider>
+      <validation-provider
+        v-slot="{ errors }"
+        name="Direction"
+        rules="required|max:25"
+      >
+        <v-text-field
+          v-model="currentPothole.direction"
+          :counter="25"
+          :error-messages="errors"
+          label="Direction"
+          required
+        ></v-text-field>
+      </validation-provider>
+      <v-btn
+        class="mr-4"
+        type="submit"
+        :disabled="invalid"
+      >
+        submit
+      </v-btn>
+    </form>
+  </validation-observer>
         </v-list-item-content>
       </v-list-item>
-    </v-list>
-    <v-divider></v-divider>
-    <v-list
-      three-line
-      subheader
-    >
-     
     </v-list>
     <v-dialog
       v-model="dialog"
@@ -127,14 +140,29 @@
 
 <script>
 import { mapGetters } from 'vuex';
-// import potholeService from '../services/PotholeService'
+import { required, max } from 'vee-validate/dist/rules'
+import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+
+setInteractionMode('eager')
+
+extend('required', {
+  ...required,
+  message: '{_field_} can not be empty',
+})
+
+extend('max', {
+  ...max,
+  message: '{_field_} may not be greater than {length} characters',
+})
 export default {
+  components: {
+    ValidationProvider,
+    ValidationObserver,
+  },
   data () {
     return {
       dialog: false,
-      notifications: false,
-      sound: true,
-      widgets: false,
+      valid: true,
       newPothole: {
         direction: '',
         lane: '',
@@ -157,6 +185,14 @@ export default {
     }),
   },
   methods:{
+      async submit() {
+        const isValid = await this.$refs.observer.validate();
+        if (!isValid) {
+          console.log('invalid form')
+        } else {
+          this.updatePothole();
+        }
+      },
       goBack(){
         // this.$store.dispatch('setReportModeOff');
          this.$router.go(-1);
@@ -164,18 +200,10 @@ export default {
       updatePothole(){
         const updatedPothole = this.currentPothole;
         updatedPothole.username = this.currentUser;
-        if (updatedPothole.roadName.length === 0
-           || updatedPothole.severity.length === 0
-           || updatedPothole.status.length === 0) {
-          // runSnackbar()
-          console.log('uhh ohh... stinky... ppoooop')
-        }
         this.$store.dispatch('updatePothole', updatedPothole)
             .then(response =>{
               console.log(response.status)
-              if(response.status === 200){
                 this.dialog = true
-              }
             })
             .catch(err =>{
                 console.log(err)
